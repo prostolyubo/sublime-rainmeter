@@ -1,4 +1,5 @@
-"""Module for opening paths containing Rainmeter-specific or 
+"""
+Module for opening paths containing Rainmeter-specific or
 Windows environment variables.
 """
 
@@ -8,51 +9,64 @@ import threading
 
 import sublime
 import sublime_plugin
-import rainmeter
+
+from Rainmeter import rainmeter
 
 
 # Files to open with sublime instead of the system default
 settings = sublime.load_settings("Rainmeter.sublime-settings")
 defexts = settings.get("rainmeter_default_open_sublime_extensions", "")
-defexts = defexts.strip().strip(r"|").strip()
+
+if defexts is not None:
+    defexts = defexts.strip().strip(r"|").strip()
+else:
+    defexts = ""
+
 addexts = settings.get("rainmeter_open_sublime_extensions", "")
-addexts = addexts.strip().strip(r"|").strip()
+
+if addexts is not None:
+    addexts = addexts.strip().strip(r"|").strip()
+else:
+    addexts = ""
 
 sublime_files = re.compile("(?i).*\\.(" + addexts + "|" + defexts + ")\\b")
 
 log = settings.get("rainmeter_enable_logging", False)
 
+
 def _log(function, string):
-    if log: 
-        print "rainmeter." + function + ": " + string
+    if log:
+        print("rainmeter." + function + ": " + string)
 
 
 def open_path(path, transient=False):
-    """Try to open a file or folder path or URL in the system default 
+    """Try to open a file or folder path or URL in the system default
     application, or in Sublime if it's a text file.
 
-    Use transient=True to open a file in Sublime without assigning it a tab. 
+    Use transient=True to open a file in Sublime without assigning it a tab.
     A tab will be created once the buffer is modified.
 
-    Will return False if the path doesn't exist in the file system, and 
+    Will return False if the path doesn't exist in the file system, and
     True otherwise.
 
     """
 
-    if not path: return False
+    if not path:
+        return False
 
-    if not os.path.exists(path): return False
-    
+    if not os.path.exists(path):
+        return False
+
     sublime.set_timeout(lambda: sublime.status_message("Opening " + path), 10)
-    if sublime_files.search(path): 
+    if sublime_files.search(path):
         if transient:
             sublime.set_timeout(
-                lambda: sublime.active_window().open_file(path, 
+                lambda: sublime.active_window().open_file(path,
                                                           sublime.TRANSIENT),
                 10)
         else:
             sublime.set_timeout(
-                lambda: sublime.active_window().open_file(path), 
+                lambda: sublime.active_window().open_file(path),
                 10)
     else:
         os.startfile(path)
@@ -66,8 +80,8 @@ def open_url(url):
     Will return False if it's not a url, and True otherwise.
     """
     if re.match(r"(?i)(https?|ftp)://", url.strip()):
-        os.startfile(url)       
-        sublime.set_timeout(lambda: sublime.status_message("Opening " + url), 
+        os.startfile(url)
+        sublime.set_timeout(lambda: sublime.status_message("Opening " + url),
                             10)
         return True
     else:
@@ -85,14 +99,14 @@ class TryOpenThread(threading.Thread):
     def run(self):
         # 1. Selected text
         selected = self.line[self.region.a:self.region.b]
-        if self.opn(selected): 
+        if self.opn(selected):
             _log("TryOpenThread.run", "Open selected text")
             return
 
         # 2. String enclosed in double quotes
 
         # Find the quotes before the current point (if any)
-        lastquote=self.region.a-1
+        lastquote = self.region.a - 1
         while lastquote >= 0 and self.line[lastquote] != "\"":
             lastquote = lastquote - 1
 
@@ -104,7 +118,7 @@ class TryOpenThread(threading.Thread):
 
             if not nextquote == len(self.line) \
                     and self.line[nextquote] == "\"":
-                string = self.line[lastquote : nextquote].strip("\"")
+                string = self.line[lastquote: nextquote].strip("\"")
                 if self.opn(string):
                     _log("TryOpenThread.run", "Open string enclosed " +
                          "in quotes: " + string)
@@ -113,7 +127,7 @@ class TryOpenThread(threading.Thread):
         # 3. Region from last whitespace to next whitespace
 
         # Find the space before the current point (if any)
-        lastspace=self.region.a-1
+        lastspace = self.region.a - 1
         while lastspace >= 0 \
                 and self.line[lastspace] != " " \
                 and self.line[lastspace] != "\t":
@@ -136,29 +150,30 @@ class TryOpenThread(threading.Thread):
             if nextspace >= len(self.line) \
                     or self.line[nextspace] == " " \
                     or self.line[nextspace] == "\t":
-                string = self.line[lastspace : nextspace].strip()
+                string = self.line[lastspace: nextspace].strip()
                 if self.opn(string):
                     _log("TryOpenThread.run", "Open string enclosed " +
                          "in whitespace: " + string)
                     return
 
-        # 4. Everything after the first \"=\" until the end 
+        # 4. Everything after the first \"=\" until the end
         # of the line (strip quotes)
         mtch = re.search(r"=\s*(.*)\s*$", self.line)
-        if mtch and self.opn(mtch.group(1).strip("\"")): 
-            _log("TryOpenThread.run", "Open text after \"=\": " + 
+        if mtch and self.opn(mtch.group(1).strip("\"")):
+            _log("TryOpenThread.run", "Open text after \"=\": " +
                  mtch.group(1).strip("\""))
             return
 
         # 5. Whole line (strip comment character at start)
         stripmatch = re.search(r"^[ \t;]*?([^ \t;].*)\s*$", self.line)
         if self.opn(stripmatch.group(1)):
-            _log("TryOpenThread.run", "Open whole line: " + 
+            _log("TryOpenThread.run", "Open whole line: " +
                  stripmatch.group(1))
             return
 
 
 class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
+
     """Try to open paths on lines in the current selection.
 
     Will try to open paths to files, folders or URLs on each line in the
@@ -172,53 +187,52 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
     4. Everything after the first "=" on the line until the end of the line
     5. The whole line, stripped of preceding semicolons
     """
-    
+
     def run(self, edit):
-        # Detect various scenarios of file paths and try to open them one 
+        # Detect various scenarios of file paths and try to open them one
         # after the other
 
         fnm = self.view.file_name()
 
-        opn = lambda st: \
-                open_path(rainmeter.make_path(st, fnm)) or open_url(st)
+        def opn(st): \
+            open_path(rainmeter.make_path(st, fnm)) or open_url(st)
 
         selection = self.view.sel()
 
         # Split all regions into individual segments on lines (using nicely
         # confusing python syntax).
         lines = [
-                    j for i in map(lambda region: \
-                                        self.view.split_by_newlines(region), 
-                                   selection) 
-                    for j in i
-                ]
+            j for i in [
+                self.view.split_by_newlines(region)
+                for region in selection
+            ]
+            for j in i
+        ]
 
         settings = sublime.load_settings("Rainmeter.sublime-settings")
         max_open_lines = settings.get("rainmeter_max_open_lines", 40)
 
         # Refuse if too many lines selected to avoid freezing
-        
-        
+
         if len(lines) > max_open_lines:
             accept = sublime.ok_cancel_dialog(
-                        "You are trying to open " + 
-                        str(len(lines)) + " lines.\n" + 
-                        "That's a lot, and could take some time. Try anyway?")
+                "You are trying to open " +
+                str(len(lines)) + " lines.\n" +
+                "That's a lot, and could take some time. Try anyway?")
             if not accept:
                 return
 
-        found = False
         for linereg in lines:
             wholeline = self.view.line(linereg)
-            thread = TryOpenThread(self.view.substr(wholeline), 
-                                   sublime.Region(linereg.a-wholeline.a, 
-                                                  linereg.b-wholeline.a), 
+            thread = TryOpenThread(self.view.substr(wholeline),
+                                   sublime.Region(linereg.a - wholeline.a,
+                                                  linereg.b - wholeline.a),
                                    opn)
             thread.start()
 
     def is_enabled(self):
         # Check if current syntax is rainmeter
-        israinmeter = self.view.score_selector(self.view.sel()[0].a, 
+        israinmeter = self.view.score_selector(self.view.sel()[0].a,
                                                "source.rainmeter")
 
         return israinmeter > 0

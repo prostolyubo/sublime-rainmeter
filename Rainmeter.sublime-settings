@@ -9,7 +9,7 @@
 
 	//The path where Rainmeter is installed.
 	//Change this if your Rainmeter is installed somewhere else.
-	"rainmeter_path": "C:\\Program Files\\Rainmeter",
+	"rainmeter_path": "E:\\Visuals\\Rainmeter 3.3",
 
 	//The path where your skins are located.
 	//Only set or change this when something is not working!
@@ -61,7 +61,7 @@
 	"rainmeter_continue_comments": true,
 
 	//Determines wether to output debugging information to the console
-	"rainmeter_enable_logging": false,
+	"rainmeter_enable_logging": true,
 
 	//The color scheme to use for Rainmeter syntax.
 	"color_scheme": "Packages/Rainmeter/Monokai (Rainmeter).tmTheme",
