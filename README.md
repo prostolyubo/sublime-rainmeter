@@ -1,6 +1,6 @@
 # Features
 
-This package for [Sublime Text 2][1] makes creating and editing [Rainmeter][7]
+This package for [Sublime Text 3][1] makes creating and editing [Rainmeter][7]
 skins even more fun!
 
 ## Syntax Highlighting
@@ -44,7 +44,7 @@ be changed in order to be more useful, don't hesitate to contact me.
 
 ![Code Folding][im4]
 
-Sublime Text 2 supports folding indented code sections. The command
+Sublime Text 3 supports folding indented code sections. The command
 `rainmeter_indent` that is included in this package automatically indents all
 selected lines (or the whole file, if nothing is selected) so code folding is
 possible in a sensible way. Hit `ctrl+alt+i` to activate it. All options in a
@@ -178,11 +178,11 @@ to-date automatically.
 
 ### Using Git
 
-Browse to your Sublime Text 2 Package folder 
-(<em>C:\\Users\\\[Your Username\]\\AppData\\Roaming\\Sublime Text 2\\Packages</em> on Windows).
+Browse to your Sublime Text 3 Package folder 
+(<em>C:\\Users\\\[Your Username\]\\AppData\\Roaming\\Sublime Text 3\\Packages</em> on Windows).
 Then clone the package there using git:
 
-	git clone https://github.com/merlinthered/sublime-rainmeter.git Rainmeter
+	git clone https://github.com/thatsIch/sublime-rainmeter.git Rainmeter
 
 Don't forget to update regularly by running
 
@@ -194,7 +194,7 @@ in the Rainmeter package directory.
 
 * Download the latest version from the [release page][2] and unzip it.
 * Drop the .sublime-package file into your <em>Installed Packages</em> folder
-  (<em>C:\\Users\\\[Your Username\]\\AppData\\Roaming\\Sublime Text 2\\Installed Packages</em> on Windows)
+  (<em>C:\\Users\\\[Your Username\]\\AppData\\Roaming\\Sublime Text 3\\Installed Packages</em> on Windows)
 
 <a name='configuration'></a>
 # Configuration
@@ -338,7 +338,7 @@ mean are included there.
   scheme.
 * [The Rainmeter Community][7], for being awesome and testing this package.
 
-[1]: http://www.sublimetext.com/ "Sublime Text 2" 
+[1]: https://www.sublimetext.com/3 "Sublime Text 3" 
 [2]: https://github.com/merlinthered/sublime-rainmeter/releases "Release page"
 [3]: http://wbond.net/sublime_packages/package_control "Package Control" 
 [4]: https://github.com/weslly/ColorPicker "Color Picker" 
