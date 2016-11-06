@@ -9,7 +9,6 @@ import winreg
 
 import sublime
 
-
 def _log(function, string):
     if log:
         print("rainmeter." + function + ': ' + string)
@@ -65,6 +64,24 @@ def get_program_path():
         # Default: "C:\Program Files\Rainmeter"
         programfiles = os.getenv("PROGRAMFILES")
         rainmeterpath = os.path.join(programfiles, "Rainmeter") + "\\"
+
+        # if it is not even specified by default, try using the registry to retrieve the installation path
+        if not os.path.isdir(rainmeterpath):
+            regkey = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
+                    r"SOFTWARE\WOW6432Node\Rainmeter")
+            keyval = winreg.QueryValueEx(regkey, "Personal")
+
+            pathrep = keyval[0]
+    
+            for i in range(1024):
+                try:
+                    asubkey_name=EnumKey(keyval,i)
+                    asubkey=OpenKey(keyval,asubkey_name)
+                    val=QueryValueEx(asubkey, "DisplayName")
+                    _log("test", val)
+                except EnvironmentError:
+                    break
+
 
     # normalize path
     rainmeterpath = os.path.normpath(rainmeterpath) + "\\"
