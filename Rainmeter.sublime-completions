@@ -485,6 +485,7 @@
             {"trigger": "!ShowMeter", "contents": "!ShowMeter \"${1:Meter}\" ${2:\"${3:(Config)}\"}"},
             {"trigger": "!ShowMeterGroup", "contents": "!ShowMeterGroup \"${1:Group}\" ${2:\"${3:(Config)}\"}"},
             {"trigger": "!SkinMenu", "contents": "!SkinMenu ${1:\"${2:(Config)}\"}"},
+            {"trigger": "!SkinCustomMenu", "contents": "!SkinCustomMenu ${1:\"${2:(Config)}\"}"},
             {"trigger": "!SnapEdges", "contents": "!SnapEdges \"${1:NewSetting:(0|1|-1)}\" ${2:\"${3:(Config)}\"}"},
             {"trigger": "!SnapEdgesGroup", "contents": "!SnapEdgesGroup \"${1:NewSetting:(0|1|-1)}\" \"${2:ConfigGroup}\""},
             {"trigger": "!Toggle", "contents": "!Toggle ${1:\"${2:(Config)}\"}"},
