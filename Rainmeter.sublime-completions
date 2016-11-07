@@ -132,6 +132,7 @@
             "DecodeCharacterReference",
             "DefaultArtwork",
             "DefaultValue",
+            "Description"
             "DesktopName",
             "DesktopWallpaper",
             "DestAddress",
