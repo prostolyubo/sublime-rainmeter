@@ -183,6 +183,8 @@
             "GraphStart",
             "Greyscale",
             "Group",
+            "Header",
+            "Header2",
             "Hidden",
             "HideExtensions",
             "HighBound",
