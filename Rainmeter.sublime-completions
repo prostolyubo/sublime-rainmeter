@@ -62,6 +62,9 @@
 
             "@include",
             "AccurateText",
+            "Action",
+            "ActionList1",
+            "ActionListN",
             "AddDaysToHours",
             "Angle",
             "AntiAlias",
@@ -210,6 +213,7 @@
             "IfTrueAction2",
             "IgnoreCount",
             "IgnoreRemovable",
+            "IgnoreWarnings",
             "ImageAlpha",
             "ImageCrop",
             "ImageCrop",
