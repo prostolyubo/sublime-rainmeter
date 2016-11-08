@@ -223,7 +223,7 @@
 			<key>comment</key>
 			<string>Section variables</string>
 			<key>match</key>
-			<string>(?i)\[[^\[\]\s\\/!#"%\$]*?(:((((W|H|X|Y|(Min|Max)Value)|(/[-+]?[0-9]*\.?[0-9]+(e[-+]?[0-9]+)?(,\s*[0-9]+)?)|(%)|([0-9]+))(,\s*((W|H|X|Y|(Min|Max)Value)|(/[-+]?[0-9]*\.?[0-9]+(e[-+]?[0-9]+)?(,\s*[0-9]+)?)|(%)|([0-9]+)))*?)|(EscapeRegExp|EncodeURL))?)\]</string>
+			<string>(?i)\[[^\[\]\s\\/!#"%\$]*?(:((((W|H|X|Y|(Min|Max)Value)|(/[-+]?[0-9]*\.?[0-9]+(e[-+]?[0-9]+)?(,\s*[0-9]+)?)|(%)|([0-9]+))(,\s*((W|H|X|Y|(Min|Max)Value)|(/[-+]?[0-9]*\.?[0-9]+(e[-+]?[0-9]+)?(,\s*[0-9]+)?)|(%)|([0-9]+)))*?)|(EscapeRegExp|EncodeURL|TimeStamp))?)\]</string>
 			<key>name</key>
 			<string>variable.other.dynamic.section_variable.rainmeter</string>
 		</dict>
