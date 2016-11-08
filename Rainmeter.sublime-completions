@@ -249,6 +249,7 @@
             "LineWidth",
             "LocalFont",
             "LocalFont2",
+            "LogSubstringErrors",
             "LoopCount",
             "LowBound",
             "MaskImageName",
