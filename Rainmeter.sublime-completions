@@ -167,6 +167,7 @@
             "FontSize",
             "ForceReload",
             "Format",
+            "FormatLocale",
             "Formula",
             "FreqMax",
             "FreqMin",
