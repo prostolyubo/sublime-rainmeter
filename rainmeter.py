@@ -519,95 +519,93 @@ class MeterAutoComplete(sublime_plugin.EventListener):
 
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
+    scope = "source.rainmeter"
+
+    measure_exp = re.compile(r'^\w*Measure\w*=\w*')
+    measure_elements = [
+        # key, value
+        ["Calc", "Calc"], 
+        ["CPU", "CPU"],
+        ["FreeDiskSpace", "FreeDiskSpace"],
+        ["Loop", "Loop"],
+        ["Memory", "Memory"],
+        ["PhysicalMemory ", "PhysicalMemory "],
+        ["SwapMemory", "SwapMemory"],
+
+        # net measure
+        ["NetIn", "NetIn"],
+        ["NetOut", "NetOut"],
+        ["NetTotal", "NetTotal"],
+        ["Plugin", "Plugin"],
+        ["Registry", "Registry"],
+        ["Script", "Script"],
+        ["String", "String"],
+        ["Time", "Time"],
+        ["Uptime", "Uptime"]
+    ]
+
+    meter_exp = re.compile(r'^\w*Meter\w*=\w*')
+    meter_elements = [
+        # key, value
+        ["Bar", "Bar"],
+        ["Bitmap", "Bitmap"],
+        ["Button", "Button"],
+        ["Histogram", "Histogram"],
+        ["Image", "Image"],
+        ["Line", "Line"],
+        ["Rotator", "Rotator"],
+        ["Roundline", "Roundline"],
+        ["Shape", "Shape"],
+        ["String", "String"]
+    ]
+
+    plugin_exp = re.compile(r'^\w*Plugin\w*=\w*')
+    plugin_elements = [
+        # key, value
+        ["ActionTimer", "ActionTimer"],
+        ["AdvancedCPU", "AdvancedCPU"],
+        ["AudioLevel", "AudioLevel"],
+        ["CoreTemp", "CoreTemp"],
+        ["FileView", "FileView"],
+        ["FolderInfo", "FolderInfo"],
+        ["InputText", "InputText"],
+        ["iTunes", "iTunesPlugin"],
+        ["MediaKey", "MediaKey"],
+        ["NowPlaying", "NowPlaying"],
+        ["PerfMon", "PerfMon"],
+        ["Ping", "PingPlugin"],
+        ["Power", "PowerPlugin"],
+        ["Process", "Process"],
+        ["Quote", "QuotePlugin"],
+        ["RecycleManager", "RecycleManager"],
+        ["ResMon", "ResMon"],
+        ["RunCommand", "RunCommand"],
+        ["SpeedFan", "SpeedFanPlugin"],
+        ["SysInfo", "SysInfo"],
+        ["WebParser", "WebParser"],
+        ["WiFiStatus", "WiFiStatus"],
+        ["Win7Audio", "Win7AudioPlugin"],
+        ["WindowMessage", "WindowMessagePlugin"]
+    ] 
 
     def on_query_completions(self, view, prefix, locations):
-        scope = "source.rainmeter"
-        # print(view)
-        # print(self.flags)
 
         for location in locations:
-            line = view.line(location)
-            lineContents = view.substr(line)
-
             # checks if the current scope is correct so it is only called in the files with the correct scope
             # here is scope only rainmeter files
-            if view.match_selector(location, scope):
+            if view.match_selector(location, self.scope):
+                line = view.line(location)
+                lineContents = view.substr(line)
                 
                 # starts with Measure, followed by an equal sign
-                measure_exp = re.compile(r'^\w*Measure\w*=\w*')
-                if measure_exp.search(lineContents):
-                    elements = [
-                        # key, value
-                        ["Calc", "Calc"], 
-                        ["CPU", "CPU"],
-                        ["FreeDiskSpace", "FreeDiskSpace"],
-                        ["Loop", "Loop"],
-                        ["Memory", "Memory"],
-                        ["PhysicalMemory ", "PhysicalMemory "],
-                        ["SwapMemory", "SwapMemory"],
+                
+                if self.measure_exp.search(lineContents):
+                    return (self.measure_elements, self.flags)
 
-                        # net measure
-                        ["NetIn", "NetIn"],
-                        ["NetOut", "NetOut"],
-                        ["NetTotal", "NetTotal"],
-                        ["Plugin", "Plugin"],
-                        ["Registry", "Registry"],
-                        ["Script", "Script"],
-                        ["String", "String"],
-                        ["Time", "Time"],
-                        ["Uptime", "Uptime"]
-                    ]
-                    
-                    return (elements, self.flags)
+                if self.meter_exp.search(lineContents):
+                    return (self.meter_elements, self.flags) 
 
-                meter_exp = re.compile(r'^\w*Meter\w*=\w*')
-                if meter_exp.search(lineContents):
-                    elements = [
-                        # key, value
-                        ["Bar", "Bar"],
-                        ["Bitmap", "Bitmap"],
-                        ["Button", "Button"],
-                        ["Histogram", "Histogram"],
-                        ["Image", "Image"],
-                        ["Line", "Line"],
-                        ["Rotator", "Rotator"],
-                        ["Roundline", "Roundline"],
-                        ["Shape", "Shape"],
-                        ["String", "String"]
-                    ]
-                    
-                    return (elements, self.flags) 
-
-                plugin_exp = re.compile(r'^\w*Plugin\w*=\w*')
-                if plugin_exp.search(lineContents):
-                    elements = [
-                        # key, value
-                        ["ActionTimer", "ActionTimer"],
-                        ["AdvancedCPU", "AdvancedCPU"],
-                        ["AudioLevel", "AudioLevel"],
-                        ["CoreTemp", "CoreTemp"],
-                        ["FileView", "FileView"],
-                        ["FolderInfo", "FolderInfo"],
-                        ["InputText", "InputText"],
-                        ["iTunes", "iTunesPlugin"],
-                        ["MediaKey", "MediaKey"],
-                        ["NowPlaying", "NowPlaying"],
-                        ["PerfMon", "PerfMon"],
-                        ["Ping", "PingPlugin"],
-                        ["Power", "PowerPlugin"],
-                        ["Process", "Process"],
-                        ["Quote", "QuotePlugin"],
-                        ["RecycleManager", "RecycleManager"],
-                        ["ResMon", "ResMon"],
-                        ["RunCommand", "RunCommand"],
-                        ["SpeedFan", "SpeedFanPlugin"],
-                        ["SysInfo", "SysInfo"],
-                        ["WebParser", "WebParser"],
-                        ["WiFiStatus", "WiFiStatus"],
-                        ["Win7Audio", "Win7AudioPlugin"],
-                        ["WindowMessage", "WindowMessagePlugin"]
-                    ]                   
-
-                    return (elements, self.flags)
+                if self.plugin_exp.search(lineContents):
+                    return (self.plugin_elements, self.flags)
 
         return None
