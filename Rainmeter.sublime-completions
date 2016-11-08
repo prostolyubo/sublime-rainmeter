@@ -484,6 +484,8 @@
             {"trigger": "!About", "contents": "!About ${1:\"${2:(TabName:(Log|Measures|Plugins|Version))}\"}"},
             {"trigger": "!ActivateConfig", "contents": "!ActivateConfig \"${1:Config}\" ${2:\"${3:(Ini-file)}\"}"},
             {"trigger": "!AddBlur", "contents": "!AddBlur \"${1:Type:(0|1|2|3)}, ${2:Left X}, ${3:Top Y}, ${4:Right X}, ${5:Bottom Y} ${6:, ${7:(Radius(if Type=2))}}\" ${8:\"${9:(Config)}\"}"},
+            {"trigger": "!AutoSelectScreen", "contents": "!AutoSelectScreen ${1:\"${2:(Setting:(0|1|-1))}\"} ${3:\"${4:(Config)}\"}"},
+            {"trigger": "!AutoSelectScreenGroup", "contents": "!AutoSelectScreenGroup ${1:\"${2:(Setting:(0|1|-1))}\"} ${3:\"${4:Group}\"}"},
             {"trigger": "!ClickThrough", "contents": "!ClickThrough \"${1:NewSetting:(0|1|-1)}\" ${2:\"${3:(Config)}\"}"},
             {"trigger": "!ClickThroughGroup", "contents": "!ClickThroughGroup \"${1:NewSetting:(0|1|-1)}\" \"${2:ConfigGroup}\""},
             {"trigger": "!CommandMeasure", "contents": "!CommandMeasure \"${1:Measure}\" \"${2:Arguments}\" ${3:\"${4:(Config)}\"}"},
