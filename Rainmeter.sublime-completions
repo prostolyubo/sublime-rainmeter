@@ -362,6 +362,8 @@
             "ShowFolder",
             "ShowHidden",
             "ShowSystem",
+            "SkinWidth",
+            "SkinHeight",
             "Solid",
             "SolidColor",
             "SolidColor2",
