@@ -11,6 +11,7 @@
             "Line",
             "Rotator",
             "Roundline",
+            "Shape",
             "String",
 
             "CPU",
@@ -370,6 +371,7 @@
             "SecondsValue",
             "Sensitivity",
             "Separator",
+            "Shape2",
             "ShowDotDot",
             "ShowFile",
             "ShowFolder",
