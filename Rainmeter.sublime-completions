@@ -26,6 +26,7 @@
             "Uptime",
 
             "AdvancedCPU",
+            "AudioLevel",
             "Calc",
             "CoreTemp",
             "FileView",
