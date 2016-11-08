@@ -427,6 +427,7 @@
             "UpdateRate",
             "Url",
             "UseExifOrientation",
+            "UserAgent",
             "ValueRemainder",
             "VDDesktop",
             "VDDesktopCount",
