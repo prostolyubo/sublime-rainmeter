@@ -543,6 +543,7 @@
             {"trigger": "acos", "contents": "acos($1)"},
             {"trigger": "asin", "contents": "asin($1)"},
             {"trigger": "atan", "contents": "atan($1)"},
+            {"trigger": "atan2", "contents": "atan2(${1:x}, ${2:y})"},
             {"trigger": "ceil", "contents": "ceil($1)"},
             {"trigger": "cos", "contents": "cos($1)"},
             {"trigger": "exp", "contents": "exp($1)"},

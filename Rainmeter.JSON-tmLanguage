@@ -547,7 +547,7 @@
         {
             "name": "support.function.math.rainmeter",
             "comment": "Functions used in Calc measures",
-            "match": "(?i)\\b(((a)?(tan|sin|cos))|abs|exp|log|ln|sqrt|sgn|frac|trunc|floor|ceil|min|max|clamp|round|rad)\\s*(?=\\()"
+            "match": "(?i)\\b(((a)?(tan(2)?|sin|cos))|abs|exp|log|ln|sqrt|sgn|frac|trunc|floor|ceil|min|max|clamp|round|rad)\\s*(?=\\()"
         },
         {
             "name": "meta.option.rainmeter",

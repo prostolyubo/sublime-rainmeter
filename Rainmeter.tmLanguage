@@ -1321,7 +1321,7 @@
 			<key>comment</key>
 			<string>Functions used in Calc measures</string>
 			<key>match</key>
-			<string>(?i)\b(((a)?(tan|sin|cos))|abs|exp|log|ln|sqrt|sgn|frac|trunc|floor|ceil|min|max|clamp|round|rad)\s*(?=\()</string>
+			<string>(?i)\b(((a)?(tan(2)?|sin|cos))|abs|exp|log|ln|sqrt|sgn|frac|trunc|floor|ceil|min|max|clamp|round|rad)\s*(?=\()</string>
 			<key>name</key>
 			<string>support.function.math.rainmeter</string>
 		</dict>
