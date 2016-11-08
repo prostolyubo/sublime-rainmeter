@@ -661,6 +661,10 @@
             {"trigger": "$MouseX:%$", "contents": "\\$MouseX:%\\$"},
             {"trigger": "$MouseY:%$", "contents": "\\$MouseY:%\\$"},
 
+            {"trigger": "Meter=", "contents": "Meter=${1:Bar|Bitmap|Button|Histogram|Image|Line|Rotator|Roundline|Shape|String}"},
+            {"trigger": "Measure=", "contents": "Measure=${1:Calc|CPU|FreeDiskSpace|Loop|Memory|Net|Plugin|Registry|Script|String|Time|Uptime}"},
+            {"trigger": "Plugin=", "contents": "Plugin=${1:ActionTimer|AdvancedCPU|AudioLevel|CoreTemp|FileView|FolderInfo|InputText|iTunesPlugin|MediaKey|NowPlaying|PerfMon|PingPlugin|PowerPlugin|Process|QuotePlugin|RecycleManager|ResMon|RunCommand|SpeedFanPlugin|SysInfo|WebParser|WiFiStatus|Win7AudioPlugin|WindowMessage}"},
+
             "HKEY_CURRENT_CONFIG",
             "HKEY_CURRENT_USER",
             "HKEY_LOCAL_MACHINE",
