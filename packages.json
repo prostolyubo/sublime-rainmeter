@@ -1,20 +1,18 @@
 {
-	"schema_version": "1.2",
+	"schema_version": "3.0.0",
 	"packages": [
 		{
 			"name": "Rainmeter",
 			"description": "Rainmeter Package for Sublime Text 3",
 			"author": "thatsIch",
 			"homepage": "http://thatsich.github.com/sublime-rainmeter/",
-			"last_modified": "2016-11-08 10:48:00",
-			"platforms": {
-				"windows": [
-					{
-						"version": "2.1.0",
-						"url": "https://nodeload.github.com/thatsich/sublime-rainmeter/zip/2.1.0"
-					}
-				]
-			}
+			"releases": [
+				{
+					"platforms": "windows",
+					"sublime_text": "<3000",
+					"tags": true
+				}
+			]
 		}
 	]
 }
