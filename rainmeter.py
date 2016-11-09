@@ -521,6 +521,7 @@ class MeterAutoComplete(sublime_plugin.EventListener):
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
     scope = "source.rainmeter"
 
+    completions = []
     measure_exp = re.compile(r'^\w*Measure\w*=\w*')
     measure_elements = [
         # key, value
@@ -528,6 +529,8 @@ class MeterAutoComplete(sublime_plugin.EventListener):
         ["CPU", "CPU"],
         ["FreeDiskSpace", "FreeDiskSpace"],
         ["Loop", "Loop"],
+        
+        # memory measure
         ["Memory", "Memory"],
         ["PhysicalMemory ", "PhysicalMemory "],
         ["SwapMemory", "SwapMemory"],
@@ -536,6 +539,7 @@ class MeterAutoComplete(sublime_plugin.EventListener):
         ["NetIn", "NetIn"],
         ["NetOut", "NetOut"],
         ["NetTotal", "NetTotal"],
+
         ["Plugin", "Plugin"],
         ["Registry", "Registry"],
         ["Script", "Script"],
@@ -543,6 +547,7 @@ class MeterAutoComplete(sublime_plugin.EventListener):
         ["Time", "Time"],
         ["Uptime", "Uptime"]
     ]
+    completions.append((measure_exp, measure_elements))
 
     meter_exp = re.compile(r'^\w*Meter\w*=\w*')
     meter_elements = [
@@ -558,6 +563,7 @@ class MeterAutoComplete(sublime_plugin.EventListener):
         ["Shape", "Shape"],
         ["String", "String"]
     ]
+    completions.append((meter_exp, meter_elements))
 
     plugin_exp = re.compile(r'^\w*Plugin\w*=\w*')
     plugin_elements = [
@@ -587,6 +593,15 @@ class MeterAutoComplete(sublime_plugin.EventListener):
         ["Win7Audio", "Win7AudioPlugin"],
         ["WindowMessage", "WindowMessagePlugin"]
     ] 
+    completions.append((plugin_exp, plugin_elements))
+
+    bar_orientation_exp = re.compile(r'^\w*BarOrientation\w*=\w*')
+    bar_orientation_elements = [
+        # key, value
+        ["Horizontal", "Horizontal"],
+        ["Vertical\tDefault", "Vertical"]
+    ]
+    completions.append((bar_orientation_exp, bar_orientation_elements))
 
     def on_query_completions(self, view, prefix, locations):
 
@@ -598,14 +613,8 @@ class MeterAutoComplete(sublime_plugin.EventListener):
                 lineContents = view.substr(line)
                 
                 # starts with Measure, followed by an equal sign
-                
-                if self.measure_exp.search(lineContents):
-                    return (self.measure_elements, self.flags)
-
-                if self.meter_exp.search(lineContents):
-                    return (self.meter_elements, self.flags) 
-
-                if self.plugin_exp.search(lineContents):
-                    return (self.plugin_elements, self.flags)
+                for exp, elements in self.completions:
+                    if exp.search(lineContents):
+                        return (elements, self.flags)
 
         return None
