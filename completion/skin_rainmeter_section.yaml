@@ -45,7 +45,7 @@ options:
       - ['#SCREENAREAWIDTH#', max width]
   -
     title: SkinHeight
-    hint: Geight of skin
+    hint: Height of skin
     values:
       - [None]
       - ['#SCREENAREAHEIGHT#', max height]
