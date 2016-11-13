@@ -7,6 +7,23 @@ import getpass
 import platform
 import winreg
 
+import yaml
+import inspect
+import sys
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+if dir_path not in sys.path:
+    sys.path.insert(0, dir_path)
+
+cmd_subfolder = os.path.realpath(os.path.abspath(os.path.join(os.path.split(inspect.getfile( inspect.currentframe() ))[0],"completion")))
+
+if cmd_subfolder not in sys.path:
+    sys.path.insert(0, cmd_subfolder)  
+
+os.chdir(dir_path)
+
+from completion import Loader
+
 import sublime
 import sublime_plugin
 
@@ -499,6 +516,7 @@ def plugin_loaded():
     settings = sublime.load_settings("Rainmeter.sublime-settings")
     log = settings.get("rainmeter_enable_logging", False)
 
+
     # Cache the paths
     _program_path = get_program_path()
     _program_drive = get_program_drive()
@@ -521,87 +539,110 @@ class MeterAutoComplete(sublime_plugin.EventListener):
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
     scope = "source.rainmeter"
 
-    completions = []
-    measure_exp = re.compile(r'^\w*Measure\w*=\w*')
-    measure_elements = [
-        # key, value
-        ["Calc", "Calc"], 
-        ["CPU", "CPU"],
-        ["FreeDiskSpace", "FreeDiskSpace"],
-        ["Loop", "Loop"],
+    comment_exp = re.compile(r'^\s*;.*')
+    meter_exp = re.compile(r'^\s*')
+
+    completions = [
+        # measures
+        (re.compile(r'^\s*Measure\s*=\s*'), [
+            # key, value
+            ["Calc", "Calc"], 
+            ["CPU", "CPU"],
+            ["FreeDiskSpace", "FreeDiskSpace"],
+            ["Loop", "Loop"],
+
+            # memory measure
+            ["Memory", "Memory"],
+            ["PhysicalMemory ", "PhysicalMemory "],
+            ["SwapMemory", "SwapMemory"],
+
+            # net measure
+            ["NetIn", "NetIn"],
+            ["NetOut", "NetOut"],
+            ["NetTotal", "NetTotal"],
+
+            ["Plugin", "Plugin"],
+            ["Registry", "Registry"],
+            ["Script", "Script"],
+            ["String", "String"],
+            ["Time", "Time"],
+            ["Uptime", "Uptime"]
+        ]),
+
+        # meters
+        (re.compile(r'^\s*Meter\s*=\s*'), [
+            # key, value
+            ["Bar", "Bar"],
+            ["Bitmap", "Bitmap"],
+            ["Button", "Button"],
+            ["Histogram", "Histogram"],
+            ["Image", "Image"],
+            ["Line", "Line"],
+            ["Rotator", "Rotator"],
+            ["Roundline", "Roundline"],
+            ["Shape", "Shape"],
+            ["String", "String"]
+        ]),
+        # general options
+
+        # bar
+        # bar orientation
+        (re.compile(r'^\s*BarOrientation\s*=\s*'), [
+            # key, value
+            ["Horizontal", "Horizontal"],
+            ["Vertical\tDefault", "Vertical"]
+        ]),
+
+        # bar flip
+        (re.compile(r'^\s*Flip\s*=\s*'), [
+            # key, value
+            ["0\tDefault", "0"],
+            ["1\tBar is flipped", "1"]
+        ]),
+
+        # bitmap
+
+        # button
+        # histogram
+        # image
+        # line
+        # rotator
+        # roundline
+        # shape
+        # string
+
+        # plugins
+        (re.compile(r'^\s*Plugin\s*=\s*'), [
+            # key, value
+            ["ActionTimer", "ActionTimer"],
+            ["AdvancedCPU", "AdvancedCPU"],
+            ["AudioLevel", "AudioLevel"],
+            ["CoreTemp", "CoreTemp"],
+            ["FileView", "FileView"],
+            ["FolderInfo", "FolderInfo"],
+            ["InputText", "InputText"],
+            ["iTunes", "iTunesPlugin"],
+            ["MediaKey", "MediaKey"],
+            ["NowPlaying", "NowPlaying"],
+            ["PerfMon", "PerfMon"],
+            ["Ping", "PingPlugin"],
+            ["Power", "PowerPlugin"],
+            ["Process", "Process"],
+            ["Quote", "QuotePlugin"],
+            ["RecycleManager", "RecycleManager"],
+            ["ResMon", "ResMon"],
+            ["RunCommand", "RunCommand"],
+            ["SpeedFan", "SpeedFanPlugin"],
+            ["SysInfo", "SysInfo"],
+            ["WebParser", "WebParser"],
+            ["WiFiStatus", "WiFiStatus"],
+            ["Win7Audio", "Win7AudioPlugin"],
+            ["WindowMessage", "WindowMessagePlugin"]
+        ]),
+
         
-        # memory measure
-        ["Memory", "Memory"],
-        ["PhysicalMemory ", "PhysicalMemory "],
-        ["SwapMemory", "SwapMemory"],
 
-        # net measure
-        ["NetIn", "NetIn"],
-        ["NetOut", "NetOut"],
-        ["NetTotal", "NetTotal"],
-
-        ["Plugin", "Plugin"],
-        ["Registry", "Registry"],
-        ["Script", "Script"],
-        ["String", "String"],
-        ["Time", "Time"],
-        ["Uptime", "Uptime"]
     ]
-    completions.append((measure_exp, measure_elements))
-
-    meter_exp = re.compile(r'^\w*Meter\w*=\w*')
-    meter_elements = [
-        # key, value
-        ["Bar", "Bar"],
-        ["Bitmap", "Bitmap"],
-        ["Button", "Button"],
-        ["Histogram", "Histogram"],
-        ["Image", "Image"],
-        ["Line", "Line"],
-        ["Rotator", "Rotator"],
-        ["Roundline", "Roundline"],
-        ["Shape", "Shape"],
-        ["String", "String"]
-    ]
-    completions.append((meter_exp, meter_elements))
-
-    plugin_exp = re.compile(r'^\w*Plugin\w*=\w*')
-    plugin_elements = [
-        # key, value
-        ["ActionTimer", "ActionTimer"],
-        ["AdvancedCPU", "AdvancedCPU"],
-        ["AudioLevel", "AudioLevel"],
-        ["CoreTemp", "CoreTemp"],
-        ["FileView", "FileView"],
-        ["FolderInfo", "FolderInfo"],
-        ["InputText", "InputText"],
-        ["iTunes", "iTunesPlugin"],
-        ["MediaKey", "MediaKey"],
-        ["NowPlaying", "NowPlaying"],
-        ["PerfMon", "PerfMon"],
-        ["Ping", "PingPlugin"],
-        ["Power", "PowerPlugin"],
-        ["Process", "Process"],
-        ["Quote", "QuotePlugin"],
-        ["RecycleManager", "RecycleManager"],
-        ["ResMon", "ResMon"],
-        ["RunCommand", "RunCommand"],
-        ["SpeedFan", "SpeedFanPlugin"],
-        ["SysInfo", "SysInfo"],
-        ["WebParser", "WebParser"],
-        ["WiFiStatus", "WiFiStatus"],
-        ["Win7Audio", "Win7AudioPlugin"],
-        ["WindowMessage", "WindowMessagePlugin"]
-    ] 
-    completions.append((plugin_exp, plugin_elements))
-
-    bar_orientation_exp = re.compile(r'^\w*BarOrientation\w*=\w*')
-    bar_orientation_elements = [
-        # key, value
-        ["Horizontal", "Horizontal"],
-        ["Vertical\tDefault", "Vertical"]
-    ]
-    completions.append((bar_orientation_exp, bar_orientation_elements))
 
     def on_query_completions(self, view, prefix, locations):
 
@@ -609,12 +650,191 @@ class MeterAutoComplete(sublime_plugin.EventListener):
             # checks if the current scope is correct so it is only called in the files with the correct scope
             # here is scope only rainmeter files
             if view.match_selector(location, self.scope):
+                # find last occurance of the [] to determine the ini sections
+                size = view.size()
+                startContent = view.substr(sublime.Region(0, location))
+                endContent = view.substr(sublime.Region(location, size))
                 line = view.line(location)
                 lineContents = view.substr(line)
+
+                start_index = self.get_current_section_content_start_index(startContent)
+                end_index = self.get_current_section_content_end_index(endContent, location, size)
+
+                section = view.substr(sublime.Region(start_index, end_index))
+                lines = section.splitlines()
+                # filter empty lines
+                lines = list(filter(None, lines))
+                # filter comments
+                lines = list(filter(lambda line: not self.comment_exp.search(line),lines))
+
+
+                # for line in lines:
+                #     print(line)
+                #     for exp, elements in self.completions:
+                #         if exp.search(line):
+                            # print(line)
+
                 
                 # starts with Measure, followed by an equal sign
                 for exp, elements in self.completions:
                     if exp.search(lineContents):
                         return (elements, self.flags)
+
+        return None
+
+    def get_current_section_content_start_index(self, startContent):
+        matches = list(re.finditer('\[.*\]', startContent))
+        if len(matches) > 0:
+            lastMatch = matches[-1]
+            return lastMatch.start()
+
+        # no previous section found, hardly legal but who cares
+        else: 
+            return 0
+
+    def get_current_section_content_end_index(self, endContent, offset, endIndex):
+        matches = list(re.finditer('\[.*\]', endContent))
+        if len(matches) > 0:
+            firstMatch = matches[0]
+            return firstMatch.start() + offset
+
+        # no next section found
+        else: 
+            return endIndex
+
+
+class SectionAutoComplete:
+    bracket_expression = re.compile(r'^\s*\[.*\]\s*$')
+
+    def get_current_section_content_start_index(self, startContent):
+        matches = list(self.bracket_expression.finditer(startContent))
+        if len(matches) > 0:
+            lastMatch = matches[-1]
+            return lastMatch.start()
+
+        # no previous section found, hardly legal but who cares
+        else: 
+            return 0
+
+    def get_current_section_content_end_index(self, endContent, offset, endIndex):
+        matches = list(self.bracket_expression.finditer(endContent))
+        if len(matches) > 0:
+            firstMatch = matches[0]
+            return firstMatch.start() + offset
+
+        # no next section found
+        else: 
+            return endIndex
+
+class SkinRainmeterSectionKeyAutoComplete(sublime_plugin.EventListener, SectionAutoComplete):
+    
+    @staticmethod
+    def get_completions():
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+
+        with open(dir_path + "/completion/skin_rainmeter_section.yaml", 'r') as skin_rainmeter_section_stream, open(dir_path + "/completion/meters_general_image_options.yaml", 'r') as meters_general_image_options_stream:
+            try:
+                skin_rainmeter_section = yaml.load(skin_rainmeter_section_stream)
+                meters_general_image_options = yaml.load(meters_general_image_options_stream)
+
+                skin_rainmeter_section['options'].extend(meters_general_image_options)
+
+                return skin_rainmeter_section
+
+                # print(skin_rainmeter_section)
+            except yaml.YAMLError as e:
+                print(e)
+
+    @staticmethod
+    def get_compiled_completions(options):
+        keys = []
+        for option in options:
+            title = option['title'] + "\t" + option['hint']
+            result = None
+            if 'value' in option: 
+                result = option['value'] 
+            else: 
+                result = option['title']
+
+            pair = (title, result)
+            keys.append(pair)
+
+        return keys
+
+    # only show our completion list because nothing else makes sense in this context
+    flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
+    scope = "source.rainmeter"
+    
+    all_completions = get_completions.__func__()
+
+    comment_exp = re.compile(r'^\s*;.*')
+    rm_exp = re.compile(r'^\s*\[Rainmeter\]\s*$', re.I)
+    all_completions = get_compiled_completions.__func__(all_completions['options'])
+    after_equal_exp = re.compile(r'^.*\=\s*')
+
+    def on_query_completions(self, view, prefix, locations):
+        for location in locations:
+            # checks if the current scope is correct so it is only called in the files with the correct scope
+            # here is scope only rainmeter files
+            if not view.match_selector(location, self.scope):
+                _log("on_query_completions", "not in rainmeter scope")
+                return None
+
+            # ignore on comment lines
+            line = view.line(location)
+            lineContents = view.substr(line)
+            if self.comment_exp.search(lineContents):
+                _log("on_query_completions", "found comment")
+                return None
+
+            # only do key completion if we are in the key are
+            # that means in front of the equal or no equal at all
+            if self.after_equal_exp.search(lineContents):
+                _log("on_query_completions", "after equal sign")
+                return None
+
+            # find last occurance of the [] to determine the ini sections
+            size = view.size()
+            startContent = view.substr(sublime.Region(0, location))
+            endContent = view.substr(sublime.Region(location, size))
+
+            start_index = self.get_current_section_content_start_index(startContent)
+            end_index = self.get_current_section_content_end_index(endContent, location, size)
+
+            section = view.substr(sublime.Region(start_index, end_index))
+            lines = section.splitlines()
+            # filter empty lines
+            lines = list(filter(None, lines))
+            # filter comments
+            lines = list(filter(lambda line: not self.comment_exp.search(line),lines))
+
+            if not lines:
+                _log("on_query_completions", "section is empty")
+                return None
+                
+            first_line = lines[0]
+
+            # currently in the [rainmeter] section
+            if not self.rm_exp.search(first_line):
+                _log("on_query_completions", "not in rainmeter section")
+                return None
+
+            # filter by already existing keys
+            completions = []
+
+            for completion in self.all_completions:
+                key, value = completion
+
+                contained = 0
+                for line in lines:
+                    regex = r"\s*(" + re.escape(value) + r")\s*\=?.*$"
+                    if re.match(regex, line, re.I):
+                        contained = 1
+                        break
+
+                if contained == 0:
+                    completions.append(completion)
+                
+            return (completions, self.flags)
 
         return None

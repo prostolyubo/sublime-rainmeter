@@ -1,0 +1,34 @@
+%YAML 1.2
+---
+hint: Measure for notification area icon
+options:
+  - 
+    title: Measure
+    hint: Data provider for values between some limits
+    values:
+      - []
+  -
+    title: TrayMeter
+    hint: Manner in which the measure is depicted
+    values:
+      - [Histogram, 'Default: render measure information']
+      - [Bitmap, 'Display bitmap as icon']
+  -
+    # requires TrayMeter=Histogram
+    title: TrayColor1
+    hint: Background color for histogram
+    values:
+      - ['0,100,0']
+  -
+    # requires TrayMeter=Histogram
+    title: TrayColor2
+    hint: Foreground color for histogram
+    values:
+      - ['0,255,0']
+  -
+    # requires TrayMeter=Bitmap
+    title: TrayBitmap
+    hint: Path to icon bitmap
+    values:
+      - []
+

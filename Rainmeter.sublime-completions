@@ -3,7 +3,10 @@
 
     "completions":
     [
-        "Meter",
+        {
+            "trigger": "Meter\tMetertype, required, not dynamic", 
+            "contents": "Meter"
+        },
 
         "Metadata",
         "Rainmeter",
