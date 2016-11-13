@@ -666,14 +666,6 @@ class MeterAutoComplete(sublime_plugin.EventListener):
                 lines = list(filter(None, lines))
                 # filter comments
                 lines = list(filter(lambda line: not self.comment_exp.search(line),lines))
-
-
-                # for line in lines:
-                #     print(line)
-                #     for exp, elements in self.completions:
-                #         if exp.search(line):
-                            # print(line)
-
                 
                 # starts with Measure, followed by an equal sign
                 for exp, elements in self.completions:
@@ -704,10 +696,11 @@ class MeterAutoComplete(sublime_plugin.EventListener):
 
 
 class SectionAutoComplete:
-    bracket_expression = re.compile(r'^\s*\[.*\]\s*$')
+    bracket_expression = re.compile(r'^\s*\[.+\]\s*$', re.MULTILINE)
 
     def get_current_section_content_start_index(self, startContent):
         matches = list(self.bracket_expression.finditer(startContent))
+
         if len(matches) > 0:
             lastMatch = matches[-1]
             return lastMatch.start()
@@ -741,7 +734,6 @@ class SkinRainmeterSectionKeyAutoComplete(sublime_plugin.EventListener, SectionA
 
                 return skin_rainmeter_section
 
-                # print(skin_rainmeter_section)
             except yaml.YAMLError as e:
                 print(e)
 
@@ -800,7 +792,7 @@ class SkinRainmeterSectionKeyAutoComplete(sublime_plugin.EventListener, SectionA
 
             start_index = self.get_current_section_content_start_index(startContent)
             end_index = self.get_current_section_content_end_index(endContent, location, size)
-
+            
             section = view.substr(sublime.Region(start_index, end_index))
             lines = section.splitlines()
             # filter empty lines
