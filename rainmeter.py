@@ -811,7 +811,7 @@ class SkinRainmeterSectionKeyAutoComplete(sublime_plugin.EventListener, SectionA
             if not lines:
                 _log("on_query_completions", "section is empty")
                 return None
-                
+        
             first_line = lines[0]
 
             # currently in the [rainmeter] section

@@ -125,7 +125,7 @@ options:
   -
     # requires BackgroundMode=2
     title: BackgroundMargins
-    hint: Margins of Background image (left,top,right,bottom)
+    hint: Margins of Background image (L,T,R,B)
     values:
       - ['0,0,0,0']
   -
@@ -179,17 +179,17 @@ options:
 
   -
     title: ContextAction
-    hint: Action by clikcing ContextTitle
+    hint: Action by clicking ContextTitle
     values:
       - []
   -
     title: ContextAction2
-    hint: Action by clikcing ContextTitle2
+    hint: Action by clicking ContextTitle2
     values:
       - []
   -
     title: ContextAction25
-    hint: Action by clikcing ContextTitle25
+    hint: Action by clicking ContextTitle25
     values:
       - []
   
