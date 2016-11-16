@@ -6,7 +6,7 @@
 	"variants":
 	[
 		{
-			"name": "Run",
+			"name": "Start Rainmeter",
 			"cmd": []
 		}
 	]
