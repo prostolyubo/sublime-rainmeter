@@ -1,0 +1,40 @@
+# tooltip options
+# ===============
+-
+  title: ToolTipText
+  hint: Provides content for tooltip
+  values:
+    - [Text, Required, "${1:Text}"]
+-
+  title: ToolTipTitle
+  hint: Title of the tooltip
+  values:
+    - [One line, Title, "${1:Title}"]
+-
+  # requires ToolTipTitle
+  title: ToolTipIcon
+  hint: Color saturated
+  values:
+    - [Path, .ico file, "${1:Path}"]
+    - [Info, "Preset icon"]
+    - [Warning, "Preset icon"]
+    - [Error, "Preset icon"]
+    - [Question, "Preset icon"]
+    - [Shield, "Preset icon"]
+-
+  title: ToolTipTypeDefault
+  hint: Display type of tooltip
+  values:
+    - [0, "Default: normal tooltip"]
+    - [1, "balloon tooltip"]
+-
+  title: ToolTipWidthDefault
+  hint: Maximum width; wrapped text
+  values:
+    - [1000]
+-
+  title: ToolTipHiddenDefault
+  hint: Hides tooltip
+  values:
+    - [0, "Default: shows tooltip"]
+    - [1, "hides tooltip"]

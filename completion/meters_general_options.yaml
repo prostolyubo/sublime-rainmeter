@@ -1,0 +1,115 @@
+# general options
+# ===============
+-
+  title: Meter
+  hint: Static type of meter
+  values:
+    - [Bar]
+    - [Bitmap]
+    - [Button]
+    - [Histogram]
+    - [Image]
+    - [Line]
+    - [Rotator]
+    - [Roundline]
+    - [String]
+-
+  title: MeterStyle
+  hint: Inherit styles. Delimit with |
+-
+  title: MeasureName
+  hint: "Binds" meter to one measure
+-
+  title: MeasureNameN
+  hint: Tint image with color
+  value: "MeasureName${1:N}"
+-
+  title: "X"
+  hint: Horizontal position of meter
+  values:
+    - [0, "Default: left"]
+    - [0r, "Relative to top/left of previous meter"]
+    - [0R, "Relative to bottom/right of previous meter"]
+-
+  title: "Y"
+  hint: Vertical position of meter
+  values:
+    - [0, "Default: top"]
+    - [0r, "Relative to top/left of previous meter"]
+    - [0R, "Relative to bottom/right of previous meter"]
+-
+  title: W
+  hint: Width of meter
+-
+  title: H
+  hint: Height of meter
+-
+  title: Padding
+  hint: Padding around meter
+  values:
+    - ["0,0,0,0", "Default"]
+    - ["L,T,R,B", "Left,Top,Right,Bottom", "${1:L},${2:T},${3:R},${4:B}"]
+-
+  title: Hidden
+  hint: Visibility of meter
+  values:
+    - ["0", "Default: visible"]
+    - ["1", "Meter is hidden"]
+-
+  title: UpdateDivider
+  hint: Update modifier
+  values:
+    - [1, "Default: once every update"]
+    - [-1, "updated once loaded/refreshed"]
+-
+  title: OnUpdateAction
+  hint: Executed on meter update
+-
+  title: SolidColor
+  hint: Background color
+  values:
+    - ["0,0,0,0", "Default: transparent black"]
+    - ["0,0,0,1", "transparent clickable"]
+    - ["R,G,B,A", "Red,Green,Blue,Alpha", "${1:R},${2:G},${3:B},${4:A}"]
+-
+  # requires SolidColor
+  title: SolidColor2
+  hint: Gradient background color
+  values:
+    - ["0,0,0,0", "Default: transparent black"]
+    - ["0,0,0,1", "transparent clickable"]
+    - ["R,G,B,A", "Red,Green,Blue,Alpha", "${1:R},${2:G},${3:B},${4:A}"]
+-
+  # requires SolidColor, SolidColor2
+  title: GradientAngle
+  hint: Angle of the gradient in degrees
+  values:
+    - [0]
+- 
+  title: BevelType
+  hint: Draws bevel around edges
+  values:
+    - [0, 'Default: no bevel']
+    - [1, 'Raised']
+    - [2, 'Sunken']
+- 
+  title: AntiAlias
+  hint: Edge smoothing
+  values:
+    - [0, 'Default: no antialiasing']
+    - [1, 'antialiasing']
+- 
+  title: DynamicVariables
+  hint: Dynamic meter
+  values:
+    - [0, 'Default: not dynamic']
+    - [1, 'dynamic meter']
+- 
+  title: TransformationMatrix
+  hint: "3x2 Matrix transforming meter"
+  values: 
+    - ["1;0;0;1;0;0", "Default: no transformation"]
+    - ["ScaleX;SkewX;ScaleY;SkewY;MoveX;MoveY", "General purpose transformation", "#{1:ScaleX};#{2:SkewX};#{3:ScaleY};#{4:SkewY};#{5:MoveX};#{6:MoveY}"]
+- 
+  title: Group
+  hint: Grouping for skins

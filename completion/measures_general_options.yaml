@@ -1,0 +1,81 @@
+# general options
+# ===============
+-
+  title: Measure
+  hint: Type of the measure
+  values:
+    - [Calc"]
+    - [CPU"]
+    - [FreeDiskSpace"]
+    - [Loop"]
+
+    # memory measure
+    - [Memory"]
+    - [PhysicalMemory"]
+    - [SwapMemory"]
+
+    # net measure
+    - [NetIn"]
+    - [NetOut"]
+    - [NetTotal"]
+
+    - [Plugin"]
+    - [Registry"]
+    - [Script"]
+    - [String"]
+    - [Time"]
+    - [Uptime"]
+-
+  title: UpdateDivider
+  hint: Update modifier
+  values:
+    - [1, "Default: once every update"]
+    - [-1, "Updated once loaded/refreshed"]
+-
+  title: OnUpdateAction
+  hint: Executed on meter update
+-
+  title: OnChangeAction
+  hint: Executed on value change
+-
+  title: InvertMeasure
+  hint: Measure value inverted
+  values:
+    - [0, "Default: not inverted"]
+    - [1, "Inverted"]
+-
+  title: MaxValue
+  hint: Maximum value of measure
+  values:
+    - [1.0]
+-
+  title: MinValue
+  hint: Minimum value of measure
+  values:
+    - [0]
+-
+  title: AverageSize
+  hint: Average of past actual values
+  values:
+    - [1]
+- 
+  title: DynamicVariables
+  hint: Dynamic measure
+  values:
+    - [0, 'Default: not dynamic']
+    - [1, 'dynamic meter']
+-
+  title: Disabled
+  hint: Disabled measure
+  values:
+    - [0, "Default"]
+    - [1, "Never updated, return 0"]
+-
+  title: Paused
+  hint: Height of meter
+  values:
+    - [0, "Default: not paused"]
+    - [1, "Never updated, returns last value"]
+- 
+  title: Group
+  hint: Grouping for skins
