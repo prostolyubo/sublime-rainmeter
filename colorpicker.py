@@ -160,8 +160,8 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
         # 0x00BBGGRR
         b = byte_table[(bgr >> 16) & 0xff]
         g = byte_table[(bgr >> 8) & 0xff]
-        r = byte_table[(bgr) & 0xff]
-        return (r + g + b)
+        r = byte_table[bgr & 0xff]
+        return r + g + b
 
     def __hexstr_to_bgr(self, hexstr):
         if len(hexstr) == 3:
