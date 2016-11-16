@@ -108,13 +108,13 @@ class TryOpenThread(threading.Thread):
         # Find the quotes before the current point (if any)
         lastquote = self.region.a - 1
         while lastquote >= 0 and self.line[lastquote] != "\"":
-            lastquote = lastquote - 1
+            lastquote -= 1
 
         if not lastquote < 0 and self.line[lastquote] == "\"":
             # Find the quote after the current point (if any)
             nextquote = self.region.b
             while nextquote == len(self.line) or self.line[nextquote] != "\"":
-                nextquote = nextquote + 1
+                nextquote += 1
 
             if not nextquote == len(self.line) \
                     and self.line[nextquote] == "\"":
@@ -131,7 +131,7 @@ class TryOpenThread(threading.Thread):
         while lastspace >= 0 \
                 and self.line[lastspace] != " " \
                 and self.line[lastspace] != "\t":
-            lastspace = lastspace - 1
+            lastspace -= 1
 
         # Set to zero if nothing was found until the start of the line
         if lastspace < 0:
@@ -145,7 +145,7 @@ class TryOpenThread(threading.Thread):
             while nextspace < len(self.line) \
                     and self.line[nextspace] != " " \
                     and self.line[nextspace] != "\t":
-                nextspace = nextspace + 1
+                nextspace += 1
 
             if nextspace >= len(self.line) \
                     or self.line[nextspace] == " " \
@@ -209,8 +209,8 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
             for j in i
         ]
 
-        settings = sublime.load_settings("Rainmeter.sublime-settings")
-        max_open_lines = settings.get("rainmeter_max_open_lines", 40)
+        loaded_settings = sublime.load_settings("Rainmeter.sublime-settings")
+        max_open_lines = loaded_settings.get("rainmeter_max_open_lines", 40)
 
         # Refuse if too many lines selected to avoid freezing
 
