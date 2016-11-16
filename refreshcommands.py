@@ -3,7 +3,7 @@ import os.path
 import sublime
 import sublime_plugin
 from Rainmeter import rainmeter
-
+from path.program_path_provider import get_cached_program_path
 
 class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
 
@@ -11,7 +11,8 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
 
     def run(self, cmd):
         # Get Rainmeter exe path
-        rainmeter_exe = rainmeter.program_path()
+        rainmeter_exe = get_cached_program_path()
+
         if not rainmeter_exe:
             sublime.error_message(
                 "Error while trying to refresh Rainmeter" +
