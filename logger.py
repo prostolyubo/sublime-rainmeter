@@ -20,6 +20,9 @@ def plugin_loaded():
 
 def __load_settings():
 	settings = sublime.load_settings("Rainmeter.sublime-settings")
+	key = "rainmeter_enable_logging"
+
+	global __log
 	__log = settings.get(key, False)
 
 def log(file, function, string):
