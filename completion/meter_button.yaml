@@ -1,0 +1,11 @@
+%YAML 1.2
+---
+# import general meter options except W and H
+# import general image option for ButtonImage except ImageCrop and ImageRotate
+-
+  title: ButtonImage
+  hint: Path to button image
+-
+  title: ButtonCommand 
+  hint: Action executed on button click
+  # import actions
