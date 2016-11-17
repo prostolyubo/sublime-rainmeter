@@ -1,0 +1,54 @@
+%YAML 1.2
+---
+
+# import general meter options except W,H and TransformationMatrix
+# import general image options for BitmapImage except ImageCrop and ImageRotate
+# ============================
+
+options:
+  -
+    title: MeasureName
+    hint: Name of percentual value measure
+  -
+    title: BitmapImage
+    hint: Path to image
+  -
+    title: BitmapFrames
+    hint: Number of frames in the image
+    values:
+      - ["1"]
+  -
+    title: BitmapTransitionFrames
+    hint: Number of transition frames per frame
+  -
+    title: BitmapZeroFrame
+    hint: "100 or 101 percentage points"
+    values:
+      - [0, "Default: exclude zero"]
+      - [1, "Include zero"]
+  -
+    title: BitmapExtend
+    hint: Display whole value
+    values:
+      - [0, "Default: not extended"]
+      - [1, "Extended"]
+  -
+    title: BitmapDigits
+    hint: Number of digits drawn
+    values:
+      - [0]
+  -
+    title: BitmapAlign
+    hint: Alignment of bitmap value
+    values:
+      - [Left, "Left alignment"]
+      - [Center, "Center alignment"]
+      - [Right, "Right alignment"]
+  -
+    # requires BitmapDigits > 1
+    title: BitmapSeparation
+    hint: Seperation between digits
+    values:
+      - [0, "Default: no spacing"]
+      - ["-N", "Tighter spacing", "-${1:Number}"]
+      - ["N", "Further spacing", "${1:Number}"]
