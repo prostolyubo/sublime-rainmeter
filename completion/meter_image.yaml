@@ -1,0 +1,38 @@
+%YAML 1.2
+---
+# import general meter options
+# import general image options for ImageName
+-
+  title: MeasureName
+  hint: Name of bound measure
+-
+  title: MeasureName2
+  hint: Name of bound measure
+-
+  title: MeasureNameN
+  hint: Name of bound measure
+-
+  title: ImageName
+  hint: Name of image file
+  values:
+    - ["%1.png", "Default"]
+-
+  # requires Tile=0
+  title: PreserveAspectRatio
+  hint: Control how W and H scale image
+  values:
+    - [0, "Default: bound without aspect ratio"]
+    - [1, "Bounded with aspect ratio"]
+    - [2, "Cropped with aspect ratio"]
+-
+  # requires Tile=0 and PreserveAspectRatio=0
+  title: ScaleMargins
+  hint: Margins of image excluded scaling
+  values:
+    - ["L,T,R,B", "Left,Top,Right,Bottom", "${1:Left},${2:Top},${3:Right},${4:Bottom}"]
+-
+  title: Tile
+  hint: Image tiled by W and H
+  values:
+    - [0, "Default: not tiled"]
+    - [1, "Tiled"]
