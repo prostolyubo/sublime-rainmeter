@@ -14,201 +14,64 @@ hint: defines options for the entire skin
 # ===============
 options:
   -
-    title: Update
-    hint: Update interval of the skin (ms)
-    values:
-      - [1000]
-      - [-1, Updated on load/refresh]
+    title: SkinPath
+    hint: Path to skins folder
   -
-    title: DefaultUpdateDivider
-    hint: Multiplied with Update option
+    title: ConfigEditor
+    hint: Path to text editor
     values:
-      - [1]
-      - [-1, Updated on load/refresh]
+      - [Notepad]
   -
-    title: AccurateText
-    hint: Improved text rendering
+    title: TrayIcon
+    hint: Shows notifcation area tray icon
     values:
-      - [0]
-      - [1, Improved padding, character spacing]
+      - [1, "Default: show tray icon"]
+      - [0, Remove tray icon]
   -
-    title: DynamicWindowSize
-    hint: Dynamic skin size adjustments
-    values:
-      - [0]
-      - [1, Adjust size to meters]
+    title: TrayExecuteM
+    hint: Action on middle mouse trayclick
   -
-    title: SkinWidth
-    hint: Width of skin
-    values:
-      - [None]
-      - ['#SCREENAREAWIDTH#', max width]
+    title: TrayExecuteR
+    hint: Action on right mouse trayclick
   -
-    title: SkinHeight
-    hint: Geight of skin
-    values:
-      - [None]
-      - ['#SCREENAREAHEIGHT#', max height]
+    title: TrayExecuteDM
+    hint: Action on middle mouse traydoubleclick
   -
-    title: DragMargins
-    hint: Area of draggable window
-    values:
-      - ['0,0,0,0']
-  -    
-    title: OnRefreshAction
-    hint: Executed on load/refresh
-    values:
-      - []
+    title: TrayExecuteDR
+    hint: Action on right mouse traydoubleclick
   -
-    title: OnUpdateAction
-    hint: Executed on update
+    title: DesktopWorkArea
+    hint: Area for maximized windows
     values:
-      - []
+      - ["L,T,W,H", "Left,Top,Width,Height", "${1:Left},${2:Top},${3:Width},${4:Height}"]
+      - ["0,0,0,0", "Default margins on type=1"]
   -
-    title: OnCloseAction
-    hint: Executed on closing rainmeter 
-    values: 
-      - []
+    title: DesktopWorkAreaType
+    hint: Either absolute size or margins
+    values:
+      - [0, "Default"]
+      - [1, "DesktopWorkArea will be margins"]
   -
-    title: OnFocusAction
-    hint: Executed on receiving focus (rm clicked)
+    title: Logging
+    hint: Log saved to file
     values:
-      - []
+      - [0, "Default: no file logging"]
+      - [1, "logged to file"]
   -
-    title: OnUnfocusAction
-    hint: Executed on loosing focus (outside clicked)
+    title: Debug
+    hint: Verbosity of logging
     values:
-      - []
+      - [0, "Default: standard logging"]
+      - [1, "More verbose logging"]
   -
-    title: OnWakeAction
-    hint: Executed on windows returns from sleep
+    title: DisableVersionCheck
+    hint: Check for new updates
     values:
-      - []
+      - [0, "Default: check"]
+      - [1, "Disable check"]
   -
-    title: TransitionUpdate
-    hint: Update time of meter transitions
+    title: DisableDragging
+    hint:
     values:
-      - [100]
-  -
-    title: ToolTipHiddenDefault
-    hint: Hiding all tooltips of skin
-    values:
-      - [0]
-      - [1, Hidden]
-  -
-    title: Group
-    hint: Grouping for skins
-    values:
-      - []
-
-
-  # general image options
-  # =====================
-
-
-  # background options
-  # ==================
-  -
-    title: Background
-    hint: Path of background image
-    values:
-      - []
-  -
-    title: BackgroundMode
-    hint: Background mode of skin
-    values:
-      - [0, Image as defined in Background] # Background is required
-      - [1, 'Default: transparent background']
-      - [2, Fill with SolidColor] # SolidColor required
-      - [3, Fill by scaling Background image] # Background is required
-      - [4, Fill by tiling Background image] # Background is required
-  -
-    # requires BackgroundMode=2
-    title: BackgroundMargins
-    hint: Margins of Background image (left,top,right,bottom)
-    values:
-      - ['0,0,0,0']
-  -
-    # requires BackgroundMode=2
-    title: SolidColor
-    hint: Background color
-    values:
-      - ['0,0,0,0']
-      - ['0,0,0,1', Clickable background]
-  -
-    # requires SolidColor
-    title: SolidColor2
-    hint: Gradient color with SolidColor
-    values:
-      - ['0,0,0,0']
-  - 
-    # requires SolidColor
-    # requires SolidColor2
-    # requires BackgroundMode=2
-    title: GradientAngle
-    hint: Angle of gradient in degrees
-    values:
-      - [0]
-  -
-    # requires BackgroundMode=2
-    title: BevelType
-    hint: Draws bevel around edges
-    values:
-      - [0, 'Default: no bevel']
-      - [1, 'Raised']
-      - [2, 'Sunken']
-  
-
-  # context options
-  # =============== 
-  -
-    title: ContextTitle
-    hint: Entry in context menu
-    values:
-      - []
-  -
-    title: ContextTitle2
-    hint: Entry in context menu
-    values:
-      - []
-  -
-    title: ContextTitle25
-    hint: Entry in context menu
-    values:
-      - []
-
-  -
-    title: ContextAction
-    hint: Action by clikcing ContextTitle
-    values:
-      - []
-  -
-    title: ContextAction2
-    hint: Action by clikcing ContextTitle2
-    values:
-      - []
-  -
-    title: ContextAction25
-    hint: Action by clikcing ContextTitle25
-    values:
-      - []
-  
-  # aero blur options
-  # =================
-  -
-    title: Blur
-    hint: Aero blue on Windows 7
-    values:
-      - [0]
-      - [1, Blur skin or BlurRegions]
-
-  -
-    title: BlurRegion 
-    hint: Area and shapes of blurred regions
-    values:
-      - []
-  -
-    title: BlurRegion2
-    hint: Area and shapes of blurred regions
-    values:
-      - []
+      - [0, "Default: draggable skins"]
+      - [1, "Prevent dragging of all active skins"]
