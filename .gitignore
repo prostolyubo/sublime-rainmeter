@@ -1,4 +1,41 @@
-*.cache
+# exclude all
+/*
+
+# inlucde important git files
+!.gitignore
+
+# include important github files
+!LICENSE
+!README.md
+
+# include completion feature
+!completion
+
+# include snippets
+!Snippets
+
+# include misc
+!lib
+
+# include path detection
+!path
+
+# include all python files
+!*.py
+# exclude compiled python files
 *.pyc
-*.sublime-project
-*.sublime-workspace
+
+# include important sublime text files
+!*.tmTheme
+!*.sublime-build
+!*.sublime-commands
+!*.sublime-completions
+!*.sublime-settings
+!*.tmLanguage
+!*.JSON-tmLanguage
+!*.sublime-menu
+!*.sublime-keymap
+!*.tmPreferences
+
+# include important PackageControl files
+!packages.json
