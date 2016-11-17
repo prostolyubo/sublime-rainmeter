@@ -1,0 +1,40 @@
+%YAML 1.2
+---
+section: r'^\s*\[Rainmeter\]\s*$'
+hint: defines options for the entire skin
+
+# import general meter options
+# import general image options
+# ============================
+
+options:
+  -
+    title: MeasureName
+    hint: Name of percentual value measure
+  -
+    title: BarColor
+    hint: 
+    values:
+      - ["0,128,0", "Default: green"]
+      - ["R,G,B", "Red,Green,Blue", "${1:Red},${2:Green},${3:Blue}"]
+  -
+    title: BarImage
+    hint: Path to image instead of BarColo
+  -
+    # requires BarImage
+    title: BarBorder
+    hint: Border of BarImage
+    values:
+      - [0, "No margin"]
+  -
+    title: BarOrientation
+    hint: Orientation of bar
+    values:
+      - [Vertical, "Default: vertical orientation"]
+      - [Horizontal, "Horizontal orientation"]
+  -
+    title: Flip
+    hint: Flip direction of bar
+    values:
+      - [0, "Default: not flipped"]
+      - [1, "Flipped"]
