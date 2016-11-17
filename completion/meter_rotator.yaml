@@ -1,0 +1,35 @@
+%YAML 1.2
+---
+# import general meter options
+# import general image options for ImageName
+- 
+  title: ImageName
+  hint: Path of image file
+- 
+  title: MeasureName
+  hint: Percentual or min/max value for angle
+- 
+  title: OffsetX
+  hint: X-offset of rotation center
+  values:
+    - ["0.0", "Default"]
+- 
+  title: OffsetY
+  hint: Y-offset of rotation center
+  values:
+    - ["0.0", "Default"]
+- 
+  title: StartAngle
+  hint: starting angle in radians (0%)
+  values:
+    - ["0.0", "Default"]
+- 
+  title: RotationAngle
+  hint: Size of rotation angle in radians
+  values:
+    - ["2 * pi", "Default"]
+- 
+  title: ValueRemainder
+  hint: Remainder instead of measured value
+  values:
+    - [0, "Default"]
