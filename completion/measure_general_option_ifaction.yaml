@@ -1,0 +1,21 @@
+%YAML 1.2
+---
+
+-
+  title: IfAboveValue
+  hint: Value used by IfAboveAction
+-
+  title: IfAboveAction
+  hint: Execution upon going over value
+-
+  title: IfBelowValue
+  hint: Value used by IfBelowAction
+-
+  title: IfBelowAction
+  hint: Execution upon going below value
+-
+  title: IfEqualValue
+  hint: Value used by IfEqualAction
+-
+  title: IfEqualAction
+  hint: Execution upon being equal value

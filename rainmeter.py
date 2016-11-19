@@ -6,6 +6,7 @@ import io
 import getpass
 import platform
 import winreg
+import curses
 
 import sublime
 import sublime_plugin
