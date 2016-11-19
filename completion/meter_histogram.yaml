@@ -1,0 +1,167 @@
+%YAML 1.2
+---
+# import general meter options
+- 
+  # required
+  title: MeasureName
+  hint: Name of primary percentual measure
+- 
+  # optional
+  title: MeasureName2
+  hint: Name of secondary percentual measure
+- 
+  title: Autoscale
+  hint: Scale to show all values
+  values:
+    - [0, "Default: no scale"]
+    - [1, "Scale"]
+- 
+  title: GraphStart
+  hint: Start point of the graph
+  values:
+    - [Right, "Default: right start point"]
+    - [Left, "Left start point"]
+- 
+  title: GraphOrientation
+  hint: Orientation of the graph elements
+  values:
+    - [Vertical, Default]
+    - [Horizontal]
+- 
+  title: Flip
+  hint: Vertically flipped
+  values:
+    - [0, "Default: not flipped"]
+    - [1, "Flipped"]
+    
+- 
+  title: PrimaryColor
+  hint: Color of primary histogram
+  values:
+    - ["0,128,0", "Default: dark green"]
+- 
+  title: SecondaryColor
+  hint: Color of secondary histogram
+  values:
+    - ["255,0,0", "Default: red"]
+- 
+  title: BothColor
+  hint: Overlapped color
+  values:
+    - ["255,255,0", "Default: yellow"]
+
+- 
+  title: PrimaryImage
+  hint: Image instead of PrimaryColor
+- 
+  title: SecondaryImage
+  hint: Image instead of SecondaryColor
+- 
+  title: BothImage
+  hint: Image instead of BothColor
+
+- 
+  title: PrimaryImagePath
+  hint: Path to primary image
+- 
+  title: SecondaryImagePath
+  hint: Path to secondary image
+- 
+  title: BothImagePath
+  hint: Path for both histograms
+
+- 
+  title: PrimaryImageCrop
+  hint: ImageCrop for PrimaryImage
+- 
+  title: SecondaryImageCrop
+  hint: ImageCrop for SecondaryImage
+- 
+  title: BothImageCrop
+  hint: ImageCrop for BothImage
+
+- 
+  title: PrimaryImageTint
+  hint: ImageTint for PrimaryImage
+  values:
+    - ["255,255,255,255", "Default"]
+- 
+  title: SecondaryImageTint
+  hint: ImageTint for SecondaryImage
+  values:
+    - ["255,255,255,255", "Default"]
+- 
+  title: BothImageTint
+  hint: ImageTint for BothImage
+  values:
+    - ["255,255,255,255", "Default"]
+
+- 
+  title: PrimaryImageAlpha
+  hint: ImageAlpha for PrimaryImage
+  values:
+    - [255, "Default: opqaque"]
+    - [0, invisible]
+- 
+  title: SecondaryImageAlpha
+  hint: ImageAlpha for SecondaryImage
+  values:
+    - [255, "Default: opqaque"]
+    - [0, invisible]
+- 
+  title: BothImageAlpha
+  hint: ImageAlpha for BothImage
+  values:
+    - [255, "Default: opqaque"]
+    - [0, invisible]
+
+- 
+  title: PrimaryImageFlip
+  hint: ImageFlip for PrimaryImage
+  values:
+    - [None, Default]
+    - [Horizontal]
+    - [Vertical]
+    - [Both]
+- 
+  title: SecondaryImageFlip
+  hint: ImageFlip for SecondaryImage
+  values:
+    - [None, Default]
+    - [Horizontal]
+    - [Vertical]
+    - [Both]
+- 
+  title: BothImageFlip
+  hint: ImageFlip for BothImage
+  values:
+    - [None, Default]
+    - [Horizontal]
+    - [Vertical]
+    - [Both]
+
+- 
+  title: PrimaryImageRotate
+  hint: ImageRotate for PrimaryImage
+  values:
+    - ["0.0", Default]
+- 
+  title: SecondaryImageRotate
+  hint: ImageRotate for SecondaryImage
+  values:
+    - ["0.0", Default]
+- 
+  title: BothImageRotate
+  hint: ImageRotate for BothImage
+  values:
+    - ["0.0", Default]
+
+- 
+  title: PrimaryColorMatrixN
+  hint: ColorMatrix for PrimaryImage
+- 
+  title: SecondaryColorMatrixN
+  hint: ColorMatrix for SecondaryImage
+- 
+  title: BothImageColorMatrixN
+  hint: ColorMatrix for BothImage
