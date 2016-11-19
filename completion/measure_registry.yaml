@@ -1,0 +1,19 @@
+%YAML 1.2
+---
+# import general measure options
+-
+  title: RegHKey
+  hint: Name of the root key 
+  values:
+    - [HKEY_CURRENT_CONFIG, "Current Config"]
+    - [HKEY_CURRENT_USER, Current User]
+    - [HKEY_LOCAL_MACHINE, Local Machine]
+    - [HKEY_CLASSES_ROOT, Classes Root]
+    - [HKEY_PERFORMANCE_DATA, Performance Data]
+    - [HKEY_DYN_DATA, Dynamic Data]
+-
+  title: RegKey
+  hint: Name of the subkey
+-
+  title: RegValue
+  hint: Name of the value
