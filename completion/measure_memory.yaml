@@ -1,0 +1,9 @@
+%YAML 1.2
+---
+# import general measure options
+-
+  title: Total
+  hint: Total memory
+  values:
+    - [0, "Default"]
+    - [1, "Measure total memory"]
