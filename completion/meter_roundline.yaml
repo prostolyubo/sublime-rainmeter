@@ -1,0 +1,59 @@
+%YAML 1.2
+---
+# import general meter options
+- 
+  title: MeasureName
+  hint: Name of percentual measure
+- 
+  title: StartAngle
+  hint: Starting angle in radians
+- 
+  title: RotationAngle
+  hint: Size of rotation angle in radians
+- 
+  title: LineStart
+  hint: Length of line (px)
+- 
+  title: LineWidth
+  hint: Width of line (px)
+  values:
+    - [1, "Default"]
+- 
+  title: LineColor
+  hint: Color of line
+  values:
+    - ["255,255,255,255", "Default: opaque white"]
+- 
+  title: Solid
+  hint: Filled roundline
+  values: 
+    - [0, "Default: not filled"]
+    - [1, "Fill with LineColor"]
+- 
+  title: ControlAngle
+  hint: Who controls angle of line
+  values:
+    - [1, "Default: use measure"]
+    - [0, "Use StartAngle"]
+- 
+  title: ControlStart
+  hint: Enables shifting of start
+  values:
+    - [0, "Default: no shifting"]
+    - [1, "Shifting"]
+- 
+  title: StartShift
+  hint: Percentual measure shifted from center
+- 
+  title: ControlLength
+  hint: Enable shifting of length
+  values:
+    - [0, "Default: no shifting"]
+    - [1, "Shifting"]
+- 
+  #requires ControlLength
+  title: LengthShift
+  hint: Percentual measure shifted from center
+- 
+  title: ValueRemainder
+  hint: Remainder instead measured value
