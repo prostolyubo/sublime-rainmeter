@@ -1,0 +1,44 @@
+%YAML 1.2
+---
+# import general measure options
+-
+  title: Format
+  hint: Display format for the string value
+  values:
+    - ["%H:%M:%S", "Default"]
+-
+  title: TimeStamp
+  hint: System date and time
+  values:
+    - [Numeric Windows Timestamp, Since 1th Jan 1601, "${1:0}"]
+    - [DSTNextStart, Next start of DST]
+    - [DSTNextEnd, Next end of DST]
+    - [DSTStart, This start of DST]
+    - [DSTEnd, This end of DST]
+    - [DSTStartYYYY, DSTStart for year, "${1:YYYY}"]
+    - [DSTEndYYYY, DSTEnd for year, "${1:YYYY}"]
+    - [Formatted String, Combination of Format Codes, "${1:Formatted}"]
+-
+  title: TimeStampFormat
+  hint: Input mask for TimeStamp
+-
+  title: TimeStampLocale
+  hint: Formatting for language
+-
+  title: FormatLocale
+  hint: Locale for formatting
+-
+  title: TimeZone
+  hint: GMT time
+  values:
+    - [local, "Default"]
+    - [-1, GMT-1]
+    - [0, GMT+0]
+    - [1, GMT+1]
+-
+  # requires TimeZone
+  title: DaylightSavingTime
+  hint: Without DST
+  values:
+    - [1, "Default: with DST"]
+    - [0, "With TimeZone no DST"]
