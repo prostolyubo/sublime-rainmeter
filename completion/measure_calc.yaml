@@ -1,0 +1,32 @@
+%YAML 1.2
+---
+# import general measure options
+-
+  title: Formula
+  hint: Formula to calculate
+  values:
+    - [0, Default]
+-
+  title: UpdateRandom
+  hint: Random constant on each update
+  values:
+    - [0, Default]
+    - [1, Generate random constant]
+-
+  # requires UpdateRandom
+  title: UniqueRandom
+  hint: Use up between low and high first
+  values:
+    - [0, "Default: no unique"]
+    - [1, "Unique"]
+-
+  title: LowBound
+  hint: Lower bound of the random constant
+  values:
+    - [0, Default]
+-
+  title: HighBound
+  hint: Upper bound of the random constant
+  values:
+    - [100, Default]
+    - [2147483647, Maximum value]
