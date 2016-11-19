@@ -1,0 +1,131 @@
+%YAML 1.2
+---
+# import general meter options
+- 
+  title: MeasureName
+  hint: Name of bound measure
+- 
+  title: MeasureName2
+  hint: Name of second bound measure
+- 
+  title: MeasureNameN
+  hint: Name of nth bound measure
+-
+  title: Text
+  hint: Text to display
+  values:
+    - ["%1", "Default: display first measure"]
+    - ["%2", "Display second measure"]
+-
+  title: Prefix
+  hint: Text before Text
+-
+  title: Postfix
+  hint: Text after Text
+-
+  title: FontFace
+  hint: Family name of the font
+  values:
+    - ["Arial", "Default"]
+-
+  title: FontSize
+  hint: Size of font
+  values:
+    - [10, "Default"]
+-
+  title: FontColor
+  hint: Color of font
+  values:
+    - ["0,0,0,255", "Default"]
+-
+  title: StringAlign
+  hint: Horizontal and vertical alignment within meter
+  values:
+    - ["Left", "Default: left alignment"]
+    - ["Right", "Right alignment"]
+    - [Center, Center alignment]
+    - [LeftTop, Left top alignment]
+    - [RightTop, Right top alignment]
+    - [CenterTop, Center top alignment]
+    - [LeftBottom, Left bottom alignment]
+    - [RightBottom, Right bottom alignment]
+    - [CenterBottom, Center bottom alignment]
+    - [LeftCenter, Left center alignment]
+    - [RightCenter, Right center alignment]
+    - [CenterCenter, Center center alignment]
+-
+  title: StringStyle
+  hint: STyle of string
+  values:
+    - ["Normal", "Default"]
+    - [Bold]
+    - [Italic]
+    - [BoldItalic]
+-
+  title: StringCase
+  hint: Converter case of string
+  values:
+    - [None, Default]
+    - [Upper]
+    - [Lower]
+    - [Proper]
+-
+  title: StringEffect
+  hint: Effect applied to a string
+  values:
+    - [None, "Default"]
+    - [Shadow, "Offsets string"]
+    - [Border, "Offsets larger string"]
+-
+  title: FontEffectColor
+  hint: Color of StringEffect
+  values:
+    - ["0,0,0,255", "Default"]
+-
+  title: ClipString
+  hint: Controls truncated strings
+  values:
+    - [0, "Default: disabled"]
+    - [1, "Enabled"]
+    - [2, "Auto"]
+-
+  # requires ClipString=2
+  # ignored on W
+  title: ClipStringW
+  hint: Maximum width
+-
+  # requires ClipString=2
+  # ignored on H
+  title: ClipStringH
+  hint: Maximum height
+-
+  title: Angle
+  hint: Text angle in radians 
+  values:
+    - ["0.0", "Default"]
+-
+  title: Percentual
+  hint: Measures taken percentual
+  values:
+    - [0, "Default: not percentual"]
+    - [1, "Percentual"]
+-
+  title: NumOfDecimals
+  hint: Number of decimals to display
+  values:
+    - [0, "Default: none"]
+-
+  # ignored on AutoScale
+  title: Scale
+  hint: Scale measure
+  values:
+    - [1, "Default: no scale"]
+-
+  title: AutoScale
+  hint: Automatically scales measure
+  values:
+    - [0, "Default: disabled"]
+    - [1, "Scale by 1024"]
+    - [1k, "Scale by 1024 with kilo"]
+    - [2, "Scale by 1000"]
+    - [2k, "Scale by 1000 with kilo"]
