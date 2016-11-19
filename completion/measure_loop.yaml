@@ -1,0 +1,23 @@
+%YAML 1.2
+---
+# import general measure options except AverageSize, MinValue, MaxValue
+-
+  title: StartValue
+  hint: Starting value for loop
+  values:
+    - [1, "Default"]
+-
+  title: EndValue
+  hint: Ending value for loop
+  values:
+    - [100, "Default"]
+-
+  title: Increment
+  hint:  Counterincrement on each update
+  values:
+    - [1, "Default"]
+-
+  title: LoopCount
+  hint: Number of loop executed
+  values:
+    - [0, "Default"]
