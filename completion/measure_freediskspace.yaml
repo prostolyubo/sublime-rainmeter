@@ -1,0 +1,38 @@
+%YAML 1.2
+---
+# import general measure options except MaxValue
+-
+  title: Drive
+  hint: Defines the drive to measure
+  values:
+    - ["C:", "Default"]
+-
+  title: Total
+  hint: Provides the total drive space
+  values:
+    - [0, "Default"]
+    - [1, "Total drive space"]
+-
+  title: Label
+  hint: The string value is the drive label
+  values:
+    - [0, "Default"]
+    - [1, "Drive label"]
+-
+  title: Type
+  hint: Provide drive type
+  values:
+    - [0, "Default"]
+    - [1, "Provide"]
+-
+  title: IgnoreRemovable
+  hint: Ignore removable drives
+  values:
+    - [1, "Default: ignore"]
+    - [0, "Measure removable drives"]
+-
+  title: DiskQuota
+  hint: Obey user specific disk quotas
+  values:
+    - [1, "Default: obey"]
+    - [0, "Ignored"]

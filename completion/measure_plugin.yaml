@@ -1,0 +1,31 @@
+%YAML 1.2
+---
+# import general measure options
+-
+  title: Plugin
+  hint: Name of plugin
+  values:
+    - ["ActionTimer", "Executes series of actions" "ActionTimer"],
+    - ["AdvancedCPU", "CPU usage by process", "AdvancedCPU"],
+    - ["AudioLevel", "Analyze audio sound", "AudioLevel"],
+    - ["CoreTemp", "CoreTemp adapter", "CoreTemp"],
+    - ["FileView", "Information about files and folders", "FileView"],
+    - ["FolderInfo", "Information about folders", "FolderInfo"],
+    - ["InputText", "Bang on user input", "InputText"],
+    - ["iTunes", "iTunes adapter", "iTunesPlugin"],
+    - ["MediaKey", "Send key strokes", "MediaKey"],
+    - ["NowPlaying", "Media player adapter", "NowPlaying"],
+    - ["PerfMon", "Windows Performance Monitor adapter", "PerfMon"],
+    - ["Ping", "Latency to host", "PingPlugin"],
+    - ["Power", "Power related information", "PowerPlugin"],
+    - ["Process", "Process state", "Process"],
+    - ["Quote", "Random quotes from source", "QuotePlugin"],
+    - ["RecycleManager", "State of recycle bin", "RecycleManager"],
+    - ["ResMon", "Monitors resources", "ResMon"],
+    - ["RunCommand", "Execute external program", "RunCommand"],
+    - ["SpeedFan", "SpeedFan adapter", "SpeedFanPlugin"],
+    - ["SysInfo", "Information about system", "SysInfo"],
+    - ["WebParser", "Read/parse from webpages", "WebParser"],
+    - ["WiFiStatus", "Information about WiFi networks", "WiFiStatus"],
+    - ["Win7Audio", "Control sound device", "Win7AudioPlugin"],
+    - ["WindowMessage", "Send to/receive from other apps", "WindowMessagePlugin"]
