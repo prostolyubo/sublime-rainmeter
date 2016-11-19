@@ -1,0 +1,17 @@
+%YAML 1.2
+---
+# import general measure options
+-
+  title: Interface
+  hint: Identity of NIC
+  values:
+    - [0, "Default: all interfaces"]
+    - [Index, "Index of interface", "${1:Index}"]
+    - [Best, "Active interface"]
+    - [Name, "Name of controller", "${1:Name}"]
+-
+  title: Cumulative
+  hint: Cumulative network traffic
+  values:
+    - [0, "Default"]
+    - [1, Cumulative]
