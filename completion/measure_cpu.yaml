@@ -1,0 +1,11 @@
+%YAML 1.2
+---
+# import general measure options
+-
+  title: Processor
+  hint: Which processor
+  values:
+    - [0, "Default: average of all"]
+    - [1, "First CPU"]
+    - [2, "First CPU"]
+    - [N, "Nth CPU", "${1:Nth CPU}"]
