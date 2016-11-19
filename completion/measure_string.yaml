@@ -1,0 +1,6 @@
+%YAML 1.2
+---
+# import general measure options except InvertMeasure
+-
+  title: String
+  hint: The string value of the measure

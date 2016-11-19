@@ -1,6 +1,6 @@
 %YAML 1.2
 ---
-# import general measure options
+# import general measure options except MaxValue
 -
   title: Total
   hint: Total memory
