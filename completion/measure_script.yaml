@@ -1,0 +1,10 @@
+%YAML 1.2
+---
+# import general measure options
+-
+  title: ScriptFile
+  hint: Path to the .lua script file
+-
+  title: User defined options
+  hint: Access in Lua with SELF
+  value: "${1:Key}=${2:Value}"
