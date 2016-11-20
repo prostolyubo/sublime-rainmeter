@@ -1,0 +1,11 @@
+%YAML 1.2
+---
+-
+  title: Substitute
+  hint: Replace key with value
+-
+  title: RegExpSubstitute
+  hint: Use PERL re in key value pairs
+  values:
+    - [0, "Default: no RegEx"]
+    - [1, "Use RegEx"]
