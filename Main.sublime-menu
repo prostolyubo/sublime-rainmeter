@@ -38,18 +38,12 @@
 						"children":
 						[
 							{
-                                "command": "open_file", "args":
+                            	"command": "edit_settings", "args":
                                 {
-                                    "file": "${packages}/Rainmeter/Rainmeter.sublime-settings"
+                                    "base_file": "${packages}/Rainmeter/Rainmeter.sublime-settings",
+                                    "default": "[\n\t$0\n]\n"
                                 },
-                                "caption": "Settings – Default"
-                            },
-                            {
-                                "command": "open_file", "args":
-                                {
-                                    "file": "${packages}/User/Rainmeter.sublime-settings"
-                                },
-                                "caption": "Settings – User"
+                                "caption": "Settings"	
                             },
                             {"caption": "-"},
                             {
