@@ -1,0 +1,45 @@
+%YAML 1.2
+---
+# import general measure options
+-
+  title: IfMatch
+  hint: Matched RegExp
+-
+  title: IfMatch2
+  hint: Matched RegExp
+-
+  title: IfMatchN
+  hint: Matched RegExp
+  value: IfMatch${1:N}
+
+
+-
+  title: IfMatchAction
+  hint: Execute IfMatch true
+-
+  title: IfMatchAction2
+  hint: Execute IfMatch2 true
+-
+  title: IfMatchActionN
+  hint: Execute IfMatchN true
+  value: IfMatchAction${1:N}
+
+
+-
+  title: IfNotMatchAction
+  hint: Execute IfMatch false
+-
+  title: IfNotMatchAction2
+  hint: Execute IfMatch2 false
+-
+  title: IfNotMatchActionN
+  hint: Execute IfMatchN false
+  value: IfNotMatchAction${1:N}
+
+
+-
+  title: IfMatchMode
+  hint: Execute on every update
+  values:
+    - [0, "Default: on high/low"]
+    - [1, "On every update"]

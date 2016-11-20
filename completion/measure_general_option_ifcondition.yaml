@@ -42,4 +42,4 @@
   hint: Execute every update
   values:
     - [0, "Default: on high/low"]
-    - [1, "Every update0"]
+    - [1, "Every update"]
