@@ -53,11 +53,12 @@
                             },
                             {"caption": "-"},
                             {
-                                "command": "open_file", "args":
+                            	"command": "edit_settings", "args":
                                 {
-                                    "file": "${packages}/Rainmeter/Default (Windows).sublime-keymap"
+                                    "base_file": "${packages}/Rainmeter/Default (Windows).sublime-keymap",
+                                    "default": "[\n\t$0\n]\n"
                                 },
-                                "caption": "Key Bindings – Default"
+                                "caption": "Key Bindings"	
                             }
 						]
 					}
