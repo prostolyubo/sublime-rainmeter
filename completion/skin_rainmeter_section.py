@@ -72,13 +72,15 @@ class SkinRainmeterSectionKeyAutoComplete:
 					break
 
 			if contained == 0:
-				print("added: " + content)
 				completions.append(completion)
 
-		# sort by levenshtein distance
-		sorted_completions = sorted(completions, key=lambda completion: levenshtein(completion[1], prefix))
-
-		return sorted_completions, self.flags
+		# only show sorted by distance if something was already typed because distance to empty string makes no sense
+		if line_content != "":
+			# sort by levenshtein distance
+			sorted_completions = sorted(completions, key=lambda completion: levenshtein(completion[1], prefix))
+			return sorted_completions, self.flags
+		else:
+			return completions, self.flags
 
 	def get_value_context_completion(self, view, prefix, location, line_content, section, keyvalues):
 
