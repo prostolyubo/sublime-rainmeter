@@ -6,7 +6,6 @@ import io
 import getpass
 import platform
 import winreg
-import curses
 
 import sublime
 import sublime_plugin
@@ -50,7 +49,7 @@ def get_skins_path():
 	# We trust the user to enter something meaningful here
 	# and don't check anything.
 	if skinspath:
-		logger.log(__file__, "get_skins_path", "Skins path found in sublime-settings file.")
+		logger.info(__file__, "get_skins_path", "Skins path found in sublime-settings file.")
 		return os.path.normpath(skinspath) + "\\"
 
 	# If it's not set, try to detect it automagically
@@ -90,7 +89,7 @@ def get_skins_path():
 
 	# if skinspath setting was found, return it
 	if match:
-		logger.log(__file__, "get_skins_path", "Skins path found in Rainmeter.ini.")
+		logger.info(__file__, "get_skins_path", "Skins path found in Rainmeter.ini.")
 		return match.group("skinpath").strip().replace("/", "\\")
 
 	# if it's not found in the settings file, try to guess it
@@ -99,7 +98,7 @@ def get_skins_path():
 	# installation. In this case, the Skins folder is inside the rainmeter
 	# path
 	if os.path.samefile(rainmeterpath, settingspath):
-		logger.log(__file__, "get_skins_path", "Skin path found in #PROGRAMPATH#" +
+		logger.info(__file__, "get_skins_path", "Skin path found in #PROGRAMPATH#" +
 			 " because portable installation")
 		return os.path.join(rainmeterpath, "Skins") + "\\"
 
@@ -119,7 +118,7 @@ def get_skins_path():
 		# variables that have to be expanded first
 		pathrep = os.path.expandvars(pathrep)
 
-		logger.log(__file__, "get_skins_path", "Guessed Skin path from My Documents" +
+		logger.info(__file__, "get_skins_path", "Guessed Skin path from My Documents" +
 			 " location in registry")
 		return os.path.join(pathrep, "Rainmeter\\Skins") + "\\"
 
@@ -131,7 +130,7 @@ def get_skins_path():
 	try:
 		username = getpass.getuser()
 	except Exception:
-		logger.log(__file__, "get_skins_path", "Skins path could not be located." +
+		logger.info(__file__, "get_skins_path", "Skins path could not be located." +
 			 " Please set the \"skins_path\" setting in your Rainmeter" +
 			 " settings file.")
 		return
@@ -143,7 +142,7 @@ def get_skins_path():
 									   username,
 									   "My Documents") + "\\"
 
-			logger.log(__file__, "get_skins_path", "Found Windows XP or lower." +
+			logger.info(__file__, "get_skins_path", "Found Windows XP or lower." +
 				 " Skins path assumed to be " + mydocuments +
 				 "Rainmeter\\Skins\\")
 		else:
@@ -151,11 +150,11 @@ def get_skins_path():
 									   username,
 									   "Documents") + "\\"
 
-			logger.log(__file__, "get_skins_path", "Found Windows Vista or higher." +
+			logger.info(__file__, "get_skins_path", "Found Windows Vista or higher." +
 				 " Skins path assumed to be " + mydocuments +
 				 "Rainmeter\\Skins\\")
 
-		logger.log(__file__, "get_skins_path", "Skin path guessed from user name" +
+		logger.info(__file__, "get_skins_path", "Skin path guessed from user name" +
 			 " and Windows version")
 		return os.path.join(mydocuments, "Rainmeter\\Skins") + "\\"
 
@@ -189,7 +188,7 @@ def get_current_path(filepath):
 
 	skinspath = skins_path()
 	if not skinspath or not filepath.startswith(skinspath):
-		logger.log(__file__, "get_current_path", "current path could not be found because" +
+		logger.info(__file__, "get_current_path", "current path could not be found because" +
 			 " either the skins path could not be found or the current file" +
 			 " is not located in the skins path.")
 		return
@@ -211,13 +210,13 @@ def get_root_config_path(filepath):
 
 	skinspath = skins_path()
 	if not skinspath or not filepath.startswith(skinspath):
-		logger.log(__file__, "get_root_config_path", "root config path could not be found" +
+		logger.info(__file__, "get_root_config_path", "root config path could not be found" +
 			 " because either the skins path could not be found or the" +
 			 " current file is not located in the skins path.")
 		return
 
 	relpath = os.path.relpath(filepath, skinspath)
-	logger.log(__file__, "get_root_config_path",
+	logger.info(__file__, "get_root_config_path",
 		 os.path.join(skinspath, relpath.split("\\")[0]) + "\\")
 
 	return os.path.join(skinspath, relpath.split("\\")[0]) + "\\"
@@ -234,7 +233,7 @@ def get_current_file(filepath):
 
 	skinspath = skins_path()
 	if not skinspath or not filepath.startswith(skinspath):
-		logger.log(__file__, "get_current_file", "current file could not be found because" +
+		logger.info(__file__, "get_current_file", "current file could not be found because" +
 			 " either the skins path could not be found or the current" +
 			 " file is not located in the skins path.")
 		return
@@ -242,7 +241,7 @@ def get_current_file(filepath):
 	if os.path.isfile(filepath):
 		return os.path.basename(filepath)
 	else:
-		logger.log(__file__, "get_current_file", "specified path is not a file.")
+		logger.info(__file__, "get_current_file", "specified path is not a file.")
 		return
 
 
@@ -257,7 +256,7 @@ def get_current_config(filepath):
 
 	skinspath = skins_path()
 	if not skinspath or not filepath.startswith(skinspath):
-		logger.log(__file__, "get_current_config", "current config could not be found" +
+		logger.info(__file__, "get_current_config", "current config could not be found" +
 			 " because \either the skins path could not be found or the" +
 			 " current file is not located in the skins path.")
 		return
@@ -279,7 +278,7 @@ def get_resources_path(filepath):
 
 	if not rfp:
 		return
-	logger.log(__file__, "get_resources_path", os.path.join(rfp, "@Resources") + "\\")
+	logger.info(__file__, "get_resources_path", os.path.join(rfp, "@Resources") + "\\")
 	return os.path.join(rfp, "@Resources") + "\\"
 
 
@@ -395,12 +394,12 @@ def plugin_loaded():
 	_plugins_path = get_plugins_path()
 	_addons_path = get_addons_path()
 
-	logger.log(__file__, "plugin_loaded()", "#PROGRAMPATH#:\t" + get_cached_program_path())
-	logger.log(__file__, "plugin_loaded()", "#PROGRAMDRIVE#:\t" + get_cached_program_drive())
-	logger.log(__file__, "plugin_loaded()", "#SETTINGSPATH#:\t" + get_cached_setting_path())
-	logger.log(__file__, "plugin_loaded()", "#SKINSPATH#:\t\t" + skins_path())
-	logger.log(__file__, "plugin_loaded()", "#PLUGINSPATH#:\t" + plugins_path())
-	logger.log(__file__, "plugin_loaded()", "#ADDONSPATH#:\t\t" + addons_path())
+	logger.info(__file__, "plugin_loaded()", "#PROGRAMPATH#:\t" + get_cached_program_path())
+	logger.info(__file__, "plugin_loaded()", "#PROGRAMDRIVE#:\t" + get_cached_program_drive())
+	logger.info(__file__, "plugin_loaded()", "#SETTINGSPATH#:\t" + get_cached_setting_path())
+	logger.info(__file__, "plugin_loaded()", "#SKINSPATH#:\t\t" + skins_path())
+	logger.info(__file__, "plugin_loaded()", "#PLUGINSPATH#:\t\t" + plugins_path())
+	logger.info(__file__, "plugin_loaded()", "#ADDONSPATH#:\t\t" + addons_path())
 
 class MeterAutoComplete(sublime_plugin.EventListener):
 
@@ -530,10 +529,95 @@ class MeterAutoComplete(sublime_plugin.EventListener):
 
 class Bootstrap(sublime_plugin.EventListener):
 
+	# only show our completion list because nothing else makes sense in this context
+	flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
+
 	skin_rainmeter_section = None
+
+	scope = "source.rainmeter"
+
+	# comments are specified by ';'
+	comment_exp = re.compile(r'^\s*;.*')
+
+	# enable searching for [] in multiline environment
+	bracket_expression = re.compile(r'^\s*\[.+\]\s*$', re.MULTILINE)
 
 	def __init__(self):
 		self.skin_rainmeter_section = SkinRainmeterSectionKeyAutoComplete()
 
+	def get_lines_of_section_on_cursor(self, view, location):
+		size = view.size()
+		start_content = view.substr(sublime.Region(0, location))
+		end_content = view.substr(sublime.Region(location, size))
+
+		start_index = self.get_current_section_content_start_index(start_content)
+		end_index = self.get_current_section_content_end_index(end_content, location, size)
+
+		section = view.substr(sublime.Region(start_index, end_index))
+		lines = section.splitlines()
+
+		return lines
+
+	def get_current_section_content_start_index(self, start_content):
+		matches = list(self.bracket_expression.finditer(start_content))
+
+		if len(matches) > 0:
+			last_match = matches[-1]
+			return last_match.start()
+
+		# no previous section found, hardly legal but who cares
+		else:
+			return 0
+
+	def get_current_section_content_end_index(self, end_content, offset, end_index):
+		matches = list(self.bracket_expression.finditer(end_content))
+		if len(matches) > 0:
+			first_match = matches[0]
+			return first_match.start() + offset
+
+		# no next section found
+		else:
+			return end_index
+
 	def on_query_completions(self, view, prefix, locations):
-		self.skin_rainmeter_section.on_query_completions(view, prefix, locations)        
+		for location in locations:
+			# ignore non scope
+			if not view.match_selector(location, self.scope):
+				return None
+
+			# ignore on comment lines
+			cursor_line = view.line(location)
+			line_content = view.substr(cursor_line)
+			if self.comment_exp.search(line_content):
+				logger.info(__file__, "on_query_completions", "found comment")
+				return None
+
+			# find last occurance of the [] to determine the ini sections
+			lines = self.get_lines_of_section_on_cursor(view, location)
+			# filter empty lines
+			lines = list(filter(None, lines))
+			# filter comments
+			lines = list(filter(lambda l: not self.comment_exp.search(l), lines))
+
+			if not lines:
+				logger.info(__file__, "bootstrap.on_query_completions", "section is empty")
+				return None
+
+			#first_line = lines[0]
+
+			# currently in the [rainmeter] section
+			#if not self.rm_exp.search(first_line):
+			#	logger.info(__file__, "on_query_completions", "not in rainmeter section")
+			#	return None
+
+			# only do key completion if we are in the key are
+			# that means in front of the equal or no equal at all
+			# if self.after_equal_exp.search(line_contents):
+				# do value completion
+				# TODO fix with cursor location
+			#	logger.info(__file__, "on_query_completions", "after equal sign")
+			#	return None
+
+			result = self.skin_rainmeter_section.get_key_context_completion(view, prefix, location, line_content, "Rainmeter", [])
+			if result:
+				return result

@@ -25,12 +25,18 @@ def __load_settings():
 	global __log
 	__log = settings.get(key, False)
 
-def log(file, function, string):
+def info(file, function, string):
 	if __log:
-		now = datetime.now()
-		timestamp = now.strftime("%H:%M:%S.%f")[:-3]
+		_log("info", file, function, string)
 
-		filename = os.path.basename(file)
-		withoutext = os.path.splitext(filename)[0]
+def error(file, function, string):
+	_log("error", file, function, string)
 
-		print("[" + timestamp + "]", withoutext + "." + function + ':', string)
+def _log(type, file, function, string):
+	now = datetime.now()
+	timestamp = now.strftime("%H:%M:%S.%f")[:-3]
+
+	filename = os.path.basename(file)
+	withoutext = os.path.splitext(filename)[0]
+
+	print("[" + timestamp + "]", "[" + type + "]" , withoutext + "." + function + ':', string)

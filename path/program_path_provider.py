@@ -14,7 +14,7 @@ def get_cached_program_path():
 
 	# If setting is not set, try default location
 	if not rainmeterpath:
-		logger.log(__file__, "get_cached_program_path()", "rainmeter_path not found in settings." +
+		logger.info(__file__, "get_cached_program_path()", "rainmeter_path not found in settings." +
 			 " Trying default location.")
 		# Default: "C:\Program Files\Rainmeter"
 		programfiles = os.getenv("PROGRAMFILES")
@@ -33,7 +33,7 @@ def get_cached_program_path():
 					asubkey_name=winreg.EnumKey(keyval, i)
 					asubkey=winreg.OpenKey(keyval,asubkey_name)
 					val=winreg.QueryValueEx(asubkey, "DisplayName")
-					logger.log(__file__, "get_cached_program_path()", val)
+					logger.info(__file__, "get_cached_program_path()", val)
 				except EnvironmentError:
 					break
 
@@ -43,9 +43,9 @@ def get_cached_program_path():
 
 	# Check if path exists and contains Rainmeter.exe
 	if not os.path.exists(rainmeterpath + "Rainmeter.exe"):
-		logger.log(__file__, "get_cached_program_path()", "Path to Rainmeter.exe could not be" +
+		logger.info(__file__, "get_cached_program_path()", "Path to Rainmeter.exe could not be" +
 			 " found. Check your \"rainmeter_path\" setting.")
 		return
 
-	logger.log(__file__, "get_cached_program_path()", "Rainmeter found in " + rainmeterpath)
+	logger.info(__file__, "get_cached_program_path()", "Rainmeter found in " + rainmeterpath)
 	return rainmeterpath
