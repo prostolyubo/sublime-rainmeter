@@ -18,7 +18,7 @@ class SkinRainmeterSectionKeyAutoComplete:
 				skin_rainmeter_section = yaml.load(skin_rainmeter_section_stream)
 				meters_general_image_options = yaml.load(meters_general_image_options_stream)
 
-				skin_rainmeter_section['options'].extend(meters_general_image_options)
+				skin_rainmeter_section.extend(meters_general_image_options)
 
 				return skin_rainmeter_section
 
@@ -26,7 +26,7 @@ class SkinRainmeterSectionKeyAutoComplete:
 				logger.error(__file__, "get_completions", e)
 
 	@staticmethod
-	def get_compiled_completions(options):
+	def get_compiled_key_completions(options):
 		keys = []
 		for option in options:
 			title = option['title'] + "\t" + option['hint']
@@ -41,16 +41,51 @@ class SkinRainmeterSectionKeyAutoComplete:
 
 		return keys
 
+	@staticmethod
+	def get_compiled_value_completions(key, options):
+		values = []
+
+		for option in options:
+			option_key = option['title']
+
+			if option_key == key:
+				if 'values' in option:
+					option_values = option['values']
+					for option_value in option_values:
+						length = len(option_value)
+						
+						# case 1 is if only the key is provided, is generally the default case.
+						# Meaning is generally explained in the key
+						if length == 1:
+							pair = (option_value[0] + "\tDefault", option_value[0])
+							values.append(pair)
+
+						# case 2 is if only the key and the special hint is given
+						# means that the key is the value too
+						elif length == 2:
+							open_value_key, option_value_hint = option_value
+							pair = (open_value_key + "\t" + option_value_hint, open_value_key)
+							values.append(pair)
+						elif length == 3:
+							open_value_key, option_value_hint, option_value_value = option_value
+							pair = (open_value_key + "\t" + option_value_hint, option_value_value)
+							values.append(pair)
+						else:
+							logger.error(__file__, "get_compiled_value_completions", "unexpected length of '" + length + "' for option key '" + option_key + "'")
+
+		return values
+
 	# only show our completion list because nothing else makes sense in this context
 	flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 	scope = "source.rainmeter"
 	
 	all_completions = get_completions.__func__()
+	all_key_completions = get_compiled_key_completions.__func__(all_completions)
 
 	comment_exp = re.compile(r'^\s*;.*')
 	rm_exp = re.compile(r'^\s*\[Rainmeter\]\s*$', re.I)
-	all_completions = get_compiled_completions.__func__(all_completions['options'])
-	after_equal_exp = re.compile(r'^.*=\s*')
+	
+	before_equal_exp = re.compile(r'^\s*(.*)\s*=\s*')
 
 	def __init__(self):
 		logger.info(__file__, "__init__()", "SkinRainmeterSectionKeyAutoComplete initialized.")
@@ -62,7 +97,7 @@ class SkinRainmeterSectionKeyAutoComplete:
 		# filter by already existing keys
 		completions = []
 
-		for completion in self.all_completions:
+		for completion in self.all_key_completions:
 			trigger, content = completion
 
 			contained = 0
@@ -82,6 +117,12 @@ class SkinRainmeterSectionKeyAutoComplete:
 		else:
 			return completions, self.flags
 
-	def get_value_context_completion(self, view, prefix, location, line_content, section, keyvalues):
+	def get_value_context_completion(self, view, prefix, location, line_content, section, key_match, keyvalues):
+		if section != "Rainmeter":
+			return None
 
-		return None
+		value_completions = SkinRainmeterSectionKeyAutoComplete.get_compiled_value_completions(key_match, self.all_completions)
+		if not value_completions:
+			return None
+		else:
+			return value_completions, self.flags

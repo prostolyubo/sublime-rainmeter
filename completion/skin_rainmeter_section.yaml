@@ -1,7 +1,5 @@
 %YAML 1.2
 ---
-section: r'^\s*\[Rainmeter\]\s*$'
-hint: defines options for the entire skin
 # key
 # key hint
 # values
@@ -12,203 +10,170 @@ hint: defines options for the entire skin
 
 # general options
 # ===============
-options:
-  -
-    title: Update
-    hint: Update interval of the skin (ms)
-    values:
-      - [1000]
-      - [-1, Updated on load/refresh]
-  -
-    title: DefaultUpdateDivider
-    hint: Multiplied with Update option
-    values:
-      - [1]
-      - [-1, Updated on load/refresh]
-  -
-    title: AccurateText
-    hint: Improved text rendering
-    values:
-      - [0]
-      - [1, Improved padding, character spacing]
-  -
-    title: DynamicWindowSize
-    hint: Dynamic skin size adjustments
-    values:
-      - [0]
-      - [1, Adjust size to meters]
-  -
-    title: SkinWidth
-    hint: Width of skin
-    values:
-      - [None]
-      - ['#SCREENAREAWIDTH#', max width]
-  -
-    title: SkinHeight
-    hint: Height of skin
-    values:
-      - [None]
-      - ['#SCREENAREAHEIGHT#', max height]
-  -
-    title: DragMargins
-    hint: Area of draggable window
-    values:
-      - ['0,0,0,0']
-  -    
-    title: OnRefreshAction
-    hint: Executed on load/refresh
-    values:
-      - []
-  -
-    title: OnUpdateAction
-    hint: Executed on update
-    values:
-      - []
-  -
-    title: OnCloseAction
-    hint: Executed on closing rainmeter 
-    values: 
-      - []
-  -
-    title: OnFocusAction
-    hint: Executed on receiving focus (rm clicked)
-    values:
-      - []
-  -
-    title: OnUnfocusAction
-    hint: Executed on loosing focus (outside clicked)
-    values:
-      - []
-  -
-    title: OnWakeAction
-    hint: Executed on windows returns from sleep
-    values:
-      - []
-  -
-    title: TransitionUpdate
-    hint: Update time of meter transitions
-    values:
-      - [100]
-  -
-    title: ToolTipHidden
-    hint: Hiding all tooltips of skin
-    values:
-      - [0]
-      - [1, Hidden]
-  -
-    title: Group
-    hint: Grouping for skins
-    values:
-      - []
+-
+  title: Update
+  hint: Update interval of the skin (ms)
+  values:
+    - ["1000", "Default: each second"]
+    - ["-1", Updated on load/refresh]
+-
+  title: DefaultUpdateDivider
+  hint: Multiplied with Update option
+  values:
+    - ["1", "Default: once every tick"]
+    - ["-1", Updated on load/refresh]
+-
+  title: AccurateText
+  hint: Improved text rendering
+  values:
+    - ["0", "Default: fast rendering"]
+    - ["1", Improved padding, character spacing]
+-
+  title: DynamicWindowSize
+  hint: Dynamic skin size adjustments
+  values:
+    - ["0", "Default: fixed size"]
+    - ["1", Adjust size to meters]
+-
+  title: SkinWidth
+  hint: Width of skin
+  values:
+    - [None, "Default: dynamic"]
+    - ['#SCREENAREAWIDTH#', max width]
+-
+  title: SkinHeight
+  hint: Height of skin
+  values:
+    - [None, "Default: dynamic"]
+    - ['#SCREENAREAHEIGHT#', max height]
+-
+  title: DragMargins
+  hint: Area of draggable window
+  values:
+    - ['0,0,0,0', "Default: no margins"]
+-    
+  title: OnRefreshAction
+  hint: Executed on load/refresh
+-
+  title: OnUpdateAction
+  hint: Executed on update
+-
+  title: OnCloseAction
+  hint: Executed on closing rainmeter 
+-
+  title: OnFocusAction
+  hint: Executed on receiving focus (rm clicked)
+-
+  title: OnUnfocusAction
+  hint: Executed on loosing focus (outside clicked)
+-
+  title: OnWakeAction
+  hint: Executed on windows returns from sleep
+-
+  title: TransitionUpdate
+  hint: Update time of meter transitions
+  values:
+    - ["100", "Default"]
+-
+  title: ToolTipHidden
+  hint: Hiding all tooltips of skin
+  values:
+    - ["0", "Default: show"]
+    - ["1", Hidden]
+-
+  title: Group
+  hint: Grouping for skins
 
 
-  # general image options
-  # =====================
-  # !include meters_general_image_options.yaml
+# general image options
+# =====================
+# !include meters_general_image_options.yaml
 
-  # background options
-  # ==================
-  -
-    title: Background
-    hint: Path of background image
-    values:
-      - []
-  -
-    title: BackgroundMode
-    hint: Background mode of skin
-    values:
-      - [0, Image as defined in Background] # Background is required
-      - [1, 'Default: transparent background']
-      - [2, Fill with SolidColor] # SolidColor required
-      - [3, Fill by scaling Background image] # Background is required
-      - [4, Fill by tiling Background image] # Background is required
-  -
-    # requires BackgroundMode=2
-    title: BackgroundMargins
-    hint: Margins of Background image (L,T,R,B)
-    values:
-      - ['0,0,0,0']
-  -
-    # requires BackgroundMode=2
-    title: SolidColor
-    hint: Background color
-    values:
-      - ['0,0,0,0']
-      - ['0,0,0,1', Clickable background]
-  -
-    # requires SolidColor
-    title: SolidColor2
-    hint: Gradient color with SolidColor
-    values:
-      - ['0,0,0,0']
-  - 
-    # requires SolidColor
-    # requires SolidColor2
-    # requires BackgroundMode=2
-    title: GradientAngle
-    hint: Angle of gradient in degrees
-    values:
-      - [0]
-  -
-    # requires BackgroundMode=2
-    title: BevelType
-    hint: Draws bevel around edges
-    values:
-      - [0, 'Default: no bevel']
-      - [1, 'Raised']
-      - [2, 'Sunken']
-  
+# background options
+# ==================
+-
+  title: Background
+  hint: Path of background image
+-
+  title: BackgroundMode
+  hint: Background mode of skin
+  values:
+    - ["0", Image as defined in Background] # Background is required
+    - ["1", 'Default: transparent background']
+    - ["2", Fill with SolidColor] # SolidColor required
+    - ["3", Fill by scaling Background image] # Background is required
+    - ["4", Fill by tiling Background image] # Background is required
+-
+  # requires BackgroundMode=2
+  title: BackgroundMargins
+  hint: Margins of Background image (L,T,R,B)
+  values:
+    - ['0,0,0,0', "Default: no margins"]
+-
+  # requires BackgroundMode=2
+  title: SolidColor
+  hint: Background color
+  values:
+    - ['0,0,0,0', "Default: no background"]
+    - ['0,0,0,1', Clickable background]
+-
+  # requires SolidColor
+  title: SolidColor2
+  hint: Gradient color with SolidColor
+  values:
+    - ['0,0,0,0', "Default: no gradient"]
+- 
+  # requires SolidColor
+  # requires SolidColor2
+  # requires BackgroundMode=2
+  title: GradientAngle
+  hint: Angle of gradient in degrees
+  values:
+    - ["0", "Default: no gradient angle"]
+-
+  # requires BackgroundMode=2
+  title: BevelType
+  hint: Draws bevel around edges
+  values:
+    - ["0", 'Default: no bevel']
+    - ["1", 'Raised']
+    - ["2", 'Sunken']
 
-  # context options
-  # =============== 
-  -
-    title: ContextTitle
-    hint: Entry in context menu
-    values:
-      - []
-  -
-    title: ContextTitle2
-    hint: Entry in context menu
-    values:
-      - []
-  -
-    title: ContextTitle25
-    hint: Entry in context menu
-    values:
-      - []
 
-  -
-    title: ContextAction
-    hint: Action by clicking ContextTitle
-    values:
-      - []
-  -
-    title: ContextAction2
-    hint: Action by clicking ContextTitle2
-    values:
-      - []
-  -
-    title: ContextAction25
-    hint: Action by clicking ContextTitle25
-    values:
-      - []
-  
-  # aero blur options
-  # =================
-  -
-    title: Blur
-    hint: Aero blue on Windows 7
-    values:
-      - [0]
-      - [1, Blur skin or BlurRegions]
+# context options
+# =============== 
+-
+  title: ContextTitle
+  hint: Entry in context menu
+-
+  title: ContextTitle2
+  hint: Entry in context menu
+-
+  title: ContextTitle25
+  hint: Entry in context menu
 
-  -
-    title: BlurRegion 
-    hint: Area and shapes of blurred regions
-    values:
-      - []
-  -
-    title: BlurRegion2
-    hint: Area and shapes of blurred regions
-    values:
-      - []
+-
+  title: ContextAction
+  hint: Action by clicking ContextTitle
+-
+  title: ContextAction2
+  hint: Action by clicking ContextTitle2
+-
+  title: ContextAction25
+  hint: Action by clicking ContextTitle25
+
+# aero blur options
+# =================
+-
+  title: Blur
+  hint: Aero blue on Windows 7
+  values:
+    - ["0", "Default: no blur"]
+    - ["1", Blur skin or BlurRegions]
+
+-
+  title: BlurRegion 
+  hint: Area and shapes of blurred regions
+-
+  title: BlurRegion2
+  hint: Area and shapes of blurred regions

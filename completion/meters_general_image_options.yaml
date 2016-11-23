@@ -3,31 +3,27 @@
 -
   title: ImagePath
   hint: Folder path of images
-  values:
-    - []
 -
   title: ImageCrop
   hint: X, Y, W, H, Origin
-  values:
-    - []
 -
   title: Greyscale
   hint: Color saturated
   values:
-    - [0]
-    - [1, "Image grayscaled"]
+    - ["0"]
+    - ["1", "Image grayscaled"]
 -
   title: ImageTint
   hint: Tint image with color
   values:
-    - [255, 255, 255, 255, "Default: opaque white"]
-    - [255, 255, 255, 0, "transparent white"]
+    - ["255,255,255,255", "Default: opaque white"]
+    - ["255,255,255,0", "transparent white"]
 -
   title: ImageAlpha
   hint: Opacity of the image (0 - 255)
   values:
-    - [255, "Default: opaque"]
-    - [0, invisible]
+    - ["255", "Default: opaque"]
+    - ["0", invisible]
 -
   title: ImageFlip
   hint: Flips the image
@@ -40,15 +36,15 @@
   title: ImageRotate
   hint: Rotates image by angle (degrees)
   values:
-    - [0.0, "Default: no rotation"]
-    - [1, "Clockwise rotation"]
-    - [-1, "Counter-clockwise rotation"]
+    - ["0.0", "Default: no rotation"]
+    - ["1", "Clockwise rotation"]
+    - ["-1", "Counter-clockwise rotation"]
 -
   title: UseExifOrientation
   hint: Rotate based on EXIF data
   values:
-    - [0, "Default: no rotation"]
-    - [1, "Rotate"]
+    - ["0", "Default: no rotation"]
+    - ["1", "Rotate"]
 -
   title: ColorMatrix1
   hint: First row

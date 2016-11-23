@@ -541,11 +541,14 @@ class Bootstrap(sublime_plugin.EventListener):
 
 	# enable searching for [] in multiline environment
 	bracket_expression = re.compile(r'^\s*\[.+\]\s*$', re.MULTILINE)
+	section_expression = re.compile(r'^\s*\[(.+)\]\s*$', re.I)
+	key_expression = re.compile(r'^\s*(.+)\s*\=?\s*(.*?)\s*$', re.MULTILINE)
+	key_value_expression = re.compile(r'^\s*(.+?)\s*\=\s*(.*?)\s*$', re.MULTILINE)
 
 	def __init__(self):
 		self.skin_rainmeter_section = SkinRainmeterSectionKeyAutoComplete()
 
-	def get_lines_of_section_on_cursor(self, view, location):
+	def get_lines_of_section_on_cursor(self, view, location, prefix):
 		size = view.size()
 		start_content = view.substr(sublime.Region(0, location))
 		end_content = view.substr(sublime.Region(location, size))
@@ -579,6 +582,32 @@ class Bootstrap(sublime_plugin.EventListener):
 		else:
 			return end_index
 
+	def get_key_value(self, line_content):
+		key_value_match = self.key_value_expression.search(line_content)
+		if key_value_match:
+			logger.info(__file__, "on_query_completions", "key/value found in '" + line_content + "'")
+			key_match = key_value_match.group(1)
+			value_match = key_value_match.group(2)
+
+			return key_match, value_match
+
+		key_only_match = self.key_expression.search(line_content)
+		if key_only_match:
+			logger.info(__file__, "on_query_completions", "potential key found in '" + line_content + "'")
+			return key_only_match.group(1), None
+
+		return None, None
+
+	def get_key_values(self, lines):
+		key_values = []
+
+		for line in lines:
+			key, value = self.get_key_value(line)
+			if key:
+				key_values.append((key, value))
+
+		return key_values
+
 	def on_query_completions(self, view, prefix, locations):
 		for location in locations:
 			# ignore non scope
@@ -593,7 +622,7 @@ class Bootstrap(sublime_plugin.EventListener):
 				return None
 
 			# find last occurance of the [] to determine the ini sections
-			lines = self.get_lines_of_section_on_cursor(view, location)
+			lines = self.get_lines_of_section_on_cursor(view, location, prefix)
 			# filter empty lines
 			lines = list(filter(None, lines))
 			# filter comments
@@ -603,21 +632,33 @@ class Bootstrap(sublime_plugin.EventListener):
 				logger.info(__file__, "bootstrap.on_query_completions", "section is empty")
 				return None
 
-			#first_line = lines[0]
+			# extract section
+			first_line = lines[0]
+			match = self.section_expression.search(first_line)
 
-			# currently in the [rainmeter] section
-			#if not self.rm_exp.search(first_line):
-			#	logger.info(__file__, "on_query_completions", "not in rainmeter section")
-			#	return None
+			# no section defined
+			# TODO section suggestion
+			if not match:
+				logger.info(__file__, "on_query_completions", "no section found")
+				return None
+			section = match.group(1)
 
+			key_match, value_match = self.get_key_value(line_content)
+			key_values = self.get_key_values(lines)
+
+			if value_match == "":
+				logger.info(__file__, "on_query_completions", "after equal trigger in '" + line_content + "'")
+				# value trigger
+				value_result = self.skin_rainmeter_section.get_value_context_completion(view, prefix, location, line_content, section, key_match, key_values)
+				if value_result:
+					return value_result
+			
 			# only do key completion if we are in the key are
 			# that means in front of the equal or no equal at all
-			# if self.after_equal_exp.search(line_contents):
-				# do value completion
-				# TODO fix with cursor location
-			#	logger.info(__file__, "on_query_completions", "after equal sign")
-			#	return None
-
-			result = self.skin_rainmeter_section.get_key_context_completion(view, prefix, location, line_content, "Rainmeter", [])
-			if result:
-				return result
+			else:
+				logger.info(__file__, "on_query_completions", "before equal trigger in '" + line_content + "'")
+				key_result = self.skin_rainmeter_section.get_key_context_completion(view, prefix, location, line_content, section, key_values)
+				if key_result:
+					return key_result
+			
+			return None
