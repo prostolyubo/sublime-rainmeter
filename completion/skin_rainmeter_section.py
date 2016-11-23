@@ -77,15 +77,9 @@ class SkinRainmeterSectionKeyAutoComplete:
 
 	# only show our completion list because nothing else makes sense in this context
 	flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
-	scope = "source.rainmeter"
 	
 	all_completions = get_completions.__func__()
 	all_key_completions = get_compiled_key_completions.__func__(all_completions)
-
-	comment_exp = re.compile(r'^\s*;.*')
-	rm_exp = re.compile(r'^\s*\[Rainmeter\]\s*$', re.I)
-	
-	before_equal_exp = re.compile(r'^\s*(.*)\s*=\s*')
 
 	def __init__(self):
 		logger.info(__file__, "__init__()", "SkinRainmeterSectionKeyAutoComplete initialized.")
