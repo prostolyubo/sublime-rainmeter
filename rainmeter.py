@@ -17,7 +17,7 @@ from .path.program_path_provider import get_cached_program_path
 from .path.setting_path_provider import get_cached_setting_path
 from .path.program_drive_provider import get_cached_program_drive
 
-from .completion.skin_rainmeter_section import SkinRainmeterSectionKeyAutoComplete
+from .completion.skin.rainmeter_section import SkinRainmeterSectionKeyAutoComplete
 
 
 def skins_path() -> str:

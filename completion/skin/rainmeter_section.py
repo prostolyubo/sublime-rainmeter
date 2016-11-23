@@ -13,7 +13,7 @@ class SkinRainmeterSectionKeyAutoComplete:
 	def get_completions():
 		dir_path = os.path.dirname(os.path.realpath(__file__))
 
-		with open(dir_path + "/skin_rainmeter_section.yaml", 'r') as skin_rainmeter_section_stream, open(dir_path + "/meters_general_image_options.yaml", 'r') as meters_general_image_options_stream:
+		with open(dir_path + "/rainmeter_section.yaml", 'r') as skin_rainmeter_section_stream, open(dir_path + "/../meters_general_image_options.yaml", 'r') as meters_general_image_options_stream:
 			try:
 				skin_rainmeter_section = yaml.load(skin_rainmeter_section_stream)
 				meters_general_image_options = yaml.load(meters_general_image_options_stream)

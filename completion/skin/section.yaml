@@ -1,0 +1,23 @@
+%YAML 1.2
+---
+-
+  title: "[Rainmeter]"
+  hint: Defines skin options
+- 
+  title: "[Metadata]"
+  hint: Presented in Manage window
+-
+  title: "[Variables]"
+  hint: Reusable text strings
+-
+  title: "[Measure]"
+  hint: Retrieve information
+  value: "[${1:MeasureName}]"
+-
+  title: "[Meter]"
+  hint: Display information
+  value: "[${1:MeterName}]"
+-
+  title: "[MeterStyle]"
+  hint: Style meters
+  value: "[${1:MeterStyleName}]"
