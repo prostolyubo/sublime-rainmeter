@@ -16,7 +16,7 @@ def plugin_loaded():
 	__log = settings.get(key, False)
 	settings.add_on_change(key, __load_settings)
 
-	_log(__file__, "plugin_loaded()", "Logger succesfully loaded.")
+	info(__file__, "plugin_loaded()", "Logger succesfully loaded.")
 
 def __load_settings():
 	settings = sublime.load_settings("Rainmeter.sublime-settings")
