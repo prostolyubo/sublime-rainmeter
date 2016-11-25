@@ -1,0 +1,525 @@
+%YAML 1.2
+---
+name: Rainmeter
+comment: "Rainmeter Syntax: r2708 beta"
+scope: scope.rainmeter
+file_extensions: [ini, inc]
+uuid: 6a53050b-d898-4e20-8fa0-c1726f4ce466
+foldingStartMarker: "^\\s*\\[\\s*[^\\[\\]\\s]*\\s*\\]\\s*$"
+foldingStopMarker: "^(?=\\s*\\[)"
+
+# template
+
+    # # 
+    # - match: 
+    #   scope: 
+    #   captures: 
+    #     1: 
+    #     2: 
+    #     3: 
+
+contexts:
+  main:
+    # comment lines
+    - match: "^\\s*(;.*)$"
+      scope: meta.comment
+      captures:
+        1: comment.line.character.rainmeter
+
+    # all other options in a section
+    - scope: meta.variables.section.rainmeter
+      match: "(?i)^\\s*(\\[\\s*variables\\s*\\])\\s*$"
+      captures:
+        1: entity.name.section.rainmeter
+      push:
+        # comment lines
+        - match: "^\\s*;.*$"
+          captures:
+            0: comment.line.character.rainmeter
+        # All other options in a section
+        - match: "(?i)^\\s*(?!@include([^=])*)([^\\s=]+)\\s*(=)"
+          captures:
+            2: storage.type.variable.rainmeter
+            3: keyword.operator.option.equal.rainmeter"
+        - match: "^(?=\\s*\\[)"
+          pop: true
+
+    # section heads
+    - match: "^\\s*\\[\\s*[^\\[\\]\\s]*\\s*\\]\\s*$"
+      scope: entity.name.section.rainmeter
+
+    # format option lines give formatting literals priority over environment variables
+    - scope: meta.format.string.rainmeter
+      match: "(?i)^\\s*(Format)\\s*(=)"
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+      push: 
+        # uptime measure
+        # String format placeholder
+        - match: "%[1-4]+"
+          captures: 
+            0: constant.language.format.rainmeter
+        - match: "![0-9]*i!"
+          captures:
+            0: constant.language.format.rainmeter
+        
+        # time measure
+         # Formatting strings for time formats
+        - match: "%#?[aAbBcdHIjmMpSUwWxXyYzZ]"
+          captures:
+            0: constant.language.format.rainmeter
+        - match: "$"
+          pop: true
+
+    # Rainmeter builtin variables
+    - match: "(?i)(#@#|#PROGRAMDRIVE#)|(#PROGRAMPATH#)|(#SETTINGSPATH#)|(#SKINSPATH#)|(#PLUGINSPATH#)|(#ADDONSPATH#)|(#CURRENTPATH#)|(#ROOTCONFIGPATH#)|(#CURRENTFILE#)|(#CURRENTCONFIG#)|(#CURRENTSECTION#)|(#CURRENTCONFIGWIDTH#)|(#CURRENTCONFIGHEIGHT#)|(#CURRENTCONFIGX#)|(#CURRENTCONFIGY#)|(#[Pp]?WORKAREAX#)|(#[Pp]?WORKAREAY#)|(#[Pp]?WORKAREAWIDTH#)|(#[Pp]?WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAWIDTH#)|(#[PpVv]?SCREENAREAHEIGHT#)|(#CRLF#)|(#WORKAREAWIDTH#)|(#WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAX#)|(#[PpVv]?SCREENAREAY#)|(#WORKAREAX@\\d+#)|(#WORKAREAY@\\d+#)|(#WORKAREAWIDTH@\\d+#)|(#WORKAREAHEIGHT@\\d+#)|(#SCREENAREAX@\\d+#)|(#SCREENAREAY@\\d+#)|(#SCREENAREAWIDTH@\\d+#)|(#SCREENAREAHEIGHT@\\d+#)"
+      scope: support.variable.rainmeter
+
+    # Escaped variables (must be before normal ones to override them)
+    - match: "#\\*[^#\\s]+?\\*#"
+      scope: meta.text.rainmeter
+
+    # Normal variables
+    - match: "#[^#\\s]+?#"
+      scope: variable.other.static.rainmeter
+
+    # Environment variables
+    - match: "%[A-Za-z][0-9a-zA-Z_]+?%"
+      scope: variable.other.env.rainmeter
+
+    # Mouse position variables
+    - match: "(?i)\\$Mouse(X|Y)(:%)?\\$"
+      scope: support.variable.rainmeter
+
+    # UserInput variable of InputText plugin
+    - match: "(?i)\\$Userinput\\$"
+      scope: support.variable.userinput.rainmeter
+
+    # Deprecated bangs
+    - match: "(?i)!((Rainmeter((SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Update)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Show|Hide)(Group)?)))|Execute|(Rainmeter)?PluginBang)\\b"
+      scope: invalid.deprecated.bang.rainmeter
+
+    # Bangs
+    - match: "(?i)!((SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Un|Toggle)?PauseMeasure)|((Show|Hide)(Group)?|(Update)|(LoadLayout)))\\b"
+      scope: support.function.bang.rainmeter
+      
+    # Escaped dynamic sections (must be before normal ones to override them)
+    - match: "\\[\\*[^\\[\\]\\s]+?\\*\\]"
+      scope: meta.text.rainmeter
+
+    # Section variables
+    - match: "(?i)\\[[^\\[\\]\\s\\\\/!#\"%\\$]*?(:((((W|H|X|Y|(Min|Max)Value)|(/[-+]?[0-9]*\\.?[0-9]+(e[-+]?[0-9]+)?(,\\s*[0-9]+)?)|(%)|([0-9]+))(,\\s*((W|H|X|Y|(Min|Max)Value)|(/[-+]?[0-9]*\\.?[0-9]+(e[-+]?[0-9]+)?(,\\s*[0-9]+)?)|(%)|([0-9]+)))*?)|(EscapeRegExp|EncodeURL|TimeStamp))?)\\]"
+      scope: variable.other.dynamic.section_variable.rainmeter
+      captures: 
+        1: constant.language.section_variable.spec.rainmeter
+
+    # Measures used as dynamic values
+    - match: "\\[[^\\[\\]\\s\\\\/!#\"%\\$]*\\]"
+      scope: variable.other.dynamic.rainmeter
+
+    # imageflip options
+    - match: "(?i)^\\s*((Primary|Secondary|Both)?imageflip)\\s*(=)\\s*((None|Horizontal|Vertical|Both)|\"(None|Horizontal|Vertical|Both)\")\\s*$"
+      scope: meta.option.imageflip.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: support.constant.option_values.rainmeter
+
+    # invalid imageflip options
+    - match: "(?i)^\\s*((Primary|Secondary|Both)?imageflip)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.imageflip.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        3: keyword.operator.option.equal.rainmeter
+        5: invalid.rainmeter
+
+    # UseExifOrientation options
+    - match: "(?i)^\\s*(UseExifOrientation)\\s*(=)\\s*((0|1)|\"(0|1)\")\\s*$"
+      scope: meta.option.UseExifOrientation.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # invalid UseExifOrientation options
+    - match: "(?i)^\\s*(UseExifOrientation)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.UseExifOrientation.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(Paused)\\s*(=)\\s*((0|1)|\"(0|1)\")\\s*$"
+      scope: meta.option.Paused.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    #
+    - match: "(?i)^\\s*(Paused)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.Paused.invalid.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(AccurateText)\\s*(=)\\s*((0|1)|\"(0|1)\")\\s*$"
+      scope: meta.option.AccurateText.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(AccurateText)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.AccurateText.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(UpdateRandom)\\s*(=)\\s*((0|1)|\"(0|1)\")\\s*$"
+      scope: meta.option.UpdateRandom.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(UpdateRandom)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.UpdateRandom.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(UniqueRandom)\\s*(=)\\s*((0|1)|\"(0|1)\")\\s*$"
+      scope: meta.option.UniqueRandom.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(UniqueRandom)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.UniqueRandom.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(IfConditionMode)\\s*(=)\\s*((0|1)|\"(0|1)\")\\s*$"
+      scope: meta.option.IfConditionMode.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(IfConditionMode)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.IfConditionMode.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(IfMatchMode)\\s*(=)\\s*((0|1)|\"(0|1)\")\\s*$"
+      scope: meta.option.IfMatchMode.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(IfMatchMode)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.IfMatchMode.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(measure)\\s*(=)\\s*((Script|Cpu|Memory|PhysicalMemory|SwapMemory|Uptime|Net(In|Out|Total)|FreeDiskSpace|Loop|Plugin|Registry|Time|Calc|String)|\"(Script|Cpu|Memory|PhysicalMemory|SwapMemory|Uptime|Net(In|Out|Total)|FreeDiskSpace|Loop|Plugin|Registry|Time|Calc|String)\")\\s*$"
+      scope: meta.option.measure.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.names.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(measure)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.measure.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(RegHKey)\\s*(=)\\s*((HKEY_CURRENT_(Config|USER)|HKEY_LOCAL_MACHINE|HKEY_CLASSES_ROOT|HKEY_PERFORMANCE_DATA|HKEY_DYN_DATA)|\"(HKEY_CURRENT_(Config|USER)|HKEY_LOCAL_MACHINE|HKEY_CLASSES_ROOT|HKEY_PERFORMANCE_DATA|HKEY_DYN_DATA)\")\\s*$"
+      scope: meta.option.RegHKey.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(RegHKey)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.RegHKey.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(TimeZone)\\s*(=)\\s*(((local)|(\"local\"))|([-+]?[0-9]*\\.?[0-9]+(e[-+]?[0-9]+)?))\\s*$"
+      scope: meta.option.TimeZone.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(TimeZone)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$|\\(.*\\)\\s*$))(.*)\\s*$"
+      scope: meta.option.TimeZone.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(meter)\\s*(=)\\s*((BAR|BITMAP|BUTTON|HISTOGRAM|IMAGE|LINE|ROTATOR|ROUNDLINE|SHAPE|STRING)|\"(BAR|BITMAP|BUTTON|HISTOGRAM|IMAGE|LINE|ROTATOR|ROUNDLINE|SHAPE|STRING)\")\\s*$"
+      scope: meta.option.meter.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.names.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(meter)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.meter.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(plugin)\\s*(=)\\s*(((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|FileView|InputText|iTunesPlugin|MediaKey|NowPlaying|PerfMon|PingPlugin|PowerPlugin|Process|QuotePlugin|RecycleManager|ResMon|RunCommand|SpeedFanPlugin|SysInfo|VirtualDesktops|WebParser|WiFiStatus|AudioLevel|Win7AudioPlugin|WindowMessagePlugin)(\\.dll)?)|\"((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|InputText|iTunes|MediaKey|NowPlaying|PerfMon|Ping|Power|Process|Quote|RecycleManager|ResMon|RunCommand|SpeedFan|SysInfo|VirtualDesktops|WebParser|WiFiStatus|Win7Audio|WindowMessage)(\\.dll)?)\")\\s*$"
+      scope: meta.option.plugin.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.names.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(TooltipIcon)\\s*(=)\\s*((INFO|WARNING|ERROR|QUESTION|SHIELD)|\"(INFO|WARNING|ERROR|QUESTION|SHIELD)\")\\s*$"
+      scope: meta.option.TooltipIcon.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(TooltipIcon)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$|.*\\.ico\\s*$))(.*)\\s*$"
+      scope: meta.option.TooltipIcon.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*((Graph|Bar)Orientation)\\s*(=)\\s*((Horizontal|Vertical)|\"(Horizontal|Vertical)\")\\s*$"
+      scope: meta.option.Orientation.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*((Graph|Bar)Orientation)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.Orientation.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        3: keyword.operator.option.equal.rainmeter
+        5: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(bitmapalign)\\s*(=)\\s*((Left|Center|Right)|\"(Left|Center|Right)\")\\s*$"
+      scope: meta.option.bitmapalign.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(bitmapalign)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.bitmapalign.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(Autoscale)\\s*(=)\\s*((0|1(k)?|2(k)?)|\"(0|1(k)?|2(k)?)\")\\s*$"
+      scope: meta.option.Autoscale.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(Autoscale)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.Autoscale.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # GraphStart options
+    - match: "(?i)^\\s*(GraphStart)\\s*(=)\\s*((Left|Right)|\"(Left|Right)\")\\s*$"
+      scope: meta.option.GraphStart.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # invalid GraphStart options
+    - match: "(?i)^\\s*(GraphStart)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.GraphStart.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(stringalign)\\s*(=)\\s*(((Left|Right|Center)(Bottom|Top|Center)?)|\"((Left|Right|Center)(Bottom|Top|Center)?)\")\\s*$"
+      scope: meta.option.align.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(stringalign)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.align.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(stringstyle)\\s*(=)\\s*((Normal|Bold|Italic|Bolditalic)|\"(Normal|Bold|Italic|Bolditalic)\")\\s*$"
+      scope: meta.option.stringstyle.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(stringstyle)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.stringstyle.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(stringeffect)\\s*(=)\\s*((none|shadow|border)|\"(none|shadow|border)\")\\s*$"
+      scope: meta.option.stringeffect.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(stringeffect)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.stringeffect.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(stringcase)\\s*(=)\\s*((none|upper|lower|proper)|\"(none|upper|lower|proper)\")\\s*$"
+      scope: meta.option.stringcase.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # 
+    - match: "(?i)^\\s*(stringcase)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.stringcase.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # Include statements
+    - match: "(?i)\\s*(@include([^=])*)\\s*(=)"
+      scope: meta.option.predefined.include.rainmeter
+      captures: 
+        1: storage.type.option.predefined.include.rainmeter
+        3: keyword.operator.option.equal.rainmeter
+
+    # Predefined options for meters and measures
+    - match: "(?i)^\\s*(Program|Parameter|State|OutputFile|OutputType|StartInFolder|Background|BackgroundMode|BackgroundMargins|AccurateText|DefaultUpdateDivider|ImageCrop|Greyscale|Image(Name|Tint|Flip|Rotate|Alpha|Crop)|UseExifOrientation|SolidColor(2)?|GradientAngle|beveltype|Blur|BlurRegion([2-9]{1,1}|[0-9]{2,})?|Update|TransitionUpdate|DynamicWindowSize|Skin(Width|Height)|DragMargins|OnRefreshAction|OnCloseAction|On(Un)?FocusAction|OnChangeAction|OnUpdateAction|OnWakeAction|Author|Description|AppVersion|LocalFont([2-9]{1,1}|[0-9]{2,})?|DynamicVariables|Name|Information|Version|License|Group|Measure|InvertMeasure|Disabled|UpdateDivider|StartValue|EndValue|Increment|LoopCount|(Max|Min)Value|AverageSize|Action|ActionList([0-9])+|IgnoreWarnings|If(Above|Equal|Below)(Value|Action)|IfCondition([2-9]{1,1}|[0-9]{2,})?|If(True|False)Action([2-9]{1,1}|[0-9]{2,})?|IfMatch([2-9]{1,1}|[0-9]{2,})?|If(Not)?MatchAction([2-9]{1,1}|[0-9]{2,})?|Substitute|Formula|UpdateRandom|UniqueRandom|(Low|High)Bound|Processor|Drive|Total|Label|Type|IgnoreRemovable|DiskQuota|Net(In|Out|Total)Speed|Traffic(Action|Value)|Interface|Cumulative|Plugin|Reg(HKey|Key|Value)|ScriptFile|Format|TimeZone|TimeStamp|TimeStampFormat|TimeStampLocale|FormatLocale|DaylightSavingTime|AddDaysToHours|SecondsValue|Meter|X|Y|W|H|MeterStyle|Shape([2-9]{1,1}|[0-9]{2,})?|Inline(Pattern|Setting)(.*)?|MeasureName([2-9]{1,1}|[0-9]{2,})?|Hidden|AntiAlias|ToolTip(Text|Title|Icon|Type|Width|Hidden)|TransformationMatrix|Padding|Paused|Bar(Color|Image|Border)|(Primary|Secondary|Both)?ColorMatrix[12345]|BarOrientation|Flip|Bitmap(Image|Frames|TransitionFrames|ZeroFrame|Extend|Digits|Align|Separation)|Button(Image|Command)|SecondaryMeasureName|(Primary|Both|Secondary)(Color|Image(Crop|Tint|Flip|Rotate|Alpha)?|Greyscale)|(Primary|Both|Secondary)?ImagePath|Graph(Start|Orientation)|PreserveAspectRatio|ScaleMargins|Tile|MaskImageName|MaskImagePath|MaskImageFlip|MaskImageRotate|Line(Count|Width|Length|Start)|LineColor([2-9]{1,1}|[0-9]{2,})?|Scale([2-9]{1,1}|[0-9]{2,})?|HorizontalLine(s|Color)|Offset(X|Y)|(Start|Rotation)Angle|ValueRemainder|Control(Length|Start|Angle)|(Length|Start)Shift|Solid|Font(Color|Size|EffectColor|Face)|String(Align|Style|Effect|Case|)?|(Pre|Post)Fix|Autoscale|Percentual|NumOfDecimals|Text|ClipString(W|H)?|Angle|(Left|Right|Middle|(X(1|2)))Mouse(Down|Up|DoubleClick)Action|Mouse(Over|Leave)Action|MouseScroll(Down|Up|Left|Right)Action|MouseActionCursor(Name)?|CPUInclude|CPUExclude|TopProcess|CoreTemp(Type|Index)|Folder|InfoType|RegExpFilter|Include(SubFolders|(Hidden|System)Files)|Command[0-9]*|DefaultValue|Password|FocusDismiss|DefaultArtwork|Player(Name|Type|Path)|TrackChangeAction|DisableLeadingZero|PerfMon(Object|Counter|Instance|Difference)|DestAddress|UpdateRate|Timeout(Value)?|PowerState|ProcessName|PathName|Separator|Subfolders|FileFilter|RecycleType|ResCountType|SpeedFan(Type|Number|Scale)|SysInfo(Type|Data)|VD(Manager|MeasureType|DesktopCount|On((De)?Activate|Change)|Desktop|Width|Height|RefreshOnUpdate)|Desktop(Name|Wallpaper)|Screenshot|Url|RegExp(Substitute)?|FinishAction|OnRegExpErrorAction|OnConnectErrorAction|OnDownloadErrorAction|StringIndex(2)?|DecodeCharacterReference|Debug|Debug2File|Download(File)?|ErrorString|ForceReload|LogSubstringErrors|ProxyServer|UserAgent|Header([2-9]{1,1}|[0-9]{2,})?|CodePage|WiFiInfoType|WiFiIntfID|WiFiListStyle|Window(Name|Class|Message)|Context(Title|Action)([2-9]{1,1}|[0-9]{2,})?|Recursive|Count|Show(DotDot|Folder|File|Hidden|System)|(Hide)?Extensions|Sort(Date)?Type|SortAscending|Port|ID|RMSAttack|RMSDecay|RMSGain|PeakAttack|PeakDecay|PeakGain|FFTSize|FFTOverlap|FFTAttack|FFTDecay|Bands|FreqMin|FreqMax|Sensitivity|Parent|Channel|Type|FFTIdx|BandIdx|WildcardSearch|Index|IgnoreCount|DateType|Icon(Path|Size))\\s*(=)"
+      scope: meta.option.predefined.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+
+    # Constants used in Calc measures
+    - match: "(?i)\\b(PI|E|RANDOM)\\b"
+      scope: support.constant.rainmeter
+
+    # Functions used in Calc measures
+    - match: "(?i)\\b(((a)?(tan(2)?|sin|cos))|abs|exp|log|ln|sqrt|sgn|frac|trunc|floor|ceil|min|max|clamp|round|rad)\\s*(?=\\()"
+      scope: support.function.math.rainmeter
+      
+    # All other options in a section
+    - match: "^\\s*([^\\s=]+)\\s*(=)"
+      scope: meta.option.rainmeter
+      captures: 
+        1: storage.type.option.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+
+    # Format placeholder
+    - match: "%[0-9]+"
+      scope: constant.language.format.rainmeter
+
+    # Formatting strings for time formats
+    - match: "![0-9]*i!"
+      scope: constant.language.format.rainmeter
+
+    # Hex color definition
+    - match: "\\b(\\h{2,2})(\\h{2,2})(\\h{2,2})(\\h{2,2})?\\b"
+      scope: meta.numeric.color.hex.rainmeter
+      captures: 
+        1: constant.numeric.color.red.hex.rainmeter
+        2: constant.numeric.color.green.hex.rainmeter
+        3: constant.numeric.color.blue.hex.rainmeter
+        4: constant.numeric.color.alpha.hex.rainmeter
+
+    # RGB color definition
+    - match: "\\b(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})(\\s*,\\s*(\\d{1,3}))?\\b"
+      scope: meta.numeric.color.numeric.rainmeter
+      captures: 
+        1: constant.numeric.color.red.numeric.rainmeter
+        2: constant.numeric.color.green.numericrainmeter
+        3: constant.numeric.color.blue.numeric.rainmeter
+        5: constant.numeric.color.alpha.numeric.rainmeter
+
+    - match: "(?i)^\\s*(stringalign)\\s*(=)\\s*(((Left|Right|Center)(Bottom|Top|Center)?)|\"((Left|Right|Center)(Bottom|Top|Center)?)\")\\s*$"
+      scope: meta.option.align.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
