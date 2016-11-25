@@ -162,6 +162,9 @@ contexts:
           captures:
             1: support.constant.option_values.rainmeter
             2: storage.type.variable.rainmeter
+        - match: (Rectangle|Ellipse|Line|Arc|Curve|Combine)\s+
+          captures:
+            1: support.constant.option_values.rainmeter
         - include: meter-shape-modifier
         - match: $
           pop: true
