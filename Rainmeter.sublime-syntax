@@ -2,7 +2,7 @@
 ---
 name: Rainmeter
 comment: "Rainmeter Syntax: r2708 beta"
-scope: scope.rainmeter
+scope: source.rainmeter
 file_extensions: [ini, inc]
 uuid: 6a53050b-d898-4e20-8fa0-c1726f4ce466
 foldingStartMarker: "^\\s*\\[\\s*[^\\[\\]\\s]*\\s*\\]\\s*$"
@@ -583,7 +583,7 @@ contexts:
         3: support.constant.option_values.rainmeter
 
   meter-shape-modifier:
-    - meta_scope: scope.rainmeter
+    - meta_scope: source.rainmeter
 
     - include: meter-shape-fill-type
     - include: meter-shape-stroke-type

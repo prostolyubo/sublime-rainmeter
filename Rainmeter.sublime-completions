@@ -8,7 +8,6 @@
             "contents": "Meter"
         },
 
-        "Metadata",
         "Rainmeter",
         "Variables",
 
@@ -21,7 +20,6 @@
         "Angle",
         "AntiAlias",
         "AppVersion",
-        "Author",
         "Autoscale",
         "AverageSize",
         "Background",
@@ -181,7 +179,6 @@
         "IncludeSystemFiles",
         "Increment",
         "Index",
-        "Information",
         "InfoType",
         "InlinePattern",
         "InlinePatternN",
@@ -194,7 +191,6 @@
         "LeftMouseDownAction",
         "LeftMouseUpAction",
         "LengthShift",
-        "License",
         "LineColor",
         "LineColor2",
         "LineCount",
@@ -394,7 +390,6 @@
         "VDOnDeactivate",
         "VDRefreshOnUpdate",
         "VDWidth",
-        "Version",
         "WiFiInfoType",
         "WiFiIntfID",
         "WiFiListStyle",

@@ -1,0 +1,17 @@
+%YAML 1.2
+---
+-
+  title: Name
+  hint: Name of skin
+-
+  title: Author
+  hint: Author of skin
+-
+  title: Information
+  hint: Description,setup,usage,credits.Use | for breaks
+-
+  title: Version
+  hint: Version of skin
+-
+  title: License
+  hint: License,permissions,conditions

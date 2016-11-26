@@ -3,23 +3,20 @@ import yaml
 
 import sublime
 
+# import own libs
 from Rainmeter import logger
-from Rainmeter.completion.levenshtein import levenshtein
 
-class SkinRainmeterSectionAutoComplete:
+class SkinMetadataSectionAutoComplete:
 
 	@staticmethod
 	def get_completions():
 		dir_path = os.path.dirname(os.path.realpath(__file__))
 
-		with open(dir_path + "/rainmeter_section.yaml", 'r') as skin_rainmeter_section_stream, open(dir_path + "/../meter/general_image_options.yaml", 'r') as meters_general_image_options_stream:
+		with open(dir_path + "/metadata_section.yaml", 'r') as skin_metadata_section_stream:
 			try:
-				skin_rainmeter_section = yaml.load(skin_rainmeter_section_stream)
-				meters_general_image_options = yaml.load(meters_general_image_options_stream)
+				skin_metadata_section = yaml.load(skin_metadata_section_stream)
 
-				skin_rainmeter_section.extend(meters_general_image_options)
-
-				return skin_rainmeter_section
+				return skin_metadata_section
 
 			except yaml.YAMLError as e:
 				logger.error(__file__, "get_completions", e)
@@ -74,17 +71,20 @@ class SkinRainmeterSectionAutoComplete:
 
 		return values
 
+	def __init__(self):
+		# metadata_section = sublime.find_resources("metadata-section.yaml")
+		# print(metadata_section)
+		logger.info(__file__, "__init__(self)", "SkinMetadataSectionAutoComplete initialized.")
+
 	# only show our completion list because nothing else makes sense in this context
 	flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 	
 	all_completions = get_completions.__func__()
 	all_key_completions = get_compiled_key_completions.__func__(all_completions)
 
-	def __init__(self):
-		logger.info(__file__, "__init__()", "SkinRainmeterSectionKeyAutoComplete initialized.")
-
 	def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
-		if section != "Rainmeter":
+		print(section)
+		if section != "Metadata":
 			return None
 
 		# filter by already existing keys
@@ -111,11 +111,4 @@ class SkinRainmeterSectionAutoComplete:
 			return completions, self.flags
 
 	def get_value_context_completion(self, view, prefix, location, line_content, section, key_match, keyvalues):
-		if section != "Rainmeter":
-			return None
-
-		value_completions = SkinRainmeterSectionKeyAutoComplete.get_compiled_value_completions(key_match, self.all_completions)
-		if not value_completions:
-			return None
-		else:
-			return value_completions, self.flags
+		return None
