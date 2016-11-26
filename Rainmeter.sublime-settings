@@ -9,7 +9,7 @@
 
 	//The path where Rainmeter is installed.
 	//Change this if your Rainmeter is installed somewhere else.
-	"rainmeter_path": "E:\\Visuals\\Rainmeter 3.3",
+	"rainmeter_path": "C:\\Program Files\\Rainmeter",
 
 	//The path where your skins are located.
 	//Only set or change this when something is not working!
