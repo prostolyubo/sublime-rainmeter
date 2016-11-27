@@ -69,9 +69,9 @@ class ContextSensAutoCompletion:
 	def get_key_value(self, line_content):
 		key_value_match = self.key_value_expression.search(line_content)
 		if key_value_match:
-			logger.info(__file__, "on_query_completions", "key/value found in '" + line_content + "'")
 			key_match = key_value_match.group(1)
 			value_match = key_value_match.group(2)
+			logger.info(__file__, "on_query_completions", "key/value found in '" + line_content + "' with ('" + key_match + "', '" + value_match + "')")
 
 			return key_match, value_match
 

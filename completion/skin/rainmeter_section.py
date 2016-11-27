@@ -84,7 +84,7 @@ class SkinRainmeterSectionAutoComplete:
 		logger.info(__file__, "__init__()", "SkinRainmeterSectionKeyAutoComplete initialized.")
 
 	def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
-		if section != "Rainmeter":
+		if section.casefold() != "Rainmeter".casefold():
 			return None
 
 		# filter by already existing keys
@@ -95,12 +95,16 @@ class SkinRainmeterSectionAutoComplete:
 
 			contained = 0
 			for key, value in keyvalues:
-				if key == content:
+				if key.casefold() == content.casefold():
 					contained = 1
 					break
 
 			if contained == 0:
 				completions.append(completion)
+
+		# no results, means all keys are used up
+		if not completions:
+			return None
 
 		# only show sorted by distance if something was already typed because distance to empty string makes no sense
 		if line_content != "":

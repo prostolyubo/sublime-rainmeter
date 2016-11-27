@@ -83,8 +83,7 @@ class SkinMetadataSectionAutoComplete:
 	all_key_completions = get_compiled_key_completions.__func__(all_completions)
 
 	def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
-		print(section)
-		if section != "Metadata":
+		if section.casefold() != "Metadata".casefold():
 			return None
 
 		# filter by already existing keys
@@ -95,12 +94,16 @@ class SkinMetadataSectionAutoComplete:
 
 			contained = 0
 			for key, value in keyvalues:
-				if key == content:
+				if key.casefold() == content.casefold():
 					contained = 1
 					break
 
 			if contained == 0:
 				completions.append(completion)
+
+		# no results, means all keys are used up
+		if not completions:
+			return None
 
 		# only show sorted by distance if something was already typed because distance to empty string makes no sense
 		if line_content != "":
