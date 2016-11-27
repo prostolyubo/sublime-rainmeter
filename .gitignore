@@ -16,6 +16,7 @@
 
 # include misc
 !lib
+!yaml
 
 # include path detection
 !path
