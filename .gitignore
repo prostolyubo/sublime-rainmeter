@@ -41,3 +41,4 @@
 
 # include important PackageControl files
 !packages.json
+!dependencies.json
