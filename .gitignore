@@ -23,6 +23,7 @@
 
 # include all python files
 !*.py
+!requirements.txt
 # exclude compiled python files
 *.pyc
 
