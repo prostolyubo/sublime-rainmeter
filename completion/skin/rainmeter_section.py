@@ -1,8 +1,8 @@
 import os
-import yaml
 
 import sublime
 
+from Rainmeter import yaml
 from Rainmeter import logger
 from Rainmeter.completion.levenshtein import levenshtein
 
