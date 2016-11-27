@@ -1,9 +1,9 @@
 import os
+import yaml
 
 import sublime
 
 # import own libs
-from Rainmeter import yaml
 from Rainmeter import logger
 
 class SkinMetadataSectionAutoComplete:
