@@ -9,13 +9,17 @@ env:
     - PACKAGE="Rainmeter"
     - SUBLIME_TEXT_VERSION="3"
 
-sudo: required
+os: linux
+# sudo: required
 language: python
 python:
   - "3.3.6"
 
 before_install:
   - curl -OL https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/travis.sh
+  # enable gui, see https://docs.travis-ci.com/user/gui-and-headless-browsers
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 
 # command to install dependencie
 install:
@@ -23,12 +27,6 @@ install:
   - sh travis.sh bootstrap
   # install Package Control and package denepdencies
   - sh travis.sh install_package_control
-
-# enable gui, see https://docs.travis-ci.com/user/gui-and-headless-browsers
-before_script:
-  - export DISPLAY=:99.0;
-  - sh -e /etc/init.d/xvfb start;
-  - sleep 3;
 
 # command to run tests
 script: 
