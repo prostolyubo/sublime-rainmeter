@@ -194,7 +194,7 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
 
         fnm = self.view.file_name()
 
-        def opn(st): \
+        def opn(st):
             open_path(rainmeter.make_path(st, fnm)) or open_url(st)
 
         selection = self.view.sel()

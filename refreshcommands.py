@@ -5,6 +5,7 @@ import sublime_plugin
 from Rainmeter import rainmeter
 from .path.program_path_provider import get_cached_program_path
 
+
 class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
 
     """Refresh a given skin file, or Rainmeter if no path is specified"""

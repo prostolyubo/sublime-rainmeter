@@ -9,148 +9,149 @@ from Rainmeter import logger
 from Rainmeter.completion.skin.rainmeter_section import SkinRainmeterSectionAutoComplete
 from Rainmeter.completion.skin.metadata_section import SkinMetadataSectionAutoComplete
 
+
 class ContextSensAutoCompletion:
-	
-	# only show our completion list because nothing else makes sense in this context
-	flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 
-	skin_rainmeter_section = None
-	skin_metadata_section = None
+    # only show our completion list because nothing else makes sense in this context
+    flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 
-	scope = "source.rainmeter"
+    skin_rainmeter_section = None
+    skin_metadata_section = None
 
-	# comments are specified by ';'
-	comment_exp = re.compile(r'^\s*;.*')
+    scope = "source.rainmeter"
 
-	# enable searching for [] in multiline environment
-	bracket_expression = re.compile(r'^\s*\[.+\]\s*$', re.MULTILINE)
-	section_expression = re.compile(r'^\s*\[(.+)\]\s*$', re.I)
-	key_expression = re.compile(r'^\s*(.+)\s*\=?\s*(.*?)\s*$', re.MULTILINE)
-	key_value_expression = re.compile(r'^\s*(.+?)\s*\=\s*(.*?)\s*$', re.MULTILINE)
+    # comments are specified by ';'
+    comment_exp = re.compile(r'^\s*;.*')
 
-	def __init__(self):
-		self.skin_rainmeter_section = SkinRainmeterSectionAutoComplete()
-		self.skin_metadata_section = SkinMetadataSectionAutoComplete()
+    # enable searching for [] in multiline environment
+    bracket_expression = re.compile(r'^\s*\[.+\]\s*$', re.MULTILINE)
+    section_expression = re.compile(r'^\s*\[(.+)\]\s*$', re.I)
+    key_expression = re.compile(r'^\s*(.+)\s*\=?\s*(.*?)\s*$', re.MULTILINE)
+    key_value_expression = re.compile(r'^\s*(.+?)\s*\=\s*(.*?)\s*$', re.MULTILINE)
 
-	def get_lines_of_section_on_cursor(self, view, location, prefix):
-		size = view.size()
-		start_content = view.substr(sublime.Region(0, location))
-		end_content = view.substr(sublime.Region(location, size))
+    def __init__(self):
+        self.skin_rainmeter_section = SkinRainmeterSectionAutoComplete()
+        self.skin_metadata_section = SkinMetadataSectionAutoComplete()
 
-		start_index = self.get_current_section_content_start_index(start_content)
-		end_index = self.get_current_section_content_end_index(end_content, location, size)
+    def get_lines_of_section_on_cursor(self, view, location, prefix):
+        size = view.size()
+        start_content = view.substr(sublime.Region(0, location))
+        end_content = view.substr(sublime.Region(location, size))
 
-		section = view.substr(sublime.Region(start_index, end_index))
-		lines = section.splitlines()
+        start_index = self.get_current_section_content_start_index(start_content)
+        end_index = self.get_current_section_content_end_index(end_content, location, size)
 
-		return lines
+        section = view.substr(sublime.Region(start_index, end_index))
+        lines = section.splitlines()
 
-	def get_current_section_content_start_index(self, start_content):
-		matches = list(self.bracket_expression.finditer(start_content))
+        return lines
 
-		if len(matches) > 0:
-			last_match = matches[-1]
-			return last_match.start()
+    def get_current_section_content_start_index(self, start_content):
+        matches = list(self.bracket_expression.finditer(start_content))
 
-		# no previous section found, hardly legal but who cares
-		else:
-			return 0
+        if len(matches) > 0:
+            last_match = matches[-1]
+            return last_match.start()
 
-	def get_current_section_content_end_index(self, end_content, offset, end_index):
-		matches = list(self.bracket_expression.finditer(end_content))
-		if len(matches) > 0:
-			first_match = matches[0]
-			return first_match.start() + offset
+        # no previous section found, hardly legal but who cares
+        else:
+            return 0
 
-		# no next section found
-		else:
-			return end_index
+    def get_current_section_content_end_index(self, end_content, offset, end_index):
+        matches = list(self.bracket_expression.finditer(end_content))
+        if len(matches) > 0:
+            first_match = matches[0]
+            return first_match.start() + offset
 
-	def get_key_value(self, line_content):
-		key_value_match = self.key_value_expression.search(line_content)
-		if key_value_match:
-			key_match = key_value_match.group(1)
-			value_match = key_value_match.group(2)
-			logger.info(__file__, "on_query_completions", "key/value found in '" + line_content + "' with ('" + key_match + "', '" + value_match + "')")
+        # no next section found
+        else:
+            return end_index
 
-			return key_match, value_match
+    def get_key_value(self, line_content):
+        key_value_match = self.key_value_expression.search(line_content)
+        if key_value_match:
+            key_match = key_value_match.group(1)
+            value_match = key_value_match.group(2)
+            logger.info(__file__, "on_query_completions", "key/value found in '" + line_content + "' with ('" + key_match + "', '" + value_match + "')")
 
-		key_only_match = self.key_expression.search(line_content)
-		if key_only_match:
-			logger.info(__file__, "on_query_completions", "potential key found in '" + line_content + "'")
-			return key_only_match.group(1), None
+            return key_match, value_match
 
-		return None, None
+        key_only_match = self.key_expression.search(line_content)
+        if key_only_match:
+            logger.info(__file__, "on_query_completions", "potential key found in '" + line_content + "'")
+            return key_only_match.group(1), None
 
-	def get_key_values(self, lines):
-		key_values = []
+        return None, None
 
-		for line in lines:
-			key, value = self.get_key_value(line)
-			if key:
-				key_values.append((key, value))
+    def get_key_values(self, lines):
+        key_values = []
 
-		return key_values
+        for line in lines:
+            key, value = self.get_key_value(line)
+            if key:
+                key_values.append((key, value))
 
-	def on_query_completions(self, view, prefix, locations):
-		for location in locations:
-			# ignore non scope
-			if not view.match_selector(location, self.scope):
-				return None
+        return key_values
 
-			# ignore on comment lines
-			cursor_line = view.line(location)
-			line_content = view.substr(cursor_line)
-			if self.comment_exp.search(line_content):
-				logger.info(__file__, "on_query_completions", "found comment")
-				return None
+    def on_query_completions(self, view, prefix, locations):
+        for location in locations:
+            # ignore non scope
+            if not view.match_selector(location, self.scope):
+                return None
 
-			# find last occurance of the [] to determine the ini sections
-			lines = self.get_lines_of_section_on_cursor(view, location, prefix)
-			# filter empty lines
-			lines = list(filter(None, lines))
-			# filter comments
-			lines = list(filter(lambda l: not self.comment_exp.search(l), lines))
+            # ignore on comment lines
+            cursor_line = view.line(location)
+            line_content = view.substr(cursor_line)
+            if self.comment_exp.search(line_content):
+                logger.info(__file__, "on_query_completions", "found comment")
+                return None
 
-			if not lines:
-				logger.info(__file__, "bootstrap.on_query_completions", "section is empty")
-				return None
+            # find last occurance of the [] to determine the ini sections
+            lines = self.get_lines_of_section_on_cursor(view, location, prefix)
+            # filter empty lines
+            lines = list(filter(None, lines))
+            # filter comments
+            lines = list(filter(lambda l: not self.comment_exp.search(l), lines))
 
-			# extract section
-			first_line = lines[0]
-			match = self.section_expression.search(first_line)
+            if not lines:
+                logger.info(__file__, "bootstrap.on_query_completions", "section is empty")
+                return None
 
-			# no section defined
-			# TODO section suggestion
-			if not match:
-				logger.info(__file__, "on_query_completions", "no section found")
-				return None
-			section = match.group(1)
+            # extract section
+            first_line = lines[0]
+            match = self.section_expression.search(first_line)
 
-			key_match, value_match = self.get_key_value(line_content)
-			key_values = self.get_key_values(lines)
+            # no section defined
+            # TODO section suggestion
+            if not match:
+                logger.info(__file__, "on_query_completions", "no section found")
+                return None
+            section = match.group(1)
 
-			if value_match == "":
-				logger.info(__file__, "on_query_completions", "after equal trigger in '" + line_content + "'")
-				# value trigger
-				value_result = self.skin_rainmeter_section.get_value_context_completion(view, prefix, location, line_content, section, key_match, key_values)
-				if value_result:
-					return value_result
+            key_match, value_match = self.get_key_value(line_content)
+            key_values = self.get_key_values(lines)
 
-				value_result = self.skin_metadata_section.get_value_context_completion(view, prefix, location, line_content, section, key_match, key_values)
-				if value_result:
-					return value_result
-			
-			# only do key completion if we are in the key are
-			# that means in front of the equal or no equal at all
-			else:
-				logger.info(__file__, "on_query_completions", "before equal trigger in '" + line_content + "'")
-				key_result = self.skin_rainmeter_section.get_key_context_completion(view, prefix, location, line_content, section, key_values)
-				if key_result:
-					return key_result
+            if value_match == "":
+                logger.info(__file__, "on_query_completions", "after equal trigger in '" + line_content + "'")
+                # value trigger
+                value_result = self.skin_rainmeter_section.get_value_context_completion(view, prefix, location, line_content, section, key_match, key_values)
+                if value_result:
+                    return value_result
 
-				key_result = self.skin_metadata_section.get_key_context_completion(view, prefix, location, line_content, section, key_values)
-				if key_result:
-					return key_result
-			
-			return None
+                value_result = self.skin_metadata_section.get_value_context_completion(view, prefix, location, line_content, section, key_match, key_values)
+                if value_result:
+                    return value_result
+
+            # only do key completion if we are in the key are
+            # that means in front of the equal or no equal at all
+            else:
+                logger.info(__file__, "on_query_completions", "before equal trigger in '" + line_content + "'")
+                key_result = self.skin_rainmeter_section.get_key_context_completion(view, prefix, location, line_content, section, key_values)
+                if key_result:
+                    return key_result
+
+                key_result = self.skin_metadata_section.get_key_context_completion(view, prefix, location, line_content, section, key_values)
+                if key_result:
+                    return key_result
+
+            return None
