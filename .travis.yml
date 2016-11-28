@@ -6,7 +6,7 @@ env:
 
 language: python
 python:
-  - "3.3"
+  - "3.3.6"
 
 before_install:
   - curl -OL https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/travis.sh
