@@ -4,7 +4,6 @@ environment:
         PACKAGE: "Rainmeter"
     matrix:
         - SUBLIME_TEXT_VERSION : "3"
-          PCINSTALL: true
 
 install:
     - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
@@ -17,4 +16,4 @@ build: off
 test_script:
     - ps: .\appveyor.ps1 "run_tests" -verbose
     # testing syntax_test files
-    # - ps: .\appveyor.ps1 "run_syntax_tests" -verbose
+    - ps: .\appveyor.ps1 "run_syntax_tests" -verbose
