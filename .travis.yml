@@ -9,7 +9,8 @@ install:
   - pip install python-coveralls
 
 # command to run tests
-script: pytest
+script: 
+  - py.test --cov=sublime-rainmeter .
 
 after_success:
   coveralls
