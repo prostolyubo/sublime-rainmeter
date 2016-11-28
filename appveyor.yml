@@ -16,4 +16,4 @@ build: off
 test_script:
     - ps: .\appveyor.ps1 "run_tests" -verbose
     # testing syntax_test files
-    - ps: .\appveyor.ps1 "run_syntax_tests" -verbose
+    # - ps: .\appveyor.ps1 "run_syntax_tests" -verbose
