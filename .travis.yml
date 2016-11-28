@@ -4,7 +4,6 @@ python:
 
 # command to install dependencie
 install:
-  - pip install .
   - pip install -r requirements.txt
   # install this outside of requirements.txt because not needed for testing
   - pip install python-coveralls
