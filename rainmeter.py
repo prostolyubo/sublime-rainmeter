@@ -394,7 +394,7 @@ def plugin_loaded():
 	_plugins_path = get_plugins_path()
 	_addons_path = get_addons_path()
 
-	logger.info(__file__, "plugin_loaded()", "#PROGRAMPATH#:\t" + get_cached_program_path())
+	logger.info(__file__, "plugin_loaded()", "#PROGRAMPATH#:\t\t" + get_cached_program_path())
 	logger.info(__file__, "plugin_loaded()", "#PROGRAMDRIVE#:\t" + get_cached_program_drive())
 	logger.info(__file__, "plugin_loaded()", "#SETTINGSPATH#:\t" + get_cached_setting_path())
 	logger.info(__file__, "plugin_loaded()", "#SKINSPATH#:\t\t" + skins_path())

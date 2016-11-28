@@ -1,4 +1,4 @@
-import os
+import os.path
 import yaml
 
 import sublime
@@ -10,9 +10,13 @@ class SkinMetadataSectionAutoComplete:
 
 	@staticmethod
 	def get_completions():
-		dir_path = os.path.dirname(os.path.realpath(__file__))
+		parent_path = os.path.dirname(os.path.realpath(__file__))
+		metadata_section_path = os.path.join(parent_path, "metadata_section.yaml")
+		if not os.path.exists(metadata_section_path):
+			logger.error(__file__, "get_completions", "skin metadata section completion expected '" + metadata_section_path + "' but does not exist.")
+			return []
 
-		with open(dir_path + "/metadata_section.yaml", 'r') as skin_metadata_section_stream:
+		with open(metadata_section_path, 'r') as skin_metadata_section_stream:
 			try:
 				skin_metadata_section = yaml.load(skin_metadata_section_stream)
 

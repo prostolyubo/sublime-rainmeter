@@ -10,9 +10,17 @@ class SkinRainmeterSectionAutoComplete:
 
 	@staticmethod
 	def get_completions():
-		dir_path = os.path.dirname(os.path.realpath(__file__))
+		parent_path = os.path.dirname(os.path.realpath(__file__))
+		rainmeter_section_path = os.path.join(parent_path, "rainmeter_section.yaml")
+		meters_general_image_options_path = os.path.join(os.path.dirname(parent_path), "meter", "general_image_options.yaml")
+		if not os.path.exists(rainmeter_section_path):
+			logger.error(__file__, "get_completions", "skin rainmeter section completion expected '" + rainmeter_section_path + "' but does not exist.")
+			return []
+		if not os.path.exists(meters_general_image_options_path):
+			logger.error(__file__, "get_completions", "skin rainmeter section completion expected '" + meters_general_image_options_path + "' but does not exist.")
+			return []
 
-		with open(dir_path + "/rainmeter_section.yaml", 'r') as skin_rainmeter_section_stream, open(dir_path + "/../meter/general_image_options.yaml", 'r') as meters_general_image_options_stream:
+		with open(rainmeter_section_path, 'r') as skin_rainmeter_section_stream, open(meters_general_image_options_path, 'r') as meters_general_image_options_stream:
 			try:
 				skin_rainmeter_section = yaml.load(skin_rainmeter_section_stream)
 				meters_general_image_options = yaml.load(meters_general_image_options_stream)
