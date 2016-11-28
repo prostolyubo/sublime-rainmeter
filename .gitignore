@@ -23,7 +23,6 @@
 
 # include all python files
 !*.py
-!requirements.txt
 # exclude compiled python files
 *.pyc
 
@@ -43,3 +42,7 @@
 # include important PackageControl files
 !packages.json
 !dependencies.json
+
+# include important build system files
+!.travis.yml
+!requirements.txt

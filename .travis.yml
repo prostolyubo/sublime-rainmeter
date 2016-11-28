@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.3"
+
+# command to install dependencie
+install:
+  - pip install .
+  - pip install -r requirements.txt
+  # install this outside of requirements.txt because not needed for testing
+  - pip install python-coveralls
+
+# command to run tests
+script: pytest
+
+after_success:
+  coveralls
