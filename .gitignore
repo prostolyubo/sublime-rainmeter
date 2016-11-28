@@ -45,4 +45,5 @@
 
 # include important build system files
 !.travis.yml
+!appveyor.yml
 !requirements.txt
