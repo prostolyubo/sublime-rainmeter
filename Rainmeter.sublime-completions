@@ -184,6 +184,8 @@
         "InlinePatternN",
         "InlineSetting",
         "InlineSettingN",
+        {"trigger": "InputLimit\tLimit number of characters", "contents": "InputLimit"},
+        {"trigger": "InputNumber\tOnly number characters", "contents": "InputNumber"},
         "Interface",
         "InvertMeasure",
         "Label",

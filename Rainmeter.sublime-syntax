@@ -150,6 +150,38 @@ contexts:
         2: keyword.operator.option.equal.rainmeter
         4: invalid.rainmeter
 
+    # InputLimit options
+    - match: "(?i)^\\s*(InputLimit)\\s*(=)\\s*((\\d+)|\"(\\+d)\")\\s*$"
+      scope: meta.option.UseExifOrientation.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: constant.numeric.rainmeter
+
+    # invalid InputLimit options
+    - match: "(?i)^\\s*(InputLimit)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.UseExifOrientation.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
+    # InputNumber options
+    - match: "(?i)^\\s*(InputNumber)\\s*(=)\\s*((1|0)|\"(1|0)\")\\s*$"
+      scope: meta.option.UseExifOrientation.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+
+    # invalid InputNumber options
+    - match: "(?i)^\\s*(InputNumber)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.UseExifOrientation.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
         
     # Shape feature
     - match: "(?i)^\\s*(Shape([2-9]{1,1}|[0-9]{2,})?)\\s*(=)"
@@ -583,7 +615,7 @@ contexts:
         3: support.constant.option_values.rainmeter
 
   meter-shape-modifier:
-    - meta_scope: source.rainmeter
+    # - meta_scope: source.rainmeter
 
     - include: meter-shape-fill-type
     - include: meter-shape-stroke-type
