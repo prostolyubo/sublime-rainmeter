@@ -23,6 +23,7 @@
 
 # include all python files
 !*.py
+!tests
 # exclude compiled python files
 *.pyc
 
