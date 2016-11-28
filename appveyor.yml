@@ -3,14 +3,17 @@ environment:
         # The package name
         PACKAGE: "Rainmeter"
     matrix:
-        - SUBLIME_TEXT_VERSION : "3"
+        - PYTHON: "C:\\Python33"
+          SUBLIME_TEXT_VERSION : "3"
+        - PYTHON: "C:\\Python33-x64"
+          SUBLIME_TEXT_VERSION : "3"
 
 install:
     - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
     - ps: .\appveyor.ps1 "bootstrap" -verbose
     # install Package Control
     - ps: .\appveyor.ps1 "install_package_control" -verbose
-    - ps: pip install python-coveralls
+    - ps: "%PYTHON%\\python.exe -m pip install python-coveralls"
 
 build: off
 
@@ -18,7 +21,8 @@ test_script:
     # - ps: .\appveyor.ps1 "run_tests" -verbose
     # testing syntax_test files
     # - ps: .\appveyor.ps1 "run_syntax_tests" -verbose
-    - ps: python "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/run_tests.py" "--coverage" "$PACKAGE" 
+    - ps: run_tests DownloadFile https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/run_tests.py
+    - ps: '%PYTHON%\\python.exe ".\run_tests.py" "--coverage" "$PACKAGE"'
 
 after_test:
     - ps: coveralls 
