@@ -4,8 +4,6 @@ environment:
         PACKAGE: "Rainmeter"
     matrix:
         - SUBLIME_TEXT_VERSION : "3"
-    COVERALLS_REPO_TOKEN:
-        secure: lP9DTfJP3ROiFbi4BYWkDaIy793q2yjZq4/SK2YMS710F3dHTxXeYr3SuSOR4Bvd
 
 install:
     - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
