@@ -41,7 +41,7 @@
                             	"command": "edit_settings", "args":
                                 {
                                     "base_file": "${packages}/Rainmeter/Rainmeter.sublime-settings",
-                                    "default": "[\n\t$0\n]\n"
+                                    "default": "{\n\t$0\n}\n"
                                 },
                                 "caption": "Settings"	
                             },
