@@ -17,20 +17,20 @@ install:
     - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
     - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
     - ps: .\appveyor.ps1 "bootstrap" -verbose
-    - "SET PATH=C:\\st;%PATH%"
+    # - "SET PATH=C:\\st;%PATH%"
     # install Package Control
     - ps: .\appveyor.ps1 "install_package_control" -verbose
-    - ps: pip install coverage git+https://github.com/jayvdb/coveralls-python@appveyor
-    - ps: pip install python-coveralls
+    # - ps: pip install coverage git+https://github.com/jayvdb/coveralls-python@appveyor
+    # - ps: pip install python-coveralls
 
 build: off
 
 test_script:
-    # - ps: .\appveyor.ps1 "run_tests" -verbose
+    - ps: .\appveyor.ps1 "run_tests" -verbose
     # testing syntax_test files
     # - ps: .\appveyor.ps1 "run_syntax_tests" -verbose
-    - ps: appveyor DownloadFile https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/run_tests.py
-    - ps: python ".\run_tests.py" "--coverage" "$PACKAGE"
+    # - ps: appveyor DownloadFile https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/run_tests.py
+    # - ps: python ".\run_tests.py" "--coverage" "$PACKAGE"
 
-after_test:
-    - ps: coveralls 
+# after_test:
+    # - ps: coveralls 
