@@ -17,6 +17,7 @@ install:
     - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
     - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
     - ps: .\appveyor.ps1 "bootstrap" -verbose
+    - "SET PATH=C:\\st;%PATH%"
     # install Package Control
     - ps: .\appveyor.ps1 "install_package_control" -verbose
     - ps: pip install coverage git+https://github.com/jayvdb/coveralls-python@appveyor
