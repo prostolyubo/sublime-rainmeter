@@ -16,10 +16,10 @@ class RainmeterNewSkinFileCommand(sublime_plugin.WindowCommand):
             "insert_snippet",
             {"name": "Packages/Rainmeter/Snippets/skin.sublime-snippet"})
 
-        if os.path.exists("Packages/User/Rainmeter.tmLanguage"):
-            view.set_syntax_file("Packages/User/Rainmeter.tmLanguage")
+        if os.path.exists("Packages/User/Rainmeter.sublime-syntax"):
+            view.set_syntax_file("Packages/User/Rainmeter.sublime-syntax")
         else:
-            view.set_syntax_file("Packages/Rainmeter/Rainmeter.tmLanguage")
+            view.set_syntax_file("Packages/Rainmeter/Rainmeter.sublime-syntax")
 
 
 class RainmeterNewSkinCommand(sublime_plugin.WindowCommand):
@@ -114,9 +114,9 @@ class RainmeterNewSkinCommand(sublime_plugin.WindowCommand):
             "insert_snippet",
             {"name": "Packages/Rainmeter/Snippets/skin.sublime-snippet"})
 
-        if os.path.exists("Packages/User/Rainmeter.tmLanguage"):
-            view.set_syntax_file("Packages/User/Rainmeter.tmLanguage")
+        if os.path.exists("Packages/User/Rainmeter.sublime-syntax"):
+            view.set_syntax_file("Packages/User/Rainmeter.sublime-syntax")
         else:
-            view.set_syntax_file("Packages/Rainmeter/Rainmeter.tmLanguage")
+            view.set_syntax_file("Packages/Rainmeter/Rainmeter.sublime-syntax")
 
         sublime.run_command("rainmeter_refresh")

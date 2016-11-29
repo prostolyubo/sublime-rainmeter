@@ -34,8 +34,6 @@
 !*.sublime-completions
 !*.sublime-settings
 !*.sublime-syntax
-!*.tmLanguage
-!*.JSON-tmLanguage
 !*.sublime-menu
 !*.sublime-keymap
 !*.tmPreferences
