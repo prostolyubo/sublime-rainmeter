@@ -4,10 +4,10 @@ environment:
         PACKAGE: "Rainmeter"
     matrix:
         - PYTHON: "C:\\Python33"
-          PYTHON_ARCH: "32"
+          # PYTHON_ARCH: "32"
           SUBLIME_TEXT_VERSION : "3"
         - PYTHON: "C:\\Python33-x64"
-          PYTHON_ARCH: "64"
+          # PYTHON_ARCH: "64"
           SUBLIME_TEXT_VERSION : "3"
 
 install:
