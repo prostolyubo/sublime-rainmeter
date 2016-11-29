@@ -65,6 +65,11 @@
 
 	//The color scheme to use for Rainmeter syntax.
 	"color_scheme": "Packages/Rainmeter/Monokai (Rainmeter).tmTheme",
+	// "color_scheme": "Packages/Rainmeter/Lachgummi Joghurt.tmTheme",
+	// "color_scheme": "Packages/Rainmeter/Nexus (Rainmeter).tmTheme",
+	// "color_scheme": "Packages/Rainmeter/RainLexer.tmTheme",
+	// "color_scheme": "Packages/Rainmeter/Rainmeter (Light).tmTheme",
+
 
 	//Tab size for indentation.
 	"tab_size": 1,
