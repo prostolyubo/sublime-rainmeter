@@ -31,7 +31,7 @@ def get_cached_program_path():
                     asubkey_name = winreg.EnumKey(keyval, i)
                     asubkey = winreg.OpenKey(keyval, asubkey_name)
                     val = winreg.QueryValueEx(asubkey, "DisplayName")
-                    logger.info(__file__, "get_cached_program_path()", val)
+                    logger.info(__file__, "get_cached_program_path()", "found rainmeter path through registry: " + val)
                 except EnvironmentError:
                     break
 
@@ -40,8 +40,9 @@ def get_cached_program_path():
 
     # Check if path exists and contains Rainmeter.exe
     if not os.path.exists(rainmeterpath + "Rainmeter.exe"):
-        logger.info(__file__, "get_cached_program_path()",
-                    "Path to Rainmeter.exe could not be found. Check your \"rainmeter_path\" setting.")
+        message = "Path to Rainmeter.exe could neither be found in the standard directory nor via registry. Check your \"rainmeter_path\" setting."
+        logger.info(__file__, "get_cached_program_path()", message)
+        sublime.error_message(message)
         return
 
     logger.info(__file__, "get_cached_program_path()", "Rainmeter found in " + rainmeterpath)
