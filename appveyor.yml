@@ -32,5 +32,17 @@ test_script:
     # - ps: appveyor DownloadFile https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/run_tests.py
     # - ps: python ".\run_tests.py" "--coverage" "$PACKAGE"
 
-# after_test:
+after_test:
     # - ps: coveralls 
+    # package application without ps
+    - gradlew.bat distribute
+
+    # stop the daemon to cache gradle files later on
+    - gradlew.bat --stop
+
+artifacts:
+    - path: build\Rainmeter.sublime-package
+
+cache:
+    - .gradle
+    - '%userprofile%\.gradle'

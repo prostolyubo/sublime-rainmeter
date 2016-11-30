@@ -1,0 +1,61 @@
+// plugins {
+//     id "co.riiid.gradle" version "0.4.2"
+// }
+
+// github {
+//     owner = "thatsIch"
+//     repo = "sublime-rainmeter"
+//     token = ""
+//     tagName = ""
+
+//     // targetCommitish = "master"
+//     // name = ""
+//     // body = ""
+//     // prerelease = ""
+//     // draft = ""
+
+//     assets = [
+//         'build/Rainmeter.sublime-package'
+//     ]
+// }
+
+task distribute(type: Zip) {
+    extension = 'sublime-package'
+    baseName = "Rainmeter"
+    archiveName = "$baseName.$extension"
+    destinationDir = file('build')
+
+    // print(projectDir)
+    from(file('.')) {
+        with {
+            // include all python files
+            include '*.py'
+            include '**./*.py'
+
+            // include important feature folders
+            include 'completion/**'
+            include 'lib/**'
+            include 'path/**'
+            include 'Snippets/**'
+            
+            // but exclude python metadata
+            exclude '**/__pycache__'  
+            exclude '**/*.pyc'
+
+            // include sublime files
+            include '*.sublime-syntax'
+            include '*.sublime-settings'
+            include '*.sublime-completions'
+            include '*.sublime-commands'
+            include '*.sublime-build'
+            include '*.tmTheme'
+            include '*.sublime-menu'
+            include '*.sublime-keymap'
+            include '*.tmPreferences'
+
+            // include package control files
+            include 'packages.json'
+            include 'dependencies.json'
+        }
+    }
+}

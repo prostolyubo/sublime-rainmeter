@@ -46,3 +46,8 @@
 !.travis.yml
 !appveyor.yml
 !requirements.txt
+!gradle
+!build.gradle
+!gradlew
+!gradlew.bat
+!settings.gradle
