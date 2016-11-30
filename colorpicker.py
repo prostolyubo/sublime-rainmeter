@@ -68,7 +68,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
             cc = CHOOSECOLOR()
             ctypes.memset(ctypes.byref(cc), 0, ctypes.sizeof(cc))
             cc.lStructSize = ctypes.sizeof(cc)
-            cc.hwndOwner = self.view.window().hwnd()
+            cc.hwndOwner = None
             cc.Flags = CC_SOLIDCOLOR | CC_FULLOPEN | CC_RGBINIT
             cc.rgbResult = c_uint32(start_color_win)
             cc.lpCustColors = self.__to_custom_color_array(custom_colors)
