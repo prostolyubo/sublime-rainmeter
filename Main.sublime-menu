@@ -53,12 +53,49 @@
                                     "default": "[\n\t$0\n]\n"
                                 },
                                 "caption": "Key Bindings"	
-                            }
+                            },
+                            {"caption": "-"},
+                            {
+                            	"caption": "Themes",
+								"id": "rainmeter-themes",
+								"children":
+								[
+		                            {
+		                            	"caption": "Monokai (Rainmeter)",
+		                            	"command": "edit_theme",
+		                            	"args": { "theme": "Monokai (Rainmeter)" },
+		                            	"checkbox": true,
+		                            },
+		                            {
+		                            	"caption": "Lachgummi Joghurt",
+		                            	"command": "edit_theme",
+		                            	"args": { "theme": "Lachgummi Joghurt" },
+		                            	"checkbox": true,
+		                            },
+		                            {
+		                            	"caption": "Nexus (Rainmeter)",
+		                            	"command": "edit_theme",
+		                            	"args": { "theme": "Nexus (Rainmeter)" },
+		                            	"checkbox": true,
+		                            },
+		                            {
+		                            	"caption": "RainLexer",
+		                            	"command": "edit_theme",
+		                            	"args": { "theme": "RainLexer" },
+		                            	"checkbox": true,
+		                            },
+		                            {
+		                            	"caption": "Rainmeter (Light)",
+		                            	"command": "edit_theme",
+		                            	"args": { "theme": "Rainmeter (Light)" },
+		                            	"checkbox": true,
+		                            },
+								],
+							},
 						]
 					}
 				]
 			}
-			
 		]
 	}
 ]
