@@ -2,19 +2,20 @@ environment:
     global:
         # The package name
         PACKAGE: "Rainmeter"
-    matrix:
-        - PYTHON: "C:\\Python33"
+        SUBLIME_TEXT_VERSION : "3"
+    # matrix:
+        # - PYTHON: "C:\\Python33"
           # PYTHON_ARCH: "32"
-          SUBLIME_TEXT_VERSION : "3"
-        - PYTHON: "C:\\Python33-x64"
+          # SUBLIME_TEXT_VERSION : "3"
+        # - PYTHON: "C:\\Python33-x64"
           # PYTHON_ARCH: "64"
-          SUBLIME_TEXT_VERSION : "3"
+        # - SUBLIME_TEXT_VERSION : "3"
 
 install:
     # Prepend newly installed Python to the PATH of this build (this cannot be
     # done from inside the powershell script as it would require to restart
     # the parent CMD process).
-    - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+    # - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
     - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
     - ps: .\appveyor.ps1 "bootstrap" -verbose
     # - "SET PATH=C:\\st;%PATH%"
