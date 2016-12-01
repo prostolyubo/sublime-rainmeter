@@ -1,5 +1,6 @@
 import os.path
 import yaml
+import zipfile
 
 import sublime
 
@@ -10,25 +11,53 @@ from Rainmeter.completion.levenshtein import levenshtein
 
 class SkinMetadataSectionAutoComplete:
 
-    @staticmethod
-    def get_completions():
+    def __get_zip_content(self, path_to_zip, resource):
+        if not os.path.exists(path_to_zip):
+            return None
+
+        ret_value = None
+
+        with zipfile.ZipFile(path_to_zip) as zip_file:
+            namelist = zip_file.namelist()
+            if resource in namelist:
+                ret_value = zip_file.read(resource)
+                return ret_value.decode("utf-8")
+
+        logger.error(__file__, "__get_zip_content(self, path_to_zip, resource)", "no zip content with resource '" + resource + "' found in .")
+        return ret_value
+
+    def __get_completions(self):
+        try:
+            skin_metadata_section_content = self.__get_metadata_section_content()
+            skin_metadata_section = yaml.load(skin_metadata_section_content)
+
+            return skin_metadata_section
+
+        except yaml.YAMLError as error:
+            logger.error(__file__, "get_completions", error)
+
+    def __get_metadata_section_content(self):
+        # trying git mode first
         parent_path = os.path.dirname(os.path.realpath(__file__))
-        metadata_section_path = os.path.join(parent_path, "metadata_section.yaml")
-        if not os.path.exists(metadata_section_path):
-            logger.error(__file__, "get_completions", "skin metadata section completion expected '" + metadata_section_path + "' but does not exist.")
-            return []
+        metadata_section_path = os.path.join(os.path.dirname(parent_path), "metadata_section.yaml")
 
-        with open(metadata_section_path, 'r') as skin_metadata_section_stream:
-            try:
-                skin_metadata_section = yaml.load(skin_metadata_section_stream)
+        if os.path.exists(metadata_section_path):
+            with open(metadata_section_path, 'r') as metadata_section_options_stream:
+                return metadata_section_options_stream.read()
 
-                return skin_metadata_section
+        # running in package mode
+        else:
+            packages_path = sublime.installed_packages_path()
+            sublime_package = "Rainmeter.sublime-package"
+            rm_package_path = os.path.join(packages_path, sublime_package)
+            if os.path.exists(rm_package_path):
+                resource = "completion/skin/metadata_section.yaml"
+                return self.__get_zip_content(rm_package_path, resource)
 
-            except yaml.YAMLError as e:
-                logger.error(__file__, "get_completions", e)
+        logger.error(__file__, "get_completions", "skin metadata section completion expected 'completion/skin/metadata_section.yaml' but does not exist in neither git nor package mode.")
+        return None
 
-    @staticmethod
-    def get_compiled_key_completions(options):
+    def __get_compiled_key_completions(self, options):
         keys = []
         for option in options:
             title = option['title'] + "\t" + option['hint']
@@ -78,19 +107,22 @@ class SkinMetadataSectionAutoComplete:
         return values
 
     def __init__(self):
-        # metadata_section = sublime.find_resources("metadata-section.yaml")
-        # print(metadata_section)
         logger.info(__file__, "__init__(self)", "SkinMetadataSectionAutoComplete initialized.")
 
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 
-    all_completions = get_completions.__func__()
-    all_key_completions = get_compiled_key_completions.__func__(all_completions)
+    all_completions = None
+    all_key_completions = None
 
     def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
         if section.casefold() != "Metadata".casefold():
             return None
+
+        # use lazy initialization because else the API is not available yet
+        if not self.all_completions:
+            self.all_completions = self.__get_completions()
+            self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
 
         # filter by already existing keys
         completions = []

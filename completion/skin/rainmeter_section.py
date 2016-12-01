@@ -2,6 +2,7 @@
 
 import os
 import yaml
+import zipfile
 
 import sublime
 
@@ -11,10 +12,28 @@ from Rainmeter.completion.levenshtein import levenshtein
 
 class SkinRainmeterSectionAutoComplete:
 
+    def __get_zip_content(self, path_to_zip, resource):
+        if not os.path.exists(path_to_zip):
+            return None
+
+        ret_value = None
+
+        with zipfile.ZipFile(path_to_zip) as zip_file:
+            namelist = zip_file.namelist()
+            if resource in namelist:
+                ret_value = zip_file.read(resource)
+                return ret_value.decode("utf-8")
+
+        logger.error(__file__, "__get_zip_content(self, path_to_zip, resource)", "no zip content with resource '" + resource + "' found in .")
+        return ret_value
+
     def __get_completions(self):
         try:
-            skin_rainmeter_section = yaml.load(self.__get_rainmeter_section_content())
-            meters_general_image_options = yaml.load(self.__get_general_image_options_content())
+            rainmeter_section_content = self.__get_rainmeter_section_content()
+            skin_rainmeter_section = yaml.load(rainmeter_section_content)
+
+            general_image_options_content = self.__get_general_image_options_content()
+            meters_general_image_options = yaml.load(general_image_options_content)
 
             skin_rainmeter_section.extend(meters_general_image_options)
 
@@ -23,7 +42,7 @@ class SkinRainmeterSectionAutoComplete:
         except yaml.YAMLError as error:
             logger.error(__file__, "get_completions", error)
 
-    def __get_rainmeter_section_content(self):
+    def __get_general_image_options_content(self):
         # trying git mode first
         parent_path = os.path.dirname(os.path.realpath(__file__))
         meters_general_image_options_path = os.path.join(os.path.dirname(parent_path), "meter", "general_image_options.yaml")
@@ -34,14 +53,17 @@ class SkinRainmeterSectionAutoComplete:
 
         # running in package mode
         else:
-            try:
-                resource_path = "Packages/Rainmeter/completion/skin/rainmeter_section.yaml"
-                return sublime.load_resource(resource_path)
-            except IOError:
-                logger.error(__file__, "get_completions", "skin rainmeter section completion expected '" + resource_path + "' but does not exist in package mode.")
-                return ""
+            packages_path = sublime.installed_packages_path()
+            sublime_package = "Rainmeter.sublime-package"
+            rm_package_path = os.path.join(packages_path, sublime_package)
+            if os.path.exists(rm_package_path):
+                resource = "completion/meter/general_image_options.yaml"
+                return self.__get_zip_content(rm_package_path, resource)
 
-    def __get_general_image_options_content(self):
+        logger.error(__file__, "get_completions", "meters general image options section completion expected 'completion/meter/general_image_options.yaml' but does not exist in neither git nor package mode.")
+        return None
+
+    def __get_rainmeter_section_content(self):
         # trying git mode first
         parent_path = os.path.dirname(os.path.realpath(__file__))
         rainmeter_section_path = os.path.join(parent_path, "rainmeter_section.yaml")
@@ -52,12 +74,15 @@ class SkinRainmeterSectionAutoComplete:
 
         # running in package mode
         else:
-            try:
-                resource_path = "Packages/Rainmeter/completion/meter/general_image_options.yaml"
-                return sublime.load_resource(resource_path)
-            except IOError:
-                logger.error(__file__, "get_completions", "meter general image options section completion expected '" + resource_path + "' but does not exist in package mode.")
-                return ""
+            packages_path = sublime.installed_packages_path()
+            sublime_package = "Rainmeter.sublime-package"
+            rm_package_path = os.path.join(packages_path, sublime_package)
+            if os.path.exists(rm_package_path):
+                resource = "completion/skin/rainmeter_section.yaml"
+                return self.__get_zip_content(rm_package_path, resource)
+
+        logger.error(__file__, "get_completions", "skin rainmeter section completion expected 'completion/skin/rainmeter_section.yaml' but does not exist in neither git nor package mode.")
+        return None
 
     def __get_compiled_key_completions(self, options):
         keys = []
@@ -115,13 +140,16 @@ class SkinRainmeterSectionAutoComplete:
     all_key_completions = None
 
     def __init__(self):
-        self.all_completions = self.__get_completions()
-        self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
         logger.info(__file__, "__init__()", "SkinRainmeterSectionKeyAutoComplete initialized.")
 
     def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
         if section.casefold() != "Rainmeter".casefold():
             return None
+
+        # use lazy initialization because else the API is not available yet
+        if not self.all_completions:
+            self.all_completions = self.__get_completions()
+            self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
 
         # filter by already existing keys
         completions = []
@@ -153,6 +181,10 @@ class SkinRainmeterSectionAutoComplete:
     def get_value_context_completion(self, view, prefix, location, line_content, section, key_match, keyvalues):
         if section != "Rainmeter":
             return None
+
+        # use lazy initialization because else the API is not available yet
+        if not self.all_completions:
+            self.all_completions = self.__get_completions()
 
         value_completions = SkinRainmeterSectionAutoComplete.get_compiled_value_completions(key_match, self.all_completions)
         if not value_completions:
