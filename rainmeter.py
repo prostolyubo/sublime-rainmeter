@@ -20,19 +20,19 @@ from .path.program_drive_provider import get_cached_program_drive
 from .completion.completion import ContextSensAutoCompletion
 
 
-def skins_path() -> str:
+def skins_path():
     """Get the cached value of the #SKINSPATH# variable"""
 
     return _skins_path
 
 
-def plugins_path() -> str:
+def plugins_path():
     """Get the cached value of the #PLUGINSPATH# variable"""
 
     return _plugins_path
 
 
-def addons_path() -> str:
+def addons_path():
     """Get the cached value of the #ADDONSPATH# variable"""
 
     return _addons_path

@@ -3,38 +3,38 @@ environment:
         # The package name
         PACKAGE: "Rainmeter"
         SUBLIME_TEXT_VERSION : "3"
-    # matrix:
-        # - PYTHON: "C:\\Python33"
-          # PYTHON_ARCH: "32"
-          # SUBLIME_TEXT_VERSION : "3"
-        # - PYTHON: "C:\\Python33-x64"
-          # PYTHON_ARCH: "64"
-        # - SUBLIME_TEXT_VERSION : "3"
 
 install:
     # Prepend newly installed Python to the PATH of this build (this cannot be
     # done from inside the powershell script as it would require to restart
     # the parent CMD process).
-    # - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
     - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
     - ps: .\appveyor.ps1 "bootstrap" -verbose
-    # - "SET PATH=C:\\st;%PATH%"
     # install Package Control
     - ps: .\appveyor.ps1 "install_package_control" -verbose
-    # - ps: pip install coverage git+https://github.com/jayvdb/coveralls-python@appveyor
-    # - ps: pip install python-coveralls
 
 build: off
 
 test_script:
-    - ps: .\appveyor.ps1 "run_tests" -verbose
+    - ps: .\appveyor.ps1 "run_tests" -coverage -verbose
     # testing syntax_test files
     # - ps: .\appveyor.ps1 "run_syntax_tests" -verbose
-    # - ps: appveyor DownloadFile https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/run_tests.py
-    # - ps: python ".\run_tests.py" "--coverage" "$PACKAGE"
 
 after_test:
-    # - ps: coveralls 
+    - ps: pip install coveralls
+
+    # check if actually copied
+    - ps: coverage report
+
+    # set via AppVeyor environment token for privacy
+    # or use encrypted versions and decrypt it here
+    # - bat: set COVERALLS_REPO_TOKEN=XXXX
+    # coveralls generally requires the .coverage file to be in the root folder
+    # this is already copied for us from the "%appdata%\Roaming\Sublime Text 3\Packages\User\UnitTesting\Rainmeter\coverage" folder
+    # - bat: copy "%appdata%\Roaming\Sublime Text 3\Packages\User\UnitTesting\Rainmeter\coverage" .coverage
+    - bat: coveralls
+
+    # this needs to be here in after_test and not in on_success because artifacts are collected directly after after_test
     # package application without ps
     - gradlew.bat distribute
 
