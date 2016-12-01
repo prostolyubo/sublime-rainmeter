@@ -11,32 +11,55 @@ from Rainmeter.completion.levenshtein import levenshtein
 
 class SkinRainmeterSectionAutoComplete:
 
-    @staticmethod
-    def get_completions():
+    def __get_completions(self):
+        try:
+            skin_rainmeter_section = yaml.load(self.__get_rainmeter_section_content())
+            meters_general_image_options = yaml.load(self.__get_general_image_options_content())
+
+            skin_rainmeter_section.extend(meters_general_image_options)
+
+            return skin_rainmeter_section
+
+        except yaml.YAMLError as error:
+            logger.error(__file__, "get_completions", error)
+
+    def __get_rainmeter_section_content(self):
+        # trying git mode first
+        parent_path = os.path.dirname(os.path.realpath(__file__))
+        meters_general_image_options_path = os.path.join(os.path.dirname(parent_path), "meter", "general_image_options.yaml")
+
+        if os.path.exists(meters_general_image_options_path):
+            with open(meters_general_image_options_path, 'r') as meters_general_image_options_stream:
+                return meters_general_image_options_stream.read()
+
+        # running in package mode
+        else:
+            try:
+                resource_path = "Packages/Rainmeter/completion/skin/rainmeter_section.yaml"
+                return sublime.load_resource(resource_path)
+            except IOError:
+                logger.error(__file__, "get_completions", "skin rainmeter section completion expected '" + resource_path + "' but does not exist in package mode.")
+                return ""
+
+    def __get_general_image_options_content(self):
+        # trying git mode first
         parent_path = os.path.dirname(os.path.realpath(__file__))
         rainmeter_section_path = os.path.join(parent_path, "rainmeter_section.yaml")
-        meters_general_image_options_path = os.path.join(os.path.dirname(parent_path), "meter", "general_image_options.yaml")
-        if not os.path.exists(rainmeter_section_path):
-            logger.error(__file__, "get_completions", "skin rainmeter section completion expected '" + rainmeter_section_path + "' but does not exist.")
-            return []
-        if not os.path.exists(meters_general_image_options_path):
-            logger.error(__file__, "get_completions", "skin rainmeter section completion expected '" + meters_general_image_options_path + "' but does not exist.")
-            return []
 
-        with open(rainmeter_section_path, 'r') as skin_rainmeter_section_stream, open(meters_general_image_options_path, 'r') as meters_general_image_options_stream:
+        if os.path.exists(rainmeter_section_path):
+            with open(rainmeter_section_path, 'r') as skin_rainmeter_section_stream:
+                return skin_rainmeter_section_stream.read()
+
+        # running in package mode
+        else:
             try:
-                skin_rainmeter_section = yaml.load(skin_rainmeter_section_stream)
-                meters_general_image_options = yaml.load(meters_general_image_options_stream)
+                resource_path = "Packages/Rainmeter/completion/meter/general_image_options.yaml"
+                return sublime.load_resource(resource_path)
+            except IOError:
+                logger.error(__file__, "get_completions", "meter general image options section completion expected '" + resource_path + "' but does not exist in package mode.")
+                return ""
 
-                skin_rainmeter_section.extend(meters_general_image_options)
-
-                return skin_rainmeter_section
-
-            except yaml.YAMLError as error:
-                logger.error(__file__, "get_completions", error)
-
-    @staticmethod
-    def get_compiled_key_completions(options):
+    def __get_compiled_key_completions(self, options):
         keys = []
         for option in options:
             title = option['title'] + "\t" + option['hint']
@@ -88,10 +111,12 @@ class SkinRainmeterSectionAutoComplete:
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 
-    all_completions = get_completions.__func__()
-    all_key_completions = get_compiled_key_completions.__func__(all_completions)
+    all_completions = None
+    all_key_completions = None
 
     def __init__(self):
+        self.all_completions = self.__get_completions()
+        self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
         logger.info(__file__, "__init__()", "SkinRainmeterSectionKeyAutoComplete initialized.")
 
     def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
