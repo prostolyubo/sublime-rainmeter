@@ -25,7 +25,7 @@
 !completion
 
 # include coloring
-!color/
+!color
 
 # include messaging
 !messages/
