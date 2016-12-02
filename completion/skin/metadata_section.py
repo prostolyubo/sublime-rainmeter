@@ -1,61 +1,25 @@
-import os.path
 import yaml
-import zipfile
 
 import sublime
 
 # import own libs
-from Rainmeter import logger
-from Rainmeter.completion.levenshtein import levenshtein
+from ... import logger
+from ...completion.levenshtein import levenshtein
+from ...completion.yaml_content_reader import YamlContentReader
 
 
-class SkinMetadataSectionAutoComplete:
-
-    def __get_zip_content(self, path_to_zip, resource):
-        if not os.path.exists(path_to_zip):
-            return None
-
-        ret_value = None
-
-        with zipfile.ZipFile(path_to_zip) as zip_file:
-            namelist = zip_file.namelist()
-            if resource in namelist:
-                ret_value = zip_file.read(resource)
-                return ret_value.decode("utf-8")
-
-        logger.error(__file__, "__get_zip_content(self, path_to_zip, resource)", "no zip content with resource '" + resource + "' found in .")
-        return ret_value
+class SkinMetadataSectionAutoComplete(YamlContentReader):
 
     def __get_completions(self):
         try:
-            skin_metadata_section_content = self.__get_metadata_section_content()
+            skin_metadata_section_content = self._get_yaml_content("completion/skin/", "metadata_section.yaml")
             skin_metadata_section = yaml.load(skin_metadata_section_content)
 
             return skin_metadata_section
 
         except yaml.YAMLError as error:
             logger.error(__file__, "get_completions", error)
-
-    def __get_metadata_section_content(self):
-        # trying git mode first
-        parent_path = os.path.dirname(os.path.realpath(__file__))
-        metadata_section_path = os.path.join(os.path.dirname(parent_path), "metadata_section.yaml")
-
-        if os.path.exists(metadata_section_path):
-            with open(metadata_section_path, 'r') as metadata_section_options_stream:
-                return metadata_section_options_stream.read()
-
-        # running in package mode
-        else:
-            packages_path = sublime.installed_packages_path()
-            sublime_package = "Rainmeter.sublime-package"
-            rm_package_path = os.path.join(packages_path, sublime_package)
-            if os.path.exists(rm_package_path):
-                resource = "completion/skin/metadata_section.yaml"
-                return self.__get_zip_content(rm_package_path, resource)
-
-        logger.error(__file__, "get_completions", "skin metadata section completion expected 'completion/skin/metadata_section.yaml' but does not exist in neither git nor package mode.")
-        return None
+            return []
 
     def __get_compiled_key_completions(self, options):
         keys = []
@@ -105,9 +69,6 @@ class SkinMetadataSectionAutoComplete:
                             logger.error(__file__, "get_compiled_value_completions", "unexpected length of '" + length + "' for option key '" + option_key + "'")
 
         return values
-
-    def __init__(self):
-        logger.info(__file__, "__init__(self)", "SkinMetadataSectionAutoComplete initialized.")
 
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS

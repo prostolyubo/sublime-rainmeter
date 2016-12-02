@@ -4,7 +4,8 @@ import winreg
 from functools import lru_cache
 
 import sublime
-from Rainmeter import logger
+
+from .. import logger
 
 
 @lru_cache(maxsize=None)

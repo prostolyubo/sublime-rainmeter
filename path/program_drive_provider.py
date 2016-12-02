@@ -1,9 +1,9 @@
 import os
 from functools import lru_cache
 
-from Rainmeter import logger
+from .. import logger
 # use absolute path because of re-occuraing imports '.' could not work
-from Rainmeter.path.program_path_provider import get_cached_program_path
+from .program_path_provider import get_cached_program_path
 
 
 @lru_cache(maxsize=None)

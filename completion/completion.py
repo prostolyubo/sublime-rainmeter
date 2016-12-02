@@ -5,9 +5,9 @@ import re
 import sublime
 
 # own libs
-from Rainmeter import logger
-from Rainmeter.completion.skin.rainmeter_section import SkinRainmeterSectionAutoComplete
-from Rainmeter.completion.skin.metadata_section import SkinMetadataSectionAutoComplete
+from .. import logger
+from ..completion.skin.rainmeter_section import SkinRainmeterSectionAutoComplete
+from ..completion.skin.metadata_section import SkinMetadataSectionAutoComplete
 
 
 class ContextSensAutoCompletion:

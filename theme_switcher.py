@@ -4,7 +4,7 @@ import re
 import sublime
 import sublime_plugin
 
-from Rainmeter import logger
+from . import logger
 
 
 class EditThemeCommand(sublime_plugin.ApplicationCommand):

@@ -3,7 +3,7 @@ import re
 
 import sublime
 import sublime_plugin
-from Rainmeter import rainmeter
+from . import rainmeter
 
 
 class RainmeterNewSkinFileCommand(sublime_plugin.WindowCommand):

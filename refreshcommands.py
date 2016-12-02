@@ -2,7 +2,7 @@ import os.path
 
 import sublime
 import sublime_plugin
-from Rainmeter import rainmeter
+from . import rainmeter
 from .path.program_path_provider import get_cached_program_path
 
 

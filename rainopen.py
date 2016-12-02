@@ -10,7 +10,7 @@ import threading
 import sublime
 import sublime_plugin
 
-from Rainmeter import rainmeter
+from . import rainmeter
 
 
 # Files to open with sublime instead of the system default
