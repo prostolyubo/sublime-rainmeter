@@ -23,6 +23,23 @@ class YamlContentReader:
         logger.error(__file__, "__get_zip_content(self, path_to_zip, resource)", "no zip content with resource '" + resource + "' found in .")
         return ret_value
 
+    def __get_yaml_content_in_package(self, package, dir_of_yaml, yaml_file):
+        # try searching in Installed Packages e.g. if packaged in .sublime-package
+        packages_path = sublime.installed_packages_path()
+        sublime_package = package + ".sublime-package"
+        rm_package_path = os.path.join(packages_path, sublime_package)
+        if os.path.exists(rm_package_path):
+            logger.info(
+                __file__,
+                "__get_yaml_content_in_package(package, dir_of_yaml, yaml_file)",
+                "found packaged resource in '" + rm_package_path + "'"
+            )
+            resource = dir_of_yaml + yaml_file
+
+            return self.__get_zip_content(rm_package_path, resource)
+
+        return None
+
     def _get_yaml_content(self, dir_of_yaml, yaml_file):
         """
         get yaml content of a yaml file located either in:
@@ -60,19 +77,15 @@ class YamlContentReader:
             with open(yaml_path, 'r') as yaml_content_stream:
                 return yaml_content_stream.read()
 
-        # try searching in Installed Packages e.g. if packaged in .sublime-package
-        packages_path = sublime.installed_packages_path()
-        sublime_package = "Rainmeter.sublime-package"
-        rm_package_path = os.path.join(packages_path, sublime_package)
-        if os.path.exists(rm_package_path):
-            logger.info(
-                __file__,
-                "_get_yaml_content(dir_of_yaml, yaml_file)",
-                "found packaged resource in '" + rm_package_path + "'"
-            )
-            resource = dir_of_yaml + yaml_file
+        # if installed officially it is called Rainmeter.sublime-package
+        # but if installed via manual added repo it is called sublime-rainmeter.sublime-package
+        rm_package = self.__get_yaml_content_in_package("Rainmeter", dir_of_yaml, yaml_file)
+        if rm_package:
+            return rm_package
 
-            return self.__get_zip_content(rm_package_path, resource)
+        sr_package = self.__get_yaml_content_in_package("sublime-rainmeter", dir_of_yaml, yaml_file)
+        if sr_package:
+            return sr_package
 
         logger.error(
             __file__,
