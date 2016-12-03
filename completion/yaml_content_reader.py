@@ -77,15 +77,10 @@ class YamlContentReader:
             with open(yaml_path, 'r') as yaml_content_stream:
                 return yaml_content_stream.read()
 
-        # if installed officially it is called Rainmeter.sublime-package
-        # but if installed via manual added repo it is called sublime-rainmeter.sublime-package
+        # if installed officially it is called Rainmeter.sublime-package or via packages.json
         rm_package = self.__get_yaml_content_in_package("Rainmeter", dir_of_yaml, yaml_file)
         if rm_package:
             return rm_package
-
-        sr_package = self.__get_yaml_content_in_package("sublime-rainmeter", dir_of_yaml, yaml_file)
-        if sr_package:
-            return sr_package
 
         logger.error(
             __file__,
