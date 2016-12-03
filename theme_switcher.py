@@ -26,7 +26,9 @@ class EditThemeCommand(sublime_plugin.ApplicationCommand):
         all_themes = sublime.find_resources("*.tmTheme")
 
         # only list rainmeter themes
-        rm_exp = re.compile(r"Packages\/Rainmeter\/")
+        # could be installed via "add repository" then the file is named after the repository
+        rm_exp = re.compile(r"Packages\/(Rainmeter|sublime-rainmeter)\/", re.IGNORECASE)
+
         theme_exp = re.compile(re.escape(theme))
         filtered_themes = list(filter(lambda t: rm_exp.search(t) and theme_exp.search(t), all_themes))
 
