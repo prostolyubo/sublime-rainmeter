@@ -6,7 +6,15 @@
 			"description": "Rainmeter Package for Sublime Text 3",
 			"author": "thatsIch",
 			"homepage": "http://thatsich.github.com/sublime-rainmeter/",
+			"details": "https://github.com/thatsIch/sublime-rainmeter",
+			"labels": ["rainmeter"],
 			"releases": [
+				{
+					"base": "https://github.com/merlinthered/sublime-rainmeter",
+ 					"sublime_text": "<3000",
+ 					"platforms": ["windows"],
+ 					"tags": true
+				},
 				{
 					"platforms": "windows",
 					"sublime_text": ">=3092",
