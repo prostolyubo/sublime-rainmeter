@@ -23,7 +23,7 @@ class EditThemeCommand(sublime_plugin.ApplicationCommand):
         theme: String
             Given String through the menu. Should match one of the tmTheme in the Rainmeter space
         """
-        all_themes = sublime.find_resources("*.tmTheme")
+        all_themes = sublime.find_resources("*.hidden-tmTheme")
 
         # only list rainmeter themes
         # could be installed via "add repository" then the file is named after the repository

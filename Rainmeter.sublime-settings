@@ -64,12 +64,11 @@
 	"rainmeter_enable_logging": true,
 
 	//The color scheme to use for Rainmeter syntax.
-	"color_scheme": "Packages/Rainmeter/Monokai (Rainmeter).tmTheme",
-	// "color_scheme": "Packages/Rainmeter/Lachgummi Joghurt.tmTheme",
-	// "color_scheme": "Packages/Rainmeter/Nexus (Rainmeter).tmTheme",
-	// "color_scheme": "Packages/Rainmeter/RainLexer.tmTheme",
-	// "color_scheme": "Packages/Rainmeter/Rainmeter (Light).tmTheme",
-
+	"color_scheme": "Packages/Rainmeter/theme/Monokai (Rainmeter).hidden-tmTheme",
+	// "color_scheme": "Packages/Rainmeter/theme/Lachgummi Joghurt.hidden-tmTheme",
+	// "color_scheme": "Packages/Rainmeter/theme/Nexus (Rainmeter).hidden-tmTheme",
+	// "color_scheme": "Packages/Rainmeter/theme/RainLexer.hidden-tmTheme",
+	// "color_scheme": "Packages/Rainmeter/theme/Rainmeter (Light).hidden-tmTheme",
 
 	//Tab size for indentation.
 	"tab_size": 1,
