@@ -27,8 +27,12 @@
 # exclude compiled python files
 *.pyc
 
-# include important sublime text files
+# include theming
+!theme
 !*.tmTheme
+!*.hidden-tmTheme
+
+# include important sublime text files
 !*.sublime-build
 !*.sublime-commands
 !*.sublime-completions
