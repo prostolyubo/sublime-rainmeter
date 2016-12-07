@@ -32,7 +32,7 @@ after_test:
     # coveralls generally requires the .coverage file to be in the root folder
     # this is already copied for us from the "%appdata%\Roaming\Sublime Text 3\Packages\User\UnitTesting\Rainmeter\coverage" folder
     # - bat: copy "%appdata%\Roaming\Sublime Text 3\Packages\User\UnitTesting\Rainmeter\coverage" .coverage
-    - bat: coveralls
+    - coveralls
 
     # this needs to be here in after_test and not in on_success because artifacts are collected directly after after_test
     # package application without ps
