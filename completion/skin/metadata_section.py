@@ -91,7 +91,8 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
         completions = []
 
         for completion in self.all_key_completions:
-            trigger, content = completion
+            # trigger is not used here
+            _, content = completion
 
             contained = 0
             for key, value in keyvalues:
