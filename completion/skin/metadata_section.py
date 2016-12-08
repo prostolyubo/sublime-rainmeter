@@ -95,7 +95,8 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
             _, content = completion
 
             contained = 0
-            for key, value in keyvalues:
+            # value not used here
+            for key, _ in keyvalues:
                 if key.casefold() == content.casefold():
                     contained = 1
                     break
