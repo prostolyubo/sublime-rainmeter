@@ -73,7 +73,9 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
                             pair = (open_value_key + "\t" + option_value_hint, option_value_value)
                             values.append(pair)
                         else:
-                            logger.error(__file__, "get_compiled_value_completions", "unexpected length of '" + length + "' for option key '" + option_key + "'")
+                            logger.error(__file__,
+                                         "get_compiled_value_completions",
+                                         "unexpected length of '" + length + "' for option key '" + option_key + "'")
 
         return values
 
