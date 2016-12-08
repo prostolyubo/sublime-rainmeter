@@ -10,7 +10,7 @@ from ..completion.skin.rainmeter_section import SkinRainmeterSectionAutoComplete
 from ..completion.skin.metadata_section import SkinMetadataSectionAutoComplete
 
 
-class ContextSensAutoCompletion:
+class ContextSensAutoCompletion(object):
 
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
