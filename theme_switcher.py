@@ -35,7 +35,13 @@ class EditThemeCommand(sublime_plugin.ApplicationCommand):
         if len(filtered_themes) != 1:
             stringified_all_themes = '\n'.join(map(str, all_themes))
             stringified_filtered_themes = '\n'.join(map(str, filtered_themes))
-            message = "searched for '{theme}' in \n\n{stringified_all_themes}\n but resulted into more or less than 1 result with\n\n{stringified_filtered_themes}"
+            message = """searched for '{theme}' in
+
+                         {stringified_all_themes}
+
+                         but resulted into more or less than 1 result with
+
+                         {stringified_filtered_themes}"""
             formatted_message = message.format(
                 theme=theme,
                 stringified_all_themes=stringified_all_themes,
