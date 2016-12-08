@@ -31,20 +31,20 @@ def __load_settings():
     __log = settings.get(key, False)
 
 
-def info(file, function, string):
+def info(file_path, function, string):
     if __log:
-        _log("info", file, function, string)
+        _log("info", file_path, function, string)
 
 
-def error(file, function, string):
-    _log("error", file, function, string)
+def error(file_path, function, string):
+    _log("error", file_path, function, string)
 
 
-def _log(type, file, function, string):
+def _log(error_type, file_path, function, string):
     now = datetime.now()
     timestamp = now.strftime("%H:%M:%S.%f")[:-3]
 
-    filename = os.path.basename(file)
+    filename = os.path.basename(file_path)
     withoutext = os.path.splitext(filename)[0]
 
-    print("[" + timestamp + "]", "[" + type + "]", withoutext + "." + function + ':', string)
+    print("[" + timestamp + "]", "[" + error_type + "]", withoutext + "." + function + ':', string)
