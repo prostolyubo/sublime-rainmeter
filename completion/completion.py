@@ -33,7 +33,7 @@ class ContextSensAutoCompletion(object):
         self.skin_rainmeter_section = SkinRainmeterSectionAutoComplete()
         self.skin_metadata_section = SkinMetadataSectionAutoComplete()
 
-    def get_lines_of_section_on_cursor(self, view, location, prefix):
+    def get_lines_of_section_on_cursor(self, view, location):
         size = view.size()
         start_content = view.substr(sublime.Region(0, location))
         end_content = view.substr(sublime.Region(location, size))
@@ -107,7 +107,7 @@ class ContextSensAutoCompletion(object):
                 return None
 
             # find last occurance of the [] to determine the ini sections
-            lines = self.get_lines_of_section_on_cursor(view, location, prefix)
+            lines = self.get_lines_of_section_on_cursor(view, location)
             # filter empty lines
             lines = list(filter(None, lines))
             # filter comments
