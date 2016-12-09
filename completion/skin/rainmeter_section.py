@@ -98,10 +98,12 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
         completions = []
 
         for completion in self.all_key_completions:
-            trigger, content = completion
+            # trigger not needed
+            _, content = completion
 
             contained = 0
-            for key, value in keyvalues:
+            # value not needed
+            for key, _ in keyvalues:
                 if key.casefold() == content.casefold():
                     contained = 1
                     break
