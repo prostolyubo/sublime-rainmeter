@@ -8,7 +8,8 @@ from .. import logger
 
 class YamlContentReader:
 
-    def __get_zip_content(self, path_to_zip, resource):
+    @classmethod
+    def __get_zip_content(cls, path_to_zip, resource):
         if not os.path.exists(path_to_zip):
             return None
 
