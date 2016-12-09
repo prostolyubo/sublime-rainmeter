@@ -281,12 +281,12 @@ def replace_variables(string, filepath):
                  "#ROOTCONFIGPATH#": lambda: get_root_config_path(filepath),
                  "#CURRENTCONFIG#": lambda: get_current_config(filepath),
                  "#@#": lambda: get_resources_path(filepath),
-                 "#SKINSPATH#": lambda: skins_path(),
-                 "#SETTINGSPATH#": lambda: get_cached_setting_path(),
-                 "#PROGRAMPATH#": lambda: get_cached_program_path(),
-                 "#PROGRAMDRIVE#": lambda: get_cached_program_drive(),
-                 "#ADDONSPATH#": lambda: get_cached_addon_path(),
-                 "#PLUGINSPATH#": lambda: get_cached_plugin_path()}
+                 "#SKINSPATH#": skins_path,
+                 "#SETTINGSPATH#": get_cached_setting_path,
+                 "#PROGRAMPATH#": get_cached_program_path,
+                 "#PROGRAMDRIVE#": get_cached_program_drive,
+                 "#ADDONSPATH#": get_cached_addon_path,
+                 "#PLUGINSPATH#": get_cached_plugin_path}
 
     pattern = re.compile("(?i)" + "|".join(list(variables.keys())))
     # replace Rainmeter variables
