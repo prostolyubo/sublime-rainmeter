@@ -106,7 +106,7 @@ class RainmeterNewSkinCommand(sublime_plugin.WindowCommand):
 
     def open_skin_file(self, view):
         if view.is_loading():
-            sublime.set_timeout(lambda: self.open_skin_file(self, view),
+            sublime.set_timeout(lambda: self.open_skin_file(view),
                                 100)
             return
 
