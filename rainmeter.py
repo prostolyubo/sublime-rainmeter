@@ -17,6 +17,7 @@ from .path.program_path_provider import get_cached_program_path
 from .path.setting_path_provider import get_cached_setting_path
 from .path.program_drive_provider import get_cached_program_drive
 from .path.plugin_path_provider import get_cached_plugin_path
+from .path.addon_path_provider import get_cached_addon_path
 
 from .completion.completion import ContextSensAutoCompletion
 
@@ -25,12 +26,6 @@ def skins_path():
     """Get the cached value of the #SKINSPATH# variable"""
 
     return _skins_path
-
-
-def addons_path():
-    """Get the cached value of the #ADDONSPATH# variable"""
-
-    return _addons_path
 
 
 def get_skins_path():
@@ -152,15 +147,6 @@ def get_skins_path():
         logger.info(__file__, "get_skins_path", "Skin path guessed from user name" +
                     " and Windows version")
         return os.path.join(mydocuments, "Rainmeter\\Skins") + "\\"
-
-
-def get_addons_path():
-    """Get the value of the #ADDONSPATH# variable"""
-
-    settingspath = get_cached_setting_path()
-    if not settingspath:
-        return
-    return os.path.join(settingspath, "Addons") + "\\"
 
 
 def get_current_path(filepath):
@@ -299,7 +285,7 @@ def replace_variables(string, filepath):
                  "#SETTINGSPATH#": lambda: get_cached_setting_path(),
                  "#PROGRAMPATH#": lambda: get_cached_program_path(),
                  "#PROGRAMDRIVE#": lambda: get_cached_program_drive(),
-                 "#ADDONSPATH#": lambda: addons_path(),
+                 "#ADDONSPATH#": lambda: get_cached_addon_path(),
                  "#PLUGINSPATH#": lambda: get_cached_plugin_path()}
 
     pattern = re.compile("(?i)" + "|".join(list(variables.keys())))
@@ -359,7 +345,6 @@ def make_path(string, filepath):
 settings = None
 
 _skins_path = None
-_addons_path = None
 
 
 # Called automatically from ST3 if plugin is loaded
@@ -369,20 +354,18 @@ def plugin_loaded():
     global settings
 
     global _skins_path
-    global _addons_path
 
     settings = sublime.load_settings("Rainmeter.sublime-settings")
 
     # Cache the paths
     _skins_path = get_skins_path()
-    _addons_path = get_addons_path()
 
     logger.info(__file__, "plugin_loaded()", "#PROGRAMPATH#:\t\t" + get_cached_program_path())
     logger.info(__file__, "plugin_loaded()", "#PROGRAMDRIVE#:\t" + get_cached_program_drive())
     logger.info(__file__, "plugin_loaded()", "#SETTINGSPATH#:\t" + get_cached_setting_path())
     logger.info(__file__, "plugin_loaded()", "#SKINSPATH#:\t\t" + skins_path())
     logger.info(__file__, "plugin_loaded()", "#PLUGINSPATH#:\t\t" + get_cached_plugin_path())
-    logger.info(__file__, "plugin_loaded()", "#ADDONSPATH#:\t\t" + addons_path())
+    logger.info(__file__, "plugin_loaded()", "#ADDONSPATH#:\t\t" + get_cached_addon_path())
 
 
 class MeterAutoComplete(sublime_plugin.EventListener):
