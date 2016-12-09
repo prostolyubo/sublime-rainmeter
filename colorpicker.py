@@ -132,19 +132,22 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
                 else:
                     self.view.replace(edit, region, color)
 
-    def __to_custom_color_array(self, custom_colors):
+    @classmethod
+    def __to_custom_color_array(cls, custom_colors):
         cc = CustomColorArray()
         for i in range(16):
             cc[i] = int(custom_colors[i])
         return cc
 
-    def __from_custom_color_array(self, custom_colors):
+    @classmethod
+    def __from_custom_color_array(cls, custom_colors):
         cc = [0] * 16
         for i in range(16):
             cc[i] = str(custom_colors[i])
         return cc
 
-    def __is_valid_hex_color(self, s):
+    @classmethod
+    def __is_valid_hex_color(cls, s):
         if len(s) not in (3, 6, 8):
             return False
         try:
@@ -152,7 +155,8 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
         except ValueError:
             return False
 
-    def __bgr_to_hexstr(self,
+    @classmethod
+    def __bgr_to_hexstr(cls,
                         bgr,
                         byte_table=list(['{0:02X}'.format(b)
                                          for b in range(256)])
@@ -164,7 +168,8 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
 
         return r + g + b
 
-    def __hexstr_to_bgr(self, hexstr):
+    @classmethod
+    def __hexstr_to_bgr(cls, hexstr):
         if len(hexstr) == 3:
             hexstr = hexstr[0] + hexstr[0] + hexstr[1] + \
                 hexstr[1] + hexstr[2] + hexstr[2]
