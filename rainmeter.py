@@ -122,7 +122,7 @@ def get_skins_path():
                     " location in registry")
         return os.path.join(pathrep, "Rainmeter\\Skins") + "\\"
 
-    except WindowsError:
+    except OSError:
         pass
 
     # If the value could not be retrieved from the registry,
