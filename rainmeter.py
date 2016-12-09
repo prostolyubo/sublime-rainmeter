@@ -16,6 +16,7 @@ from . import logger
 from .path.program_path_provider import get_cached_program_path
 from .path.setting_path_provider import get_cached_setting_path
 from .path.program_drive_provider import get_cached_program_drive
+from .path.plugin_path_provider import get_cached_plugin_path
 
 from .completion.completion import ContextSensAutoCompletion
 
@@ -24,12 +25,6 @@ def skins_path():
     """Get the cached value of the #SKINSPATH# variable"""
 
     return _skins_path
-
-
-def plugins_path():
-    """Get the cached value of the #PLUGINSPATH# variable"""
-
-    return _plugins_path
 
 
 def addons_path():
@@ -157,15 +152,6 @@ def get_skins_path():
         logger.info(__file__, "get_skins_path", "Skin path guessed from user name" +
                     " and Windows version")
         return os.path.join(mydocuments, "Rainmeter\\Skins") + "\\"
-
-
-def get_plugins_path():
-    """Get the value of the #PLUGINSPATH# variable"""
-
-    settingspath = get_cached_setting_path()
-    if not settingspath:
-        return
-    return os.path.join(settingspath, "Plugins") + "\\"
 
 
 def get_addons_path():
@@ -314,7 +300,7 @@ def replace_variables(string, filepath):
                  "#PROGRAMPATH#": lambda: get_cached_program_path(),
                  "#PROGRAMDRIVE#": lambda: get_cached_program_drive(),
                  "#ADDONSPATH#": lambda: addons_path(),
-                 "#PLUGINSPATH#": lambda: plugins_path()}
+                 "#PLUGINSPATH#": lambda: get_cached_plugin_path()}
 
     pattern = re.compile("(?i)" + "|".join(list(variables.keys())))
     # replace Rainmeter variables
@@ -373,7 +359,6 @@ def make_path(string, filepath):
 settings = None
 
 _skins_path = None
-_plugins_path = None
 _addons_path = None
 
 
@@ -384,21 +369,19 @@ def plugin_loaded():
     global settings
 
     global _skins_path
-    global _plugins_path
     global _addons_path
 
     settings = sublime.load_settings("Rainmeter.sublime-settings")
 
     # Cache the paths
     _skins_path = get_skins_path()
-    _plugins_path = get_plugins_path()
     _addons_path = get_addons_path()
 
     logger.info(__file__, "plugin_loaded()", "#PROGRAMPATH#:\t\t" + get_cached_program_path())
     logger.info(__file__, "plugin_loaded()", "#PROGRAMDRIVE#:\t" + get_cached_program_drive())
     logger.info(__file__, "plugin_loaded()", "#SETTINGSPATH#:\t" + get_cached_setting_path())
     logger.info(__file__, "plugin_loaded()", "#SKINSPATH#:\t\t" + skins_path())
-    logger.info(__file__, "plugin_loaded()", "#PLUGINSPATH#:\t\t" + plugins_path())
+    logger.info(__file__, "plugin_loaded()", "#PLUGINSPATH#:\t\t" + get_cached_plugin_path())
     logger.info(__file__, "plugin_loaded()", "#ADDONSPATH#:\t\t" + addons_path())
 
 
