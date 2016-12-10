@@ -8,6 +8,7 @@ import sublime
 from .. import logger
 from ..completion.skin.rainmeter_section import SkinRainmeterSectionAutoComplete
 from ..completion.skin.metadata_section import SkinMetadataSectionAutoComplete
+from ..completion.section import SkinSectionAutoCompleter
 
 
 class ContextSensAutoCompletion(object):
@@ -15,6 +16,7 @@ class ContextSensAutoCompletion(object):
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 
+    section = None
     skin_rainmeter_section = None
     skin_metadata_section = None
 
@@ -30,6 +32,7 @@ class ContextSensAutoCompletion(object):
     key_value_expression = re.compile(r'^\s*(.+?)\s*\=\s*(.*?)\s*$', re.MULTILINE)
 
     def __init__(self):
+        self.section = SkinSectionAutoCompleter()
         self.skin_rainmeter_section = SkinRainmeterSectionAutoComplete()
         self.skin_metadata_section = SkinMetadataSectionAutoComplete()
 
@@ -115,7 +118,11 @@ class ContextSensAutoCompletion(object):
 
             if not lines:
                 logger.info(__file__, "bootstrap.on_query_completions", "section is empty")
-                return None
+                size = view.size()
+                content = view.substr(sublime.Region(0, size))
+                sections = self.bracket_expression.findall(content)
+
+                return self.section.get_key_context_completion(prefix, line_content, sections)
 
             # extract section
             first_line = lines[0]
@@ -123,9 +130,13 @@ class ContextSensAutoCompletion(object):
 
             # no section defined
             # TODO section suggestion
-            if not match:
-                logger.info(__file__, "on_query_completions", "no section found")
-                return None
+            # if not match:
+            #     logger.info(__file__, "on_query_completions", "no section found")
+            #     size = view.size()
+            #     content = view.substr(sublime.Region(0, size))
+            #     sections = self.bracket_expression.findall(content)
+
+            #     return self.section.get_key_context_completion(prefix, line_content, sections)
             section = match.group(1)
 
             key_match, value_match = self.get_key_value(line_content)
