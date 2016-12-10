@@ -149,10 +149,6 @@ class ContextSensAutoCompletion(object):
                 if value_result:
                     return value_result
 
-                value_result = self.skin_metadata_section.get_value_context_completion(view, prefix, location, line_content, section, key_match, key_values)
-                if value_result:
-                    return value_result
-
             # only do key completion if we are in the key are
             # that means in front of the equal or no equal at all
             else:
@@ -161,7 +157,7 @@ class ContextSensAutoCompletion(object):
                 if key_result:
                     return key_result
 
-                key_result = self.skin_metadata_section.get_key_context_completion(view, prefix, location, line_content, section, key_values)
+                key_result = self.skin_metadata_section.get_key_context_completion(prefix, line_content, section, key_values)
                 if key_result:
                     return key_result
 

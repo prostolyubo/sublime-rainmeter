@@ -64,13 +64,15 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
             if contained == 0:
                 completions.append(completion)
 
+        return completions
+
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 
     all_completions = None
     all_key_completions = None
 
-    def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
+    def get_key_context_completion(self, prefix, line_content, section, keyvalues):
         if section.casefold() != "Metadata".casefold():
             return None
 
@@ -79,6 +81,11 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
 
         # no results, means all keys are used up
         if not completions:
+            logger.info(
+                __file__,
+                "get_key_context_completion",
+                "no results, all keys are used up"
+            )
             return None
 
         # only show sorted by distance if something was already typed because distance to empty string makes no sense
@@ -88,6 +95,3 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
             return sorted_completions, self.flags
         else:
             return completions, self.flags
-
-    def get_value_context_completion(self, view, prefix, location, line_content, section, key_match, keyvalues):
-        return None
