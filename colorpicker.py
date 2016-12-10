@@ -155,16 +155,14 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
         except ValueError:
             return False
 
+    byte_table = list(['{0:02X}'.format(b) for b in range(256)])
+
     @classmethod
-    def __bgr_to_hexstr(cls,
-                        bgr,
-                        byte_table=list(['{0:02X}'.format(b)
-                                         for b in range(256)])
-                        ):
+    def __bgr_to_hexstr(cls, bgr):
         # 0x00BBGGRR
-        b = byte_table[(bgr >> 16) & 0xff]
-        g = byte_table[(bgr >> 8) & 0xff]
-        r = byte_table[bgr & 0xff]
+        b = cls.byte_table[(bgr >> 16) & 0xff]
+        g = cls.byte_table[(bgr >> 8) & 0xff]
+        r = cls.byte_table[bgr & 0xff]
 
         return r + g + b
 
