@@ -35,21 +35,13 @@ class SkinSectionAutoCompleter(YamlContentReader):
 
         return keys
 
-    # only show our completion list because nothing else makes sense in this context
-    flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
-
-    all_completions = None
-    all_key_completions = None
-
-    def get_key_context_completion(self, prefix, line_content, sections):
-        # if section.casefold() != "Metadata".casefold():
-        #     return None
-
+    def __lazy_initialize_completions(self):
         # use lazy initialization because else the API is not available yet
         if not self.all_completions:
             self.all_completions = self.__get_completions()
             self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
 
+    def __filter_completions_by_already_defined_sections(self, sections):
         # filter by already existing keys
         completions = []
 
@@ -66,6 +58,21 @@ class SkinSectionAutoCompleter(YamlContentReader):
 
             if contained == 0:
                 completions.append(completion)
+
+        return completions
+
+    # only show our completion list because nothing else makes sense in this context
+    flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
+
+    all_completions = None
+    all_key_completions = None
+
+    def get_key_context_completion(self, prefix, line_content, sections):
+        # if section.casefold() != "Metadata".casefold():
+        #     return None
+
+        self.__lazy_initialize_completions()
+        completions = self.__filter_completions_by_already_defined_sections(sections)
 
         # no results, means all keys are used up
         if not completions:
