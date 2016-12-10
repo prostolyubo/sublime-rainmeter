@@ -221,8 +221,6 @@ def plugin_loaded():
     # define variables from the global scope
     global settings
 
-    global _skins_path
-
     settings = sublime.load_settings("Rainmeter.sublime-settings")
 
     logger.info(__file__, "plugin_loaded()", "#PROGRAMPATH#:\t\t" + get_cached_program_path())
