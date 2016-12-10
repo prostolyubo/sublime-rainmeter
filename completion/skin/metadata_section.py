@@ -36,21 +36,17 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
 
         return keys
 
-    # only show our completion list because nothing else makes sense in this context
-    flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
-
-    all_completions = None
-    all_key_completions = None
-
-    def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
-        if section.casefold() != "Metadata".casefold():
-            return None
-
+    def __lazy_initialize_completions(self):
         # use lazy initialization because else the API is not available yet
         if not self.all_completions:
             self.all_completions = self.__get_completions()
             self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
 
+    def __filter_completions_by_key_already_used(self, keyvalues):
+        """
+        In Rainmeter a key can only be used once in a section statement.
+        If you declare it twice this is a code smell.
+        """
         # filter by already existing keys
         completions = []
 
@@ -67,6 +63,19 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
 
             if contained == 0:
                 completions.append(completion)
+
+    # only show our completion list because nothing else makes sense in this context
+    flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
+
+    all_completions = None
+    all_key_completions = None
+
+    def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
+        if section.casefold() != "Metadata".casefold():
+            return None
+
+        self.__lazy_initialize_completions()
+        completions = self.__filter_completions_by_key_already_used(keyvalues)
 
         # no results, means all keys are used up
         if not completions:
