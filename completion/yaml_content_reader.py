@@ -6,7 +6,7 @@ import sublime
 from .. import logger
 
 
-class YamlContentReader:
+class YamlContentReader(object):
 
     @classmethod
     def __get_zip_content(cls, path_to_zip, resource):
