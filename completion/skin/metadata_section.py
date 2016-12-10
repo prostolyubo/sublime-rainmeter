@@ -36,42 +36,6 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
 
         return keys
 
-    @staticmethod
-    def get_compiled_value_completions(key, options):
-        values = []
-
-        for option in options:
-            option_key = option['title']
-
-            if option_key == key:
-                if 'values' in option:
-                    option_values = option['values']
-                    for option_value in option_values:
-                        length = len(option_value)
-
-                        # case 1 is if only the key is provided, is generally the default case.
-                        # Meaning is generally explained in the key
-                        if length == 1:
-                            pair = (option_value[0] + "\tDefault", option_value[0])
-                            values.append(pair)
-
-                        # case 2 is if only the key and the special hint is given
-                        # means that the key is the value too
-                        elif length == 2:
-                            open_value_key, option_value_hint = option_value
-                            pair = (open_value_key + "\t" + option_value_hint, open_value_key)
-                            values.append(pair)
-                        elif length == 3:
-                            open_value_key, option_value_hint, option_value_value = option_value
-                            pair = (open_value_key + "\t" + option_value_hint, option_value_value)
-                            values.append(pair)
-                        else:
-                            logger.error(__file__,
-                                         "get_compiled_value_completions",
-                                         "unexpected length of '" + length + "' for option key '" + option_key + "'")
-
-        return values
-
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 
