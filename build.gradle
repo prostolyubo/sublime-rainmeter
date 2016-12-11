@@ -37,6 +37,7 @@ task distribute(type: Zip) {
             include 'lib/**'
             include 'path/**'
             include 'Snippets/**'
+            include 'theme/**'
             
             // but exclude python metadata
             exclude '**/__pycache__'  
