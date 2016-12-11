@@ -4,10 +4,17 @@ environment:
         PACKAGE: "Rainmeter"
         SUBLIME_TEXT_VERSION : "3"
 
+# enable for debugging purposes
+# init:
+  # - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
-    # Prepend newly installed Python to the PATH of this build (this cannot be
-    # done from inside the powershell script as it would require to restart
-    # the parent CMD process).
+    # install rainmeter
+    # we do it by downloading the installer and install it in silent mode
+    - ps: appveyor DownloadFile https://github.com/rainmeter/rainmeter/releases/download/v4.0.0.2722/Rainmeter-4.0-r2722-beta.exe -FileName C:/Rainmeter-setup.exe
+    - ps: C:/Rainmeter-setup.exe /S /D=C:/Rainmeter /VERSION=64 /PORTABLE=0 /DESKTOPSHORTCUT=0 /STARTUP=0 /ALLUSERS=1
+
+    # we download the special test environment for sublime text which can run commands from within the VM
     - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
     - ps: .\appveyor.ps1 "bootstrap" -verbose
     # install Package Control
