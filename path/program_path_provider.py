@@ -8,6 +8,61 @@ import sublime
 from .. import logger
 
 
+def _get_rainmeter_path_from_default_path():
+    """
+    Default location is "C:\Program Files\Rainmeter" in windows
+    we can get "C:\Program Files" through the environmental variables
+    %PROGRAMFILES%
+    """
+    programfiles = os.getenv("PROGRAMFILES")
+    rainmeterpath = os.path.join(programfiles, "Rainmeter")
+
+    return rainmeterpath
+
+
+def _get_rainmeter_registry_key():
+    try:
+        return winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rainmeter")
+    except FileNotFoundError:
+        import sys
+
+        is_64bits = sys.maxsize > 2**32
+        if is_64bits:
+            other_view_flag = winreg.KEY_WOW64_32KEY
+        else:
+            other_view_flag = winreg.KEY_WOW64_64KEY
+
+        try:
+            return winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rainmeter", access=winreg.KEY_READ | other_view_flag)
+        except FileNotFoundError:
+            '''
+            We really could not find the key in both views.
+            '''
+            return None
+
+
+def _get_rainmeter_path_from_registry():
+    """
+    Registry
+    """
+    regkey = __get_rainmeter_registry_key()
+    if regkey:
+        keyval = winreg.QueryValueEx(regkey, "Personal")
+
+        for i in range(1024):
+            try:
+                asubkey_name = winreg.EnumKey(keyval, i)
+                asubkey = winreg.OpenKey(keyval, asubkey_name)
+                rainmeterpath = winreg.QueryValueEx(asubkey, "DisplayName")
+                logger.info(__file__, "get_cached_program_path()", "found rainmeter path through registry: " + rainmeterpath)
+                if rainmeterpath:
+                    return rainmeterpath
+            except EnvironmentError:
+                break
+
+    return None
+
+
 @lru_cache(maxsize=None)
 def get_cached_program_path():
     # Load setting
@@ -16,35 +71,31 @@ def get_cached_program_path():
 
     # If setting is not set, try default location
     if not rainmeterpath:
-        logger.info(__file__, "get_cached_program_path()",
-                    "rainmeter_path not found in settings. Trying default location.")
-        # Default: "C:\Program Files\Rainmeter"
-        programfiles = os.getenv("PROGRAMFILES")
-        rainmeterpath = os.path.join(programfiles, "Rainmeter") + "\\"
+        logger.info(
+            __file__,
+            "get_cached_program_path()",
+            "rainmeter_path not found in settings. Trying default location."
+        )
+        rainmeterpath = _get_rainmeter_path_from_default_path()
 
-        # if it is not even specified by default, try using the registry to retrieve the installation path
-        if not os.path.isdir(rainmeterpath):
-            regkey = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\WOW6432Node\Rainmeter")
-            keyval = winreg.QueryValueEx(regkey, "Personal")
-
-            for i in range(1024):
-                try:
-                    asubkey_name = winreg.EnumKey(keyval, i)
-                    asubkey = winreg.OpenKey(keyval, asubkey_name)
-                    val = winreg.QueryValueEx(asubkey, "DisplayName")
-                    logger.info(__file__, "get_cached_program_path()", "found rainmeter path through registry: " + val)
-                except EnvironmentError:
-                    break
-
-    # normalize path
-    rainmeterpath = os.path.normpath(rainmeterpath) + "\\"
+    # if it is not even specified by default, try using the registry to retrieve the installation path
+    if not os.path.isdir(rainmeterpath):
+        rainmeterpath = _get_rainmeter_path_from_registry()
 
     # Check if path exists and contains Rainmeter.exe
-    if not os.path.exists(rainmeterpath + "Rainmeter.exe"):
+    if not os.path.isdir(rainmeterpath):
         message = "Path to Rainmeter.exe could neither be found in the standard directory nor via registry. Check your \"rainmeter_path\" setting."
         logger.info(__file__, "get_cached_program_path()", message)
         sublime.error_message(message)
         return
 
+    # normalize path
+    rainmeter_exe = os.path.join(rainmeterpath, "Rainmeter.exe")
+    if not os.path.exists(rainmeter_exe):
+        message = "Rainmeter path was found, but no Rainmeter.exe found. Check if you have correctly installed Rainmeter."
+        logger.error(__file__, "get_cached_program_path()", message)
+        sublime.error_message(message)
+        return
+
     logger.info(__file__, "get_cached_program_path()", "Rainmeter found in " + rainmeterpath)
-    return rainmeterpath
+    return rainmeterpath + "\\"
