@@ -35,9 +35,9 @@ def _get_rainmeter_registry_key():
         try:
             return winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rainmeter", access=winreg.KEY_READ | other_view_flag)
         except FileNotFoundError:
-            '''
+            """
             We really could not find the key in both views.
-            '''
+            """
             return None
 
 
@@ -45,7 +45,7 @@ def _get_rainmeter_path_from_registry():
     """
     Registry
     """
-    regkey = __get_rainmeter_registry_key()
+    regkey = _get_rainmeter_registry_key()
     if regkey:
         keyval = winreg.QueryValueEx(regkey, "Personal")
 
