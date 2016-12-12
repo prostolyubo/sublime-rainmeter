@@ -109,6 +109,9 @@ class ContextSensAutoCompletion(object):
         return None, None
 
     def get_key_values(self, lines):
+        """
+        Extract all key values in the given lines
+        """
         key_values = []
 
         for line in lines:
@@ -119,6 +122,14 @@ class ContextSensAutoCompletion(object):
         return key_values
 
     def on_query_completions(self, view, prefix, locations):
+        """"
+        executed if a auto completion is requested.
+        can be either via typing or manual invoked with ctrl+space.
+
+        This provides general variable extractions which are then
+        passed to the domain specific worker completions.
+        """
+
         for location in locations:
             # ignore non scope
             if not view.match_selector(location, self.scope):
