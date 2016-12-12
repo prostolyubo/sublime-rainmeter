@@ -172,7 +172,8 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
             hexstr = hexstr[0] + hexstr[0] + hexstr[1] + \
                 hexstr[1] + hexstr[2] + hexstr[2]
 
-        r = int(hexstr[0:2], 16)
-        g = int(hexstr[2:4], 16)
-        b = int(hexstr[4:6], 16)
-        return (b << 16) | (g << 8) | r
+        red = int(hexstr[0:2], 16)
+        green = int(hexstr[2:4], 16)
+        blue = int(hexstr[4:6], 16)
+
+        return (blue << 16) | (green << 8) | red
