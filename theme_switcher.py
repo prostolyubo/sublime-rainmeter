@@ -1,4 +1,9 @@
-# import os.path
+"""
+The theme switcher is a construct to allow easy manipulations
+of the rainmeter themes. The rainmeter themes are hidden to the default system
+so other systems can not use these color schemes.
+"""
+
 import re
 
 import sublime
