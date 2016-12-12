@@ -16,11 +16,20 @@ matrix:
 
 install:
     # install rainmeter
-    # we do it by downloading the installer and install it in silent mode
-    # TODO: silent mode is not supported anymore and automating with AutoIt failed
-    # - ps: appveyor DownloadFile https://github.com/rainmeter/rainmeter/releases/download/v4.0.0.2722/Rainmeter-4.0-r2722-beta.exe -FileName C:/Rainmeter-setup.exe
-    # - ps: C:/Rainmeter-setup.exe /S /D=C:/Program Files/Rainmeter /VERSION=64 /PORTABLE=0 /DESKTOPSHORTCUT=0 /STARTUP=0 /ALLUSERS=1
+    # we use the github API to determine the latest rainmeter
+    # we assume that the first entry is the latest
+    # using the API and /releases/latest only results in releases and not pre-releases
+    # rainmeter is typically offered as a pre-release
 
+    # requests all releases from rainmeter                              | search for field bdu      | first entry| easier delimiter | 4th col without *        | pass url to curl -L to follow redirect
+    - curl -s https://api.github.com/repos/rainmeter/rainmeter/releases | grep browser_download_url | head -n 1 | sed -e "s/""/*/g" | cut --delimiter="*" -f 4 | xargs curl -o C:\rainmeter-setup.exe -L
+
+    # the project is installed into C:\projects\sublime-rainmeter via AppVeyor
+    # the installer is located in the tests folder since this is used for integration testing
+    # this will silently install rainmeter
+    # we do not need to handle UAC since it is disabled in workers
+    - C:\projects\sublime-rainmeter\tests\rainmeter-installer.exe
+    
     # we download the special test environment for sublime text which can run commands from within the VM
     - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
     - ps: .\appveyor.ps1 "bootstrap" -verbose
