@@ -12,6 +12,11 @@ from ..completion.section import SkinSectionAutoCompleter
 
 
 class ContextSensAutoCompletion(object):
+    """
+    This represents the internal implementation for the contextual auto completion.
+    It uses smart environmental information like section, key, values etc
+    to provide smarter auto completion suggestions.
+    """
 
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
@@ -50,6 +55,11 @@ class ContextSensAutoCompletion(object):
         return lines
 
     def get_current_section_content_start_index(self, start_content):
+        """
+        This returns the index of the section.
+        If no section is found the first index (0) is returned
+        """
+
         matches = list(self.bracket_expression.finditer(start_content))
 
         if len(matches) > 0:
@@ -61,6 +71,11 @@ class ContextSensAutoCompletion(object):
             return 0
 
     def get_current_section_content_end_index(self, end_content, offset, end_index):
+        """
+        This returns the index of the next section.
+        If no next section is found the last index is returned given through the param end_index
+        """
+
         matches = list(self.bracket_expression.finditer(end_content))
         if len(matches) > 0:
             first_match = matches[0]
@@ -71,6 +86,13 @@ class ContextSensAutoCompletion(object):
             return end_index
 
     def get_key_value(self, line_content):
+        """
+        Extract the key and/or value in a line if existing.
+        This is used if a specific completion is only shown
+        on special conditions like only show X on measures.
+
+        If nothing is given return (None, None)
+        """
         key_value_match = self.key_value_expression.search(line_content)
         if key_value_match:
             key_match = key_value_match.group(1)
