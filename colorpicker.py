@@ -8,6 +8,9 @@ if sublime.platform() == 'windows':
     from ctypes import c_int32, c_uint32, c_void_p, c_wchar_p, POINTER
 
     class CHOOSECOLOR(ctypes.Structure):
+        """
+        Data mapping representation contained for the color chooser
+        """
         _fields_ = [('lStructSize', c_uint32),
                     ('hwndOwner', c_void_p),
                     ('hInstance', c_void_p),
@@ -147,11 +150,11 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
         return cc
 
     @classmethod
-    def __is_valid_hex_color(cls, s):
-        if len(s) not in (3, 6, 8):
+    def __is_valid_hex_color(cls, string):
+        if len(string) not in (3, 6, 8):
             return False
         try:
-            return 0 <= int(s, 16) <= 0xffffffff
+            return 0 <= int(string, 16) <= 0xffffffff
         except ValueError:
             return False
 
