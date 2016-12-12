@@ -31,7 +31,7 @@ if color_sel.run() == gtk.RESPONSE_OK:
     if len(blue) == 1:
         blue = "0%s" % blue
 
-    finalcolor = red + green + blue
-    print(finalcolor.upper())
+    final_color = red + green + blue
+    print(final_color.upper())
 
 color_sel.destroy()
