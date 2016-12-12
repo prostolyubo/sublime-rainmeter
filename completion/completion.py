@@ -46,15 +46,15 @@ class ContextSensAutoCompletion(object):
         start_content = view.substr(sublime.Region(0, location))
         end_content = view.substr(sublime.Region(location, size))
 
-        start_index = self.get_current_section_content_start_index(start_content)
-        end_index = self.get_current_section_content_end_index(end_content, location, size)
+        start_index = self.get_start_index_of_section(start_content)
+        end_index = self.get_end_index_of_section(end_content, location, size)
 
         section = view.substr(sublime.Region(start_index, end_index))
         lines = section.splitlines()
 
         return lines
 
-    def get_current_section_content_start_index(self, start_content):
+    def get_start_index_of_section(self, start_content):
         """
         This returns the index of the section.
         If no section is found the first index (0) is returned
@@ -70,7 +70,7 @@ class ContextSensAutoCompletion(object):
         else:
             return 0
 
-    def get_current_section_content_end_index(self, end_content, offset, end_index):
+    def get_end_index_of_section(self, end_content, offset, end_index):
         """
         This returns the index of the next section.
         If no next section is found the last index is returned given through the param end_index
