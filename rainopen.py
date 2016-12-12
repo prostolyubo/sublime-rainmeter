@@ -195,13 +195,13 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
 
         fnm = self.view.file_name()
 
-        def opn(st):
-            opened = open_path(rainmeter.make_path(st, fnm)) or open_url(st)
+        def opn(string):
+            opened = open_path(rainmeter.make_path(string, fnm)) or open_url(string)
             if opened:
                 logger.info(
                     __file__,
                     "run(self, edit)",
-                    "found file or url '" + st + "' to open"
+                    "found file or url '" + string + "' to open"
                 )
 
         selection = self.view.sel()
