@@ -1,3 +1,10 @@
+"""
+Provides a cached method to obtain the rainmeter plugin path.
+This is only possible if Rainmeter is installed.
+Plugins are stored in the settings path and thus only available
+if settings are successfully loaded and installed.
+"""
+
 import os.path
 from functools import lru_cache
 
