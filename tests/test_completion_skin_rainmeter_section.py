@@ -1,3 +1,9 @@
+"""
+These are unit tests especially made for Rainmeter and Sublime Text.
+The ST3 modules need to be loaded differently than the usual import,
+because they are not official modules.
+"""
+
 import sys
 
 from unittest import TestCase
