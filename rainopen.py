@@ -11,6 +11,7 @@ import sublime
 import sublime_plugin
 
 from . import rainmeter
+from . import logger
 
 
 # Files to open with sublime instead of the system default
@@ -195,7 +196,13 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
         fnm = self.view.file_name()
 
         def opn(st):
-            open_path(rainmeter.make_path(st, fnm)) or open_url(st)
+            opened = open_path(rainmeter.make_path(st, fnm)) or open_url(st)
+            if opened:
+                logger.info(
+                    __file__,
+                    "run(self, edit)",
+                    "found file or url '" + st + "' to open"
+                )
 
         selection = self.view.sel()
 
