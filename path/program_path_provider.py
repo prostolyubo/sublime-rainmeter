@@ -45,20 +45,39 @@ def _get_rainmeter_path_from_registry():
     """
     Registry
     """
-    regkey = _get_rainmeter_registry_key()
-    if regkey:
-        keyval = winreg.QueryValueEx(regkey, "Personal")
+    rainmeter_key = _get_rainmeter_registry_key()
+    if rainmeter_key:
+        rainmeter_path = winreg.QueryValue(rainmeter_key, None)
 
-        for i in range(1024):
-            try:
-                asubkey_name = winreg.EnumKey(keyval, i)
-                asubkey = winreg.OpenKey(keyval, asubkey_name)
-                rainmeterpath = winreg.QueryValueEx(asubkey, "DisplayName")
-                logger.info(__file__, "get_cached_program_path()", "found rainmeter path through registry: " + rainmeterpath)
-                if rainmeterpath:
-                    return rainmeterpath
-            except EnvironmentError:
-                break
+        return rainmeter_path
+
+        # sub_key_size and last_modified not required
+        # _, value_size, _ = winreg.QueryInfoKey(regkey)
+        # print("---", value_size)
+        # print("---", winreg.EnumKey(regkey, 0))
+        # for entry_index in range(0, entry_size):
+        #     key_name = winreg.EnumKey(regkey, entry_index)
+        #     key = winreg.OpenKey(regkey, key_name)
+        #     try:
+        #         print(winreg.QueryValueEx(key, 'DisplayName')[0])
+        #     except OSError as e:
+        #         print(e)
+        #         pass
+        #     finally:
+        #         key.close()
+
+        # keyval = winreg.QueryValueEx(regkey, "Personal")
+
+        # for i in range(1024):
+        #     try:
+        #         asubkey_name = winreg.EnumKey(keyval, i)
+        #         asubkey = winreg.OpenKey(keyval, asubkey_name)
+        #         rainmeterpath = winreg.QueryValueEx(asubkey, "DisplayName")
+        #         logger.info(__file__, "get_cached_program_path()", "found rainmeter path through registry: " + rainmeterpath)
+        #         if rainmeterpath:
+        #             return rainmeterpath
+        #     except EnvironmentError:
+        #         break
 
     return None
 

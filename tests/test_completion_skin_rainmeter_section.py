@@ -16,7 +16,7 @@ class TestSkinRainmeterSectionCompletion(TestCase):
     Testing the skin/rainmeter section completion
     """
 
-    def not_rainmeter_should_return_none(self):
+    def test_wrong_section_return_none(self):
         """
         The given section is 'Different' but we are moving in the Rainmeter section
         thus only 'Rainmeter' is allowed

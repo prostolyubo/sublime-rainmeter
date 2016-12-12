@@ -10,7 +10,7 @@ class TestLevenShtein(TestCase):
     Test for the levenshtein module
     """
 
-    def same_word_should_equal_zero(self):
+    def test_same_word_should_zero(self):
         """
         if we use the same word there should be no difference required
         """
@@ -18,7 +18,7 @@ class TestLevenShtein(TestCase):
 
         self.assertEqual(diff, 0)
 
-    def zero_words_should_equal_zero(self):
+    def test_zero_words_should_zero(self):
         """
         special case with same word but both are empty
         """
@@ -26,7 +26,7 @@ class TestLevenShtein(TestCase):
 
         self.assertEqual(diff, 0)
 
-    def first_word_one_longer_should_equal_one(self):
+    def test_first_longer_equal_one(self):
         """
         try with same word base but missing characters
         """
@@ -34,7 +34,7 @@ class TestLevenShtein(TestCase):
 
         self.assertEqual(diff, 1)
 
-    def second_word_one_longer_should_equal_one(self):
+    def test_second_longer_equal_one(self):
         """
         reversed case of the missing character.
         method should work in both ways and not return a negative difference
