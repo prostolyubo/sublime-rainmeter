@@ -5,9 +5,12 @@ from unittest import TestCase
 rainmeter_section = sys.modules["Rainmeter.completion.skin.rainmeter_section"]
 
 
-class TestFunctions(TestCase):
+class TestSkinRainmeterSectionCompletion(TestCase):
+    """
+    Testing the skin/rainmeter section completion
+    """
 
-    def test_completion_skin_rainmeter_section_with_not_rainmeter_should_return_none(self):
+    def not_rainmeter_should_return_none(self):
         """
         The given section is 'Different' but we are moving in the Rainmeter section
         thus only 'Rainmeter' is allowed
