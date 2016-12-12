@@ -10,15 +10,12 @@ Called automatically from ST3 if plugin is loaded
 # Is required now due to async call and ignoring sublime.* from main routine
 '''
 
+setting_key = "rainmeter_enable_logging"
+
 
 def plugin_loaded():
-    global __log
-
-    key = "rainmeter_enable_logging"
-
-    settings = sublime.load_settings("Rainmeter.sublime-settings")
-    __log = settings.get(key, False)
-    settings.add_on_change(key, __load_settings)
+    settings = __load_settings()
+    settings.add_on_change(setting_key, __load_settings)
 
     info(__file__, "plugin_loaded()", "Logger succesfully loaded.")
 
@@ -29,6 +26,8 @@ def __load_settings():
 
     global __log
     __log = settings.get(key, False)
+
+    return settings
 
 
 def info(file_path, function, string):
