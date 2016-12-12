@@ -7,6 +7,13 @@ from .. import logger
 
 
 class YamlContentReader(object):
+    """
+    use this to read the content of yamls inside of sublime text packages.
+    supports multiple ways to access them:
+    * .sublime-package
+    * .zip
+    * folder
+    """
 
     @classmethod
     def __get_zip_content(cls, path_to_zip, resource):
