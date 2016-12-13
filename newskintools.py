@@ -3,7 +3,7 @@ import re
 
 import sublime
 import sublime_plugin
-from . import rainmeter
+
 from .path.skin_path_provider import get_cached_skin_path
 
 
