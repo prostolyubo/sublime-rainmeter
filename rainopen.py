@@ -189,11 +189,22 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
     5. The whole line, stripped of preceding semicolons
     """
 
-    def run(self, _):
-        # Detect various scenarios of file paths and try to open them one
-        # after the other
-        # edit unused
+    def __split_selection_by_new_lines(self, selection):
+        # Split all regions into individual segments on lines (using nicely
+        # confusing python syntax).
+        return [
+            j for i in [
+                self.view.split_by_newlines(region)
+                for region in selection
+            ]
+            for j in i
+        ]
 
+    def __open_each_line_by_thread(self, lines):
+        """this identifies segments in selected lines
+        and tries to open them in any way in a new thread.
+        This can be resource intensive.
+        """
         fnm = self.view.file_name()
 
         def opn(string):
@@ -205,17 +216,21 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
                     "found file or url '" + string + "' to open"
                 )
 
-        selection = self.view.sel()
+        for linereg in lines:
+            wholeline = self.view.line(linereg)
+            thread = TryOpenThread(self.view.substr(wholeline),
+                                   sublime.Region(linereg.a - wholeline.a,
+                                                  linereg.b - wholeline.a),
+                                   opn)
+            thread.start()
 
-        # Split all regions into individual segments on lines (using nicely
-        # confusing python syntax).
-        lines = [
-            j for i in [
-                self.view.split_by_newlines(region)
-                for region in selection
-            ]
-            for j in i
-        ]
+    def run(self, _):
+        # Detect various scenarios of file paths and try to open them one
+        # after the other
+        # @param edit unused
+
+        selection = self.view.sel()
+        lines = self.__split_selection_by_new_lines(selection)
 
         loaded_settings = sublime.load_settings("Rainmeter.sublime-settings")
         max_open_lines = loaded_settings.get("rainmeter_max_open_lines", 40)
@@ -230,13 +245,7 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
             if not accept:
                 return
 
-        for linereg in lines:
-            wholeline = self.view.line(linereg)
-            thread = TryOpenThread(self.view.substr(wholeline),
-                                   sublime.Region(linereg.a - wholeline.a,
-                                                  linereg.b - wholeline.a),
-                                   opn)
-            thread.start()
+        self.__open_each_line_by_thread(lines)
 
     def is_enabled(self):
         # Check if current syntax is rainmeter
