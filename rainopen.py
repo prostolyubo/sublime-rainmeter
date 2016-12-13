@@ -200,13 +200,17 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
         ]
 
     def __open_each_line_by_thread(self, lines):
-        """this identifies segments in selected lines
+        """This identifies segments in selected lines
         and tries to open them in any way in a new thread.
         This can be resource intensive.
         """
         fnm = self.view.file_name()
 
         def opn(string):
+            """Simple callback method to apply multiple opening operations.
+
+            An URL can be either external or internal and thus is opened differently.
+            """
             opened = open_path(rainmeter.make_path(string, fnm)) or open_url(string)
             if opened:
                 logger.info(
