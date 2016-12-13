@@ -1,7 +1,4 @@
-"""
-Module for opening paths containing Rainmeter-specific or
-Windows environment variables.
-"""
+"""Module for opening paths containing Rainmeter-specific or Windows environment variables."""
 
 import os
 import re
@@ -32,26 +29,22 @@ else:
 
 sublime_files = re.compile("(?i).*\\.(" + addexts + "|" + defexts + ")\\b")
 
-log = settings.get("rainmeter_enable_logging", False)
-
-
-def _log(function, string):
-    if log:
-        print("rainmeter." + function + ": " + string)
-
 
 def open_path(path, transient=False):
-    """Try to open a file or folder path or URL in the system default
-    application, or in Sublime if it's a text file.
+    """Try to open a path.
+
+    A path could be opened either as:
+
+    * a file or folder path or
+    * URL in the system default application, or
+    * in Sublime if it's a text file.
 
     Use transient=True to open a file in Sublime without assigning it a tab.
     A tab will be created once the buffer is modified.
 
     Will return False if the path doesn't exist in the file system, and
     True otherwise.
-
     """
-
     if not path:
         return False
 
@@ -90,18 +83,25 @@ def open_url(url):
 
 
 class TryOpenThread(threading.Thread):
+    """A wrapper method to handle threading for opening line embedded URLs."""
 
     def __init__(self, line, region, opn):
+        """Construct a thread for opening URL embedded in a line."""
         self.line = line
         self.region = region
         self.opn = opn
         threading.Thread.__init__(self)
 
     def run(self):
+        """Run the thread."""
         # 1. Selected text
         selected = self.line[self.region.a:self.region.b]
         if self.opn(selected):
-            _log("TryOpenThread.run", "Open selected text")
+            logger.info(
+                __file__,
+                "TryOpenThread.run(self)",
+                "Open selected text"
+            )
             return
 
         # 2. String enclosed in double quotes
@@ -121,8 +121,11 @@ class TryOpenThread(threading.Thread):
                     and self.line[nextquote] == "\"":
                 string = self.line[lastquote: nextquote].strip("\"")
                 if self.opn(string):
-                    _log("TryOpenThread.run", "Open string enclosed " +
-                         "in quotes: " + string)
+                    logger.info(
+                        __file__,
+                        "TryOpenThread.run",
+                        "Open string enclosed in quotes: " + string
+                    )
                     return
 
         # 3. Region from last whitespace to next whitespace
@@ -153,23 +156,34 @@ class TryOpenThread(threading.Thread):
                     or self.line[nextspace] == "\t":
                 string = self.line[lastspace: nextspace].strip()
                 if self.opn(string):
-                    _log("TryOpenThread.run", "Open string enclosed " +
-                         "in whitespace: " + string)
+                    logger.info(
+                        __file__,
+                        "TryOpenThread.run",
+                        "Open string enclosed in whitespace: " + string
+                    )
                     return
 
         # 4. Everything after the first \"=\" until the end
         # of the line (strip quotes)
         mtch = re.search(r"=\s*(.*)\s*$", self.line)
         if mtch and self.opn(mtch.group(1).strip("\"")):
-            _log("TryOpenThread.run", "Open text after \"=\": " +
-                 mtch.group(1).strip("\""))
+            logger.info(
+                __file__,
+                "TryOpenThread.run",
+                "Open text after \"=\": " +
+                mtch.group(1).strip("\"")
+            )
             return
 
         # 5. Whole line (strip comment character at start)
         stripmatch = re.search(r"^[ \t;]*?([^ \t;].*)\s*$", self.line)
         if self.opn(stripmatch.group(1)):
-            _log("TryOpenThread.run", "Open whole line: " +
-                 stripmatch.group(1))
+            logger.info(
+                __file__,
+                "TryOpenThread.run",
+                "Open whole line: " +
+                stripmatch.group(1)
+            )
             return
 
 
@@ -200,8 +214,8 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
         ]
 
     def __open_each_line_by_thread(self, lines):
-        """This identifies segments in selected lines
-        and tries to open them in any way in a new thread.
+        """Identify segments in selected lines and tries to open them each in a new thread.
+
         This can be resource intensive.
         """
         fnm = self.view.file_name()
@@ -228,10 +242,10 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
             thread.start()
 
     def run(self, _):
-        # Detect various scenarios of file paths and try to open them one
-        # after the other
-        # @param edit unused
+        """Detect various scenarios of file paths and try to open them one after the other.
 
+        @param edit unused
+        """
         selection = self.view.sel()
         lines = self.__split_selection_by_new_lines(selection)
 
@@ -251,11 +265,12 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
         self.__open_each_line_by_thread(lines)
 
     def is_enabled(self):
-        # Check if current syntax is rainmeter
+        """Check if current syntax is rainmeter."""
         israinmeter = self.view.score_selector(self.view.sel()[0].a,
                                                "source.rainmeter")
 
         return israinmeter > 0
 
     def is_visible(self):
+        """It is visible if it is in Rainmeter scope."""
         return self.is_enabled()
