@@ -1,4 +1,4 @@
-"""Module for getting Rainmeter-specific paths"""
+"""Module for getting Rainmeter-specific paths."""
 
 import os
 import re
