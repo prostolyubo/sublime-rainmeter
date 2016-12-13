@@ -22,6 +22,6 @@ class TestSkinRainmeterSectionCompletion(TestCase):
         thus only 'Rainmeter' is allowed
         """
         complete = rainmeter_section.SkinRainmeterSectionAutoComplete()
-        value_completion = complete.get_value_context_completion(None, None, None, None, "Different", None, None)
+        value_completion = complete.get_value_context_completion("Different", None)
 
         self.assertEqual(value_completion, None)
