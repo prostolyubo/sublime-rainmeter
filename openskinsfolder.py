@@ -2,13 +2,14 @@ import os.path
 
 import sublime
 import sublime_plugin
-from . import rainmeter
+
+from .path.skin_path_provider import get_cached_skin_path
 
 
 class RainmeterOpenSkinsFolderCommand(sublime_plugin.WindowCommand):
 
     def run(self):
-        skinspath = rainmeter.skins_path()
+        skinspath = get_cached_skin_path()
         if not skinspath or not os.path.exists(skinspath):
             sublime.error_message(
                 "Error while trying to open Rainmeter" +
