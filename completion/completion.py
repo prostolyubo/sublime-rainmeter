@@ -178,7 +178,7 @@ class ContextSensAutoCompletion(object):
             if value_match == "":
                 logger.info(__file__, "on_query_completions", "after equal trigger in '" + line_content + "'")
                 # value trigger
-                value_result = self.skin_rainmeter_section.get_value_context_completion(view, prefix, location, line_content, section, key_match, key_values)
+                value_result = self.skin_rainmeter_section.get_value_context_completion(section, key_match)
                 if value_result:
                     return value_result
 

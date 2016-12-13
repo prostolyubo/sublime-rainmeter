@@ -123,7 +123,7 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
         else:
             return completions, self.flags
 
-    def get_value_context_completion(self, view, prefix, location, line_content, section, key_match, keyvalues):
+    def get_value_context_completion(self, section, key_match):
         if section != "Rainmeter":
             return None
 
