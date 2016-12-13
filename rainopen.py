@@ -12,22 +12,22 @@ from . import logger
 
 
 # Files to open with sublime instead of the system default
-settings = sublime.load_settings("Rainmeter.sublime-settings")
-defexts = settings.get("rainmeter_default_open_sublime_extensions", "")
+SETTINGS = sublime.load_settings("Rainmeter.sublime-settings")
+DEF_EXTS = SETTINGS.get("rainmeter_default_open_sublime_extensions", "")
 
-if defexts is not None:
-    defexts = defexts.strip().strip(r"|").strip()
+if DEF_EXTS is not None:
+    DEF_EXTS = DEF_EXTS.strip().strip(r"|").strip()
 else:
-    defexts = ""
+    DEF_EXTS = ""
 
-addexts = settings.get("rainmeter_open_sublime_extensions", "")
+ADD_EXTS = SETTINGS.get("rainmeter_open_sublime_extensions", "")
 
-if addexts is not None:
-    addexts = addexts.strip().strip(r"|").strip()
+if ADD_EXTS is not None:
+    ADD_EXTS = ADD_EXTS.strip().strip(r"|").strip()
 else:
-    addexts = ""
+    ADD_EXTS = ""
 
-sublime_files = re.compile("(?i).*\\.(" + addexts + "|" + defexts + ")\\b")
+SUBLIME_FILES = re.compile("(?i).*\\.(" + ADD_EXTS + "|" + DEF_EXTS + ")\\b")
 
 
 def open_path(path, transient=False):
@@ -52,7 +52,7 @@ def open_path(path, transient=False):
         return False
 
     sublime.set_timeout(lambda: sublime.status_message("Opening " + path), 10)
-    if sublime_files.search(path):
+    if SUBLIME_FILES.search(path):
         if transient:
             sublime.set_timeout(
                 lambda: sublime.active_window().open_file(path,
