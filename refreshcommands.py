@@ -85,7 +85,10 @@ class RainmeterRefreshCurrentSkinCommand(sublime_plugin.TextCommand):
 
     """Refresh the current skin file opened in a view"""
 
-    def run(self, edit):
+    def run(self, _):
+        """
+        edit param is not used
+        """
 
         # Get current file's path
         filepath = self.view.file_name()
