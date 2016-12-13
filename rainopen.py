@@ -174,7 +174,6 @@ class TryOpenThread(threading.Thread):
 
 
 class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
-
     """Try to open paths on lines in the current selection.
 
     Will try to open paths to files, folders or URLs on each line in the
