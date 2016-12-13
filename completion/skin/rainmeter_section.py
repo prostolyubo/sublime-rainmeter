@@ -85,7 +85,7 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
     all_completions = None
     all_key_completions = None
 
-    def get_key_context_completion(self, view, prefix, location, line_content, section, keyvalues):
+    def get_key_context_completion(self, prefix, line_content, section, keyvalues):
         if section.casefold() != "Rainmeter".casefold():
             return None
 

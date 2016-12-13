@@ -186,7 +186,7 @@ class ContextSensAutoCompletion(object):
             # that means in front of the equal or no equal at all
             else:
                 logger.info(__file__, "on_query_completions", "before equal trigger in '" + line_content + "'")
-                key_result = self.skin_rainmeter_section.get_key_context_completion(view, prefix, location, line_content, section, key_values)
+                key_result = self.skin_rainmeter_section.get_key_context_completion(prefix, line_content, section, key_values)
                 if key_result:
                     return key_result
 
