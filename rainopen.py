@@ -189,9 +189,10 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
     5. The whole line, stripped of preceding semicolons
     """
 
-    def run(self, edit):
+    def run(self, _):
         # Detect various scenarios of file paths and try to open them one
         # after the other
+        # edit unused
 
         fnm = self.view.file_name()
 
