@@ -1,3 +1,7 @@
+"""
+This module is about testing the logger.
+"""
+
 import sys
 
 from unittest import TestCase
