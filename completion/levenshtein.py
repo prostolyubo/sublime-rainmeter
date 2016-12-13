@@ -1,3 +1,8 @@
+"""
+This module provides distance calculations using the levenshtein metric.
+"""
+
+
 def levenshtein(top_string, bot_string):
     """
     the Levenshtein distance is a string metric for measuring the difference between two sequences.
