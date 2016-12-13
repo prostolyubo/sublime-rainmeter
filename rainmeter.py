@@ -339,7 +339,12 @@ class MeterAutoComplete(sublime_plugin.EventListener):
         ]),
     ]
 
-    def on_query_completions(self, view, prefix, locations):
+    def on_query_completions(self, view, _, locations):
+        """
+        @param view
+        @param prefix unused
+        @param locations
+        """
         for location in locations:
             # checks if the current scope is correct so it is only called in the files with the correct scope
             # here is scope only rainmeter files
