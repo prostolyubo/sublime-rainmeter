@@ -4,6 +4,7 @@ import re
 import sublime
 import sublime_plugin
 from . import rainmeter
+from .path.skin_path_provider import get_cached_skin_path
 
 
 class RainmeterNewSkinFileCommand(sublime_plugin.WindowCommand):
@@ -35,12 +36,12 @@ class RainmeterNewSkinCommand(sublime_plugin.WindowCommand):
     def run(self):
         self.window.show_input_panel("Enter Skin Name:",
                                      "",
-                                     lambda name: self.create_skin(name),
+                                     self.create_skin,
                                      None,
                                      None)
 
     def create_skin(self, name):
-        skinspath = rainmeter.skins_path()
+        skinspath = get_cached_skin_path()
         if not skinspath or not os.path.exists(skinspath):
             sublime.error_message(
                 "Error while trying to create new skin: " +
