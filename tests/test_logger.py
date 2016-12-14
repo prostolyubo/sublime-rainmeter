@@ -1,22 +1,21 @@
-"""
-This module is about testing the logger.
-"""
+"""This module is about testing the logger."""
 
 import sys
 
 from unittest import TestCase
 
-logger = sys.modules["Rainmeter.logger"]
+__LOGGER = sys.modules["Rainmeter.logger"]
 
 
 class TestFunctions(TestCase):
+    """Test class wrapper using unittest."""
+
+    # pylint: disable=W0703; This is acceptable since we are testing it not failing
 
     def test_info(self):
-        """
-        info should not through exceptions due to settings
-        """
+        """Info should not through exceptions due to settings."""
         try:
-            logger.info(
+            __LOGGER.info(
                 __file__,
                 "test_info(self)",
                 "info test"
@@ -25,11 +24,9 @@ class TestFunctions(TestCase):
             self.fail("logger.info() raised exception '" + error + "'")
 
     def test_error(self):
-        """
-        error should not through exception due to settings
-        """
+        """Error should not through exception due to settings."""
         try:
-            logger.error(
+            __LOGGER.error(
                 __file__,
                 "test_error(self)",
                 "error test"
