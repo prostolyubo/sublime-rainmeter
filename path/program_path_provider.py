@@ -4,9 +4,8 @@ This is required to execute Rainmeter.exe for example to refresh the current ski
 """
 
 import os
-import winreg
-
 from functools import lru_cache
+import winreg
 
 import sublime
 
