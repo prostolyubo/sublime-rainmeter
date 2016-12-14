@@ -12,7 +12,7 @@ class TestProgramPathProvider(TestCase):
         If the user installed the application into the default directory
         it is in "C:/Program Files/Rainmeter"
         """
-        default_program_path = program_path_provider._get_rainmeter_path_from_default_path()
+        default_program_path = program_path_provider._get_rm_path_from_default_path()
 
         self.assertEqual(default_program_path, "C:\\Program Files\\Rainmeter")
 
@@ -22,7 +22,7 @@ class TestProgramPathProvider(TestCase):
         We can use this to find the actual Rainmeter.
         Since we use the default installation path, there should no difference
         """
-        registry_program_path = program_path_provider._get_rainmeter_path_from_registry()
+        registry_program_path = program_path_provider._get_rm_path_from_registry()
 
         self.assertEqual(registry_program_path, "C:\\Program Files\\Rainmeter")
 
