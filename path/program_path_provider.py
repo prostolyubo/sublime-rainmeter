@@ -43,6 +43,7 @@ def _get_rm_path_from_registry():
 
 
 def __executable_exists(rm_path):
+    """Check if Rainmeter executable exists."""
     # normalize path
     rainmeter_exe = os.path.join(rm_path, "Rainmeter.exe")
     if not os.path.exists(rainmeter_exe):
