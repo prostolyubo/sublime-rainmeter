@@ -1,44 +1,40 @@
+"""This module is for testing Levenshtein distance."""
+
+
 import sys
 
 from unittest import TestCase
 
-levenshtein = sys.modules["Rainmeter.completion.levenshtein"]
+__LEVENSHTEIN = sys.modules["Rainmeter.completion.levenshtein"]
 
 
 class TestLevenShtein(TestCase):
-    """
-    Test for the levenshtein module
-    """
+    """Test for the levenshtein module using unittest."""
 
     def test_same_word_should_zero(self):
-        """
-        if we use the same word there should be no difference required
-        """
-        diff = levenshtein.levenshtein("hello", "hello")
+        """We use the same word there should be no difference required."""
+        diff = __LEVENSHTEIN.levenshtein("hello", "hello")
 
         self.assertEqual(diff, 0)
 
     def test_zero_words_should_zero(self):
-        """
-        special case with same word but both are empty
-        """
-        diff = levenshtein.levenshtein("", "")
+        """Special case with same word but both are empty."""
+        diff = __LEVENSHTEIN.levenshtein("", "")
 
         self.assertEqual(diff, 0)
 
     def test_first_longer_equal_one(self):
-        """
-        try with same word base but missing characters
-        """
-        diff = levenshtein.levenshtein("hello", "hell")
+        """Same word base but missing characters."""
+        diff = __LEVENSHTEIN.levenshtein("hello", "hell")
 
         self.assertEqual(diff, 1)
 
     def test_second_longer_equal_one(self):
         """
-        reversed case of the missing character.
-        method should work in both ways and not return a negative difference
+        Reversed case of the missing character.
+
+        Method should work in both ways and not return a negative difference.
         """
-        diff = levenshtein.levenshtein("hell", "hello")
+        diff = __LEVENSHTEIN.levenshtein("hell", "hello")
 
         self.assertEqual(diff, 1)
