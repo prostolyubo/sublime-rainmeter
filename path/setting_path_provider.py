@@ -1,3 +1,13 @@
+"""
+This module provides methods for determine the settings path.
+
+Rainmeter has an built-in variable called #SETTINGSPATH#.
+With this you can directly route to the drive in which Rainmeter is contained.
+If by some chance people use @Include on #SETTINGSPATH# it is still able to resolve
+the path and open the include for you.
+"""
+
+
 import os
 from functools import lru_cache
 
@@ -8,8 +18,7 @@ from .program_path_provider import get_cached_program_path
 
 @lru_cache(maxsize=None)
 def get_cached_setting_path():
-    """Get the value of the #SETTINGSPATH# variable"""
-
+    """Get the value of the #SETTINGSPATH# variable."""
     rainmeterpath = get_cached_program_path()
 
     if not rainmeterpath:
