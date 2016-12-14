@@ -1,4 +1,5 @@
-"""This module is about path resolving for the program path.
+"""
+This module is about path resolving for the program path.
 
 This is required to execute Rainmeter.exe for example to refresh the current skin.
 """
