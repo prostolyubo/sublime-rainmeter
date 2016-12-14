@@ -9,8 +9,8 @@ import io
 import os
 import platform
 import re
-import winreg
 from functools import lru_cache
+import winreg
 
 import sublime
 
