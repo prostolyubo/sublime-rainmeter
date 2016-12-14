@@ -1,3 +1,9 @@
+"""This module is about path resolving for the skin path.
+
+This is particular useful if you for example try create new skins
+or open an existing one.
+"""
+
 import getpass
 import io
 import os
@@ -16,8 +22,7 @@ from .setting_path_provider import get_cached_setting_path
 
 @lru_cache(maxsize=None)
 def get_cached_skin_path():
-    """Get the value of the #SKINSPATH# variable"""
-
+    """Get the value of the #SKINSPATH# variable."""
     # First try to load the value from the "rainmeter_skins_path" setting
     loaded_settings = sublime.load_settings("Rainmeter.sublime-settings")
     skinspath = loaded_settings.get("rainmeter_skins_path", None)
@@ -26,17 +31,17 @@ def get_cached_skin_path():
     # We trust the user to enter something meaningful here
     # and don't check anything.
     if skinspath:
-        logger.info(__file__, "get_skins_path", "Skins path found in sublime-settings file.")
+        logger.info(
+            __file__,
+            "get_skins_path",
+            "Skins path '" + skinspath + "' found in sublime-settings file."
+        )
         return os.path.normpath(skinspath) + "\\"
 
     # If it's not set, try to detect it automagically
-
     rainmeterpath = get_cached_program_path()
-    if not rainmeterpath:
-        return
-
     settingspath = get_cached_setting_path()
-    if not settingspath:
+    if not rainmeterpath or not settingspath:
         return
 
     # First, try to read the SkinPath setting from Rainmeter.ini
