@@ -1,16 +1,31 @@
+"""This module is about the integration with the color picker.
+
+The color picker can detect a color in a substring
+and launch a tool to display the current color,
+change it and thus also replace the old color.
+
+It supports both ways Rainmeter defines color.
+
+* RRGGBB
+* RRGGBBAA
+* RRR,GGG,BBB
+* RRR,GGG,BBB,AAA
+
+which is hexadecimal and decimal format.
+"""
+import os
+import subprocess
+
 import sublime
 import sublime_plugin
-import subprocess
-import os
 
 if sublime.platform() == 'windows':
     import ctypes
     from ctypes import c_int32, c_uint32, c_void_p, c_wchar_p, POINTER
 
-    class CHOOSECOLOR(ctypes.Structure):
-        """
-        Data mapping representation contained for the color chooser
-        """
+    class CHOOSECOLOR(ctypes.Structure): # pylint: disable=R0903; this extends a data class
+        """Data mapping representation contained for the color chooser."""
+
         _fields_ = [('lStructSize', c_uint32),
                     ('hwndOwner', c_void_p),
                     ('hInstance', c_void_p),
@@ -39,9 +54,15 @@ if sublime.platform() == 'windows':
     ReleaseDC.restype = c_int32
 
 
-class RainmeterColorPickCommand(sublime_plugin.TextCommand):
+class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
+    """Sublime Text integration running this through an action."""
 
     def run(self, edit):
+        """Method is provided by Sublime Text through the super class TextCommand.
+
+        This is run automatically if you initialize the command
+        through an "command": "rainmeter_color_pick" command.
+        """
         sel = self.view.sel()
         start_color = None
         start_color_osx = None
@@ -61,23 +82,23 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
 
         if sublime.platform() == 'windows':
 
-            s = sublime.load_settings("ColorPicker.sublime-settings")
-            custom_colors = s.get("custom_colors", ['0'] * 16)
+            settings = sublime.load_settings("ColorPicker.sublime-settings")
+            custom_colors = settings.get("custom_colors", ['0'] * 16)
 
             if len(custom_colors) < 16:
                 custom_colors = ['0'] * 16
-                s.set('custom_colors', custom_colors)
+                settings.set('custom_colors', custom_colors)
 
-            cc = CHOOSECOLOR()
-            ctypes.memset(ctypes.byref(cc), 0, ctypes.sizeof(cc))
-            cc.lStructSize = ctypes.sizeof(cc)
-            cc.hwndOwner = None
-            cc.Flags = CC_SOLIDCOLOR | CC_FULLOPEN | CC_RGBINIT
-            cc.rgbResult = c_uint32(start_color_win)
-            cc.lpCustColors = self.__to_custom_color_array(custom_colors)
+            choose_color = CHOOSECOLOR()
+            ctypes.memset(ctypes.byref(choose_color), 0, ctypes.sizeof(choose_color))
+            choose_color.lStructSize = ctypes.sizeof(choose_color)
+            choose_color.hwndOwner = None
+            choose_color.Flags = CC_SOLIDCOLOR | CC_FULLOPEN | CC_RGBINIT
+            choose_color.rgbResult = c_uint32(start_color_win)
+            choose_color.lpCustColors = self.__to_custom_color_array(custom_colors)
 
-            if ChooseColorW(ctypes.byref(cc)):
-                color = self.__bgr_to_hexstr(cc.rgbResult)
+            if ChooseColorW(ctypes.byref(choose_color)):
+                color = self.__bgr_to_hexstr(choose_color.rgbResult)
             else:
                 color = None
 
@@ -137,17 +158,17 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
 
     @classmethod
     def __to_custom_color_array(cls, custom_colors):
-        cc = CustomColorArray()
+        cca = CustomColorArray()
         for i in range(16):
-            cc[i] = int(custom_colors[i])
-        return cc
+            cca[i] = int(custom_colors[i])
+        return cca
 
     @classmethod
     def __from_custom_color_array(cls, custom_colors):
-        cc = [0] * 16
+        cca = [0] * 16
         for i in range(16):
-            cc[i] = str(custom_colors[i])
-        return cc
+            cca[i] = str(custom_colors[i])
+        return cca
 
     @classmethod
     def __is_valid_hex_color(cls, string):
@@ -163,11 +184,11 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):
     @classmethod
     def __bgr_to_hexstr(cls, bgr):
         # 0x00BBGGRR
-        b = cls.byte_table[(bgr >> 16) & 0xff]
-        g = cls.byte_table[(bgr >> 8) & 0xff]
-        r = cls.byte_table[bgr & 0xff]
+        blue = cls.byte_table[(bgr >> 16) & 0xff]
+        green = cls.byte_table[(bgr >> 8) & 0xff]
+        red = cls.byte_table[bgr & 0xff]
 
-        return r + g + b
+        return red + green + blue
 
     @classmethod
     def __hexstr_to_bgr(cls, hexstr):
