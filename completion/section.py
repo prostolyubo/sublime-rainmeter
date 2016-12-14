@@ -1,4 +1,5 @@
 """This module handles the skin section auto completion.
+
 This provides the means to automatically add the base rainmeter sections
 upon auto complete request with:
 
@@ -23,6 +24,7 @@ from .yaml_content_reader import YamlContentReader
 
 class SkinSectionAutoCompleter(YamlContentReader):
     """Ths class is the logical state holder for the auto completion suggestions.
+
     Upon the request the respective yaml file is parsed and converted into a logical
     representation of the completions. Depending on the prior information the completions
     can be filtered containing less entries.
@@ -30,6 +32,7 @@ class SkinSectionAutoCompleter(YamlContentReader):
 
     def __get_completions(self):
         """IO access to the yaml file.
+
         Uses a yaml loader to parse it into a python object.
         """
         try:
@@ -43,7 +46,8 @@ class SkinSectionAutoCompleter(YamlContentReader):
             return []
 
     def __get_compiled_key_completions(self, options):
-        """completions can contain lots of duplicate information.
+        """Completion can contain lots of duplicate information.
+
         For example the trigger is most of the time also the result.
         Only in case of a value attribute is that returned.
         It also takes hints into consideration for compilation.
@@ -95,6 +99,7 @@ class SkinSectionAutoCompleter(YamlContentReader):
     all_key_completions = None
 
     def get_key_context_completion(self, prefix, line_content, sections):
+        """Provide all possible sections without duplicates of unique ones."""
         # if section.casefold() != "Metadata".casefold():
         #     return None
 
@@ -105,10 +110,14 @@ class SkinSectionAutoCompleter(YamlContentReader):
         if not completions:
             return None
 
-        # only show sorted by distance if something was already typed because distance to empty string makes no sense
+        # only show sorted by distance if something was already typed
+        # because distance to empty string makes no sense
         if line_content != "":
             # sort by levenshtein distance
-            sorted_completions = sorted(completions, key=lambda completion: levenshtein(completion[1], prefix))
+            sorted_completions = sorted(
+                completions,
+                key=lambda completion: levenshtein(completion[1], prefix)
+            )
             return sorted_completions, self.flags
         else:
             return completions, self.flags
