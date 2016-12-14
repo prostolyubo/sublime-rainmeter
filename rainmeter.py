@@ -23,9 +23,7 @@ def get_current_path(filepath):
     """Get the value of the #CURRENTPATH# variable for the specified path.
 
     Returns None if the file path is not in the skins folder
-
     """
-
     filepath = os.path.normpath(filepath)
 
     skinspath = get_cached_skin_path()
@@ -42,12 +40,10 @@ def get_current_path(filepath):
 
 
 def get_root_config_path(filepath):
-    """Get the value of the #ROOTCONFIGPATH# variable for the specified path
+    """Get the value of the #ROOTCONFIGPATH# variable for the specified path.
 
     Returns None if the path is not in the skins folder
-
     """
-
     filepath = os.path.normpath(filepath)
 
     skinspath = get_cached_skin_path()
@@ -65,12 +61,10 @@ def get_root_config_path(filepath):
 
 
 def get_current_file(filepath):
-    """Get the value of the #CURRENTFILE# variable for the specified path
+    """Get the value of the #CURRENTFILE# variable for the specified path.
 
     Returns None if the path is not in the skins folder
-
     """
-
     filepath = os.path.normpath(filepath)
 
     skinspath = get_cached_skin_path()
@@ -88,18 +82,16 @@ def get_current_file(filepath):
 
 
 def get_current_config(filepath):
-    """Get the value of the #CURRENTCONFIG# variable for the specified path
+    """Get the value of the #CURRENTCONFIG# variable for the specified path.
 
     Returns None if the path is not in the skins folder
-
     """
-
     filepath = os.path.normpath(filepath)
 
     skinspath = get_cached_skin_path()
     if not skinspath or not filepath.startswith(skinspath):
         logger.info(__file__, "get_current_config", "current config could not be found" +
-                    " because \either the skins path could not be found or the" +
+                    " because either the skins path could not be found or the" +
                     " current file is not located in the skins path.")
         return
 
@@ -110,12 +102,10 @@ def get_current_config(filepath):
 
 
 def get_resources_path(filepath):
-    """Get the value of the #@# variable for the specified path
+    """Get the value of the #@# variable for the specified path.
 
     Returns None if the path is not in the skins folder
-
     """
-
     rfp = get_root_config_path(filepath)
 
     if not rfp:
@@ -125,8 +115,7 @@ def get_resources_path(filepath):
 
 
 def replace_variables(string, filepath):
-    """Replace Rainmeter built-in variables and Windows environment variables
-    in string.
+    """Replace Rainmeter built-in variables and Windows environment variables in string.
 
     Replaces occurrences of the following variables in the string:
     #CURRENTFILE#
@@ -142,21 +131,21 @@ def replace_variables(string, filepath):
     #PLUGINSPATH#
     Any Windows environment variables (like %APPDATA%)
     filepath must be a skin file located in a subdirectory of the skins folder
-
     """
-
-    # lambdas for lazy evaluation
-    variables = {"#CURRENTFILE#": lambda: get_current_file(filepath),
-                 "#CURRENTPATH#": lambda: get_current_path(filepath),
-                 "#ROOTCONFIGPATH#": lambda: get_root_config_path(filepath),
-                 "#CURRENTCONFIG#": lambda: get_current_config(filepath),
-                 "#@#": lambda: get_resources_path(filepath),
-                 "#SKINSPATH#": get_cached_skin_path,
-                 "#SETTINGSPATH#": get_cached_setting_path,
-                 "#PROGRAMPATH#": get_cached_program_path,
-                 "#PROGRAMDRIVE#": get_cached_program_drive,
-                 "#ADDONSPATH#": get_cached_addon_path,
-                 "#PLUGINSPATH#": get_cached_plugin_path}
+    variables = {
+        # lambdas for lazy evaluation
+        "#CURRENTFILE#": lambda: get_current_file(filepath),
+        "#CURRENTPATH#": lambda: get_current_path(filepath),
+        "#ROOTCONFIGPATH#": lambda: get_root_config_path(filepath),
+        "#CURRENTCONFIG#": lambda: get_current_config(filepath),
+        "#@#": lambda: get_resources_path(filepath),
+        "#SKINSPATH#": get_cached_skin_path,
+        "#SETTINGSPATH#": get_cached_setting_path,
+        "#PROGRAMPATH#": get_cached_program_path,
+        "#PROGRAMDRIVE#": get_cached_program_drive,
+        "#ADDONSPATH#": get_cached_addon_path,
+        "#PLUGINSPATH#": get_cached_plugin_path
+    }
 
     pattern = re.compile("(?i)" + "|".join(list(variables.keys())))
     # replace Rainmeter variables
@@ -168,14 +157,12 @@ def replace_variables(string, filepath):
 
 
 def make_path(string, filepath):
-    """Make the string into an absolute path of an existing file or folder,
+    """Make the string into an absolute path of an existing file or folder.
 
-    replacing Rainmeter built-in variables relative to the file specified in
+    Replacing Rainmeter built-in variables relative to the file specified in
     filepath (see replace_variables()) will return None if the file or folder
     doesn't exist, or if string is None or empty.
-
     """
-
     if not string:
         return None
 
@@ -212,16 +199,17 @@ def make_path(string, filepath):
 
 # Initialize Module
 # Global Variables
-settings = None
+SETTINGS = None
 
 
-# Called automatically from ST3 if plugin is loaded
-# Is required now due to async call and ignoring sublime.* from main routine
 def plugin_loaded():
-    # define variables from the global scope
-    global settings
+    """Called automatically from ST3 if plugin is loaded.
 
-    settings = sublime.load_settings("Rainmeter.sublime-settings")
+    Is required now due to async call and ignoring sublime.* from main routine
+    """
+    # define variables from the global scope
+    global SETTINGS
+    SETTINGS = sublime.load_settings("Rainmeter.sublime-settings")
 
     logger.info(__file__, "plugin_loaded()", "#PROGRAMPATH#:\t\t" + get_cached_program_path())
     logger.info(__file__, "plugin_loaded()", "#PROGRAMDRIVE#:\t" + get_cached_program_drive())
@@ -232,6 +220,18 @@ def plugin_loaded():
 
 
 class MeterAutoComplete(sublime_plugin.EventListener):
+    # pylint: disable=R0903; Ignore too few methods because we have a super class.
+    """
+    This class is an implementation of the sublime plugin EventListener.
+
+    This is a temporary solution for the completion module.
+    It provides some basic smart completions like:
+
+    * measures
+    * plugins
+    * meters
+    * some attributes
+    """
 
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
@@ -341,12 +341,15 @@ class MeterAutoComplete(sublime_plugin.EventListener):
 
     def on_query_completions(self, view, _, locations):
         """
+        Called upon auto completion request.
+
         @param view
         @param prefix unused
         @param locations
         """
         for location in locations:
-            # checks if the current scope is correct so it is only called in the files with the correct scope
+            # checks if the current scope is correct
+            # so it is only called in the files with the correct scope
             # here is scope only rainmeter files
             if view.match_selector(location, self.scope):
                 # find last occurance of the [] to determine the ini sections
@@ -361,11 +364,18 @@ class MeterAutoComplete(sublime_plugin.EventListener):
 
 
 class CompletionProxy(sublime_plugin.EventListener):
+    # pylint: disable=R0903; Ignore too few methods because we have a super class.
+    """
+    Proxy the sublime plugin EventListener to the internal completion module.
 
-    proxied_completion = None
+    The module handles all the request and routes them to the correct submodules.
+    This prevents all the single modules from polluting the root directory.
+    """
 
     def __init__(self):
+        """Initialize the proxy."""
         self.proxied_completion = ContextSensAutoCompletion()
 
     def on_query_completions(self, view, prefix, locations):
+        """Pass query completion to proxy."""
         return self.proxied_completion.on_query_completions(view, prefix, locations)
