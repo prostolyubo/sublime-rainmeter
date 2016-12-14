@@ -111,7 +111,7 @@ def get_cached_skin_path():
     # we try some educated guesses about default locations
     try:
         username = getpass.getuser()
-    except Exception:
+    except Exception: # pylint: disable=W0703; The docs to not specify the exception type
         logger.info(__file__, "get_skins_path", "Skins path could not be located." +
                     " Please set the \"skins_path\" setting in your Rainmeter" +
                     " settings file.")
