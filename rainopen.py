@@ -92,6 +92,13 @@ class TryOpenThread(threading.Thread):
         self.opn = opn
         threading.Thread.__init__(self)
 
+    def __find_prior_quotation_mark(self):
+        lastquote = self.region.a - 1
+        while lastquote >= 0 and self.line[lastquote] != "\"":
+            lastquote -= 1
+
+        return lastquote
+
     def run(self):
         """Run the thread."""
         # 1. Selected text
@@ -107,9 +114,7 @@ class TryOpenThread(threading.Thread):
         # 2. String enclosed in double quotes
 
         # Find the quotes before the current point (if any)
-        lastquote = self.region.a - 1
-        while lastquote >= 0 and self.line[lastquote] != "\"":
-            lastquote -= 1
+        lastquote = self.__find_prior_quotation_mark()
 
         if not lastquote < 0 and self.line[lastquote] == "\"":
             # Find the quote after the current point (if any)
@@ -138,8 +143,7 @@ class TryOpenThread(threading.Thread):
             lastspace -= 1
 
         # Set to zero if nothing was found until the start of the line
-        if lastspace < 0:
-            lastspace = 0
+        lastspace = max(lastspace, 0)
 
         if lastspace == 0 \
                 or self.line[lastspace] == " " \
