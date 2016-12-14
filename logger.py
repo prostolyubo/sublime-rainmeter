@@ -1,5 +1,16 @@
-from datetime import datetime
+"""This module provides general methods for logging puprposes.
+
+Basic operations are:
+
+* info
+* error
+
+with these operations it is easier to track from where the information is printed
+"""
+
 import os
+
+from datetime import datetime
 
 import sublime
 
