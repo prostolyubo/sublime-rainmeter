@@ -4,7 +4,7 @@ import sys
 
 from unittest import TestCase
 
-__PROGRAM_PATH_PROVIDER = sys.modules["Rainmeter.path.program_path_provider"]
+PROGRAM_PATH_PROVIDER = sys.modules["Rainmeter.path.program_path_provider"]
 
 
 class TestProgramPathProvider(TestCase):
@@ -16,7 +16,7 @@ class TestProgramPathProvider(TestCase):
 
         it is in "C:/Program Files/Rainmeter"
         """
-        default_program_path = __PROGRAM_PATH_PROVIDER._get_rm_path_from_default_path()
+        default_program_path = PROGRAM_PATH_PROVIDER._get_rm_path_from_default_path()
 
         self.assertEqual(default_program_path, "C:\\Program Files\\Rainmeter")
 
@@ -27,7 +27,7 @@ class TestProgramPathProvider(TestCase):
         We can use this to find the actual Rainmeter.
         Since we use the default installation path, there should no difference
         """
-        registry_program_path = __PROGRAM_PATH_PROVIDER._get_rm_path_from_registry()
+        registry_program_path = PROGRAM_PATH_PROVIDER._get_rm_path_from_registry()
 
         self.assertEqual(registry_program_path, "C:\\Program Files\\Rainmeter")
 
@@ -38,6 +38,6 @@ class TestProgramPathProvider(TestCase):
         But since we use the path internally we already add / to it
         and python internal path uses \\ instead windows /
         """
-        program_path = __PROGRAM_PATH_PROVIDER.get_cached_program_path()
+        program_path = PROGRAM_PATH_PROVIDER.get_cached_program_path()
 
         self.assertEqual(program_path, "C:\\Program Files\\Rainmeter\\")
