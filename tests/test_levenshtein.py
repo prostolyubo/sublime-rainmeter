@@ -5,7 +5,7 @@ import sys
 
 from unittest import TestCase
 
-__LEVENSHTEIN = sys.modules["Rainmeter.completion.levenshtein"]
+LEVENSHTEIN = sys.modules["Rainmeter.completion.levenshtein"]
 
 
 class TestLevenShtein(TestCase):
@@ -13,19 +13,19 @@ class TestLevenShtein(TestCase):
 
     def test_same_word_should_zero(self):
         """We use the same word there should be no difference required."""
-        diff = __LEVENSHTEIN.levenshtein("hello", "hello")
+        diff = LEVENSHTEIN.levenshtein("hello", "hello")
 
         self.assertEqual(diff, 0)
 
     def test_zero_words_should_zero(self):
         """Special case with same word but both are empty."""
-        diff = __LEVENSHTEIN.levenshtein("", "")
+        diff = LEVENSHTEIN.levenshtein("", "")
 
         self.assertEqual(diff, 0)
 
     def test_first_longer_equal_one(self):
         """Same word base but missing characters."""
-        diff = __LEVENSHTEIN.levenshtein("hello", "hell")
+        diff = LEVENSHTEIN.levenshtein("hello", "hell")
 
         self.assertEqual(diff, 1)
 
@@ -35,6 +35,6 @@ class TestLevenShtein(TestCase):
 
         Method should work in both ways and not return a negative difference.
         """
-        diff = __LEVENSHTEIN.levenshtein("hell", "hello")
+        diff = LEVENSHTEIN.levenshtein("hell", "hello")
 
         self.assertEqual(diff, 1)

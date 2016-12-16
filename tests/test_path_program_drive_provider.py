@@ -5,7 +5,7 @@ import sys
 
 from unittest import TestCase
 
-__PROGRAM_DRIVE_PROVIDER = sys.modules["Rainmeter.path.program_drive_provider"]
+PROGRAM_DRIVE_PROVIDER = sys.modules["Rainmeter.path.program_drive_provider"]
 
 
 class TestFunctions(TestCase):
@@ -13,6 +13,6 @@ class TestFunctions(TestCase):
 
     def test_default_drive(self):
         """Per default we install it onto c:/."""
-        program_drive = __PROGRAM_DRIVE_PROVIDER.get_cached_program_drive()
+        program_drive = PROGRAM_DRIVE_PROVIDER.get_cached_program_drive()
 
         self.assertEqual(program_drive, "C:")

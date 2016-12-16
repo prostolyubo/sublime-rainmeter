@@ -9,7 +9,7 @@ import sys
 
 from unittest import TestCase
 
-__RAINMETER_SECTION = sys.modules["Rainmeter.completion.skin.rainmeter_section"]
+RAINMETER_SECTION = sys.modules["Rainmeter.completion.skin.rainmeter_section"]
 
 
 class TestSkinRainmeterSectionCompletion(TestCase):
@@ -22,7 +22,7 @@ class TestSkinRainmeterSectionCompletion(TestCase):
         The given section is 'Different' but we are moving in the Rainmeter section
         thus only 'Rainmeter' is allowed
         """
-        complete = __RAINMETER_SECTION.SkinRainmeterSectionAutoComplete()
+        complete = RAINMETER_SECTION.SkinRainmeterSectionAutoComplete()
         value_completion = complete.get_value_context_completion("Different", None)
 
         self.assertEqual(value_completion, None)

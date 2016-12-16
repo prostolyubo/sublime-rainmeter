@@ -4,7 +4,7 @@ import sys
 
 from unittest import TestCase
 
-__LOGGER = sys.modules["Rainmeter.logger"]
+LOGGER = sys.modules["Rainmeter.logger"]
 
 
 class TestFunctions(TestCase):
@@ -15,7 +15,7 @@ class TestFunctions(TestCase):
     def test_info(self):
         """Info should not through exceptions due to settings."""
         try:
-            __LOGGER.info(
+            LOGGER.info(
                 __file__,
                 "test_info(self)",
                 "info test"
@@ -26,7 +26,7 @@ class TestFunctions(TestCase):
     def test_error(self):
         """Error should not through exception due to settings."""
         try:
-            __LOGGER.error(
+            LOGGER.error(
                 __file__,
                 "test_error(self)",
                 "error test"
