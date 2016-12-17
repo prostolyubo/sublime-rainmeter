@@ -564,7 +564,7 @@ contexts:
       scope: meta.option.predefined.rainmeter
       captures: 
         1: storage.type.option.predefined.rainmeter
-        2: keyword.operator.option.equal.rainmeter
+        78: keyword.operator.option.equal.rainmeter
 
     # Constants used in Calc measures
     - match: "(?i)\\b(PI|E|RANDOM)\\b"
@@ -606,13 +606,6 @@ contexts:
         2: constant.numeric.color.green.numericrainmeter
         3: constant.numeric.color.blue.numeric.rainmeter
         5: constant.numeric.color.alpha.numeric.rainmeter
-
-    - match: "(?i)^\\s*(stringalign)\\s*(=)\\s*(((Left|Right|Center)(Bottom|Top|Center)?)|\"((Left|Right|Center)(Bottom|Top|Center)?)\")\\s*$"
-      scope: meta.option.align.rainmeter
-      captures:
-        1: storage.type.option.predefined.rainmeter
-        2: keyword.operator.option.equal.rainmeter
-        3: support.constant.option_values.rainmeter
 
   meter-shape-modifier:
     # - meta_scope: source.rainmeter
