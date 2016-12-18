@@ -51,7 +51,7 @@ class RainmeterIndentCommand(sublime_plugin.TextCommand):
             current_indent = -1
             adjustment = -1
 
-            lines = self.view.lines(sublime.Region(0, self.view.size()))   
+            lines = self.view.lines(sublime.Region(0, self.view.size()))
             for i in line_nums:
                 line = lines[i]
                 line_content = self.view.substr(line)
