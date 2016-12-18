@@ -11,14 +11,21 @@ from ..levenshtein import levenshtein
 from ..yaml_content_reader import YamlContentReader
 
 
-class SkinRainmeterSectionAutoComplete(YamlContentReader):
+class SkinRainmeterSectionAutoComplete(YamlContentReader): # pylint: disable=R0903; only provide one method
+    """This uses the provided YAML files to extract the possible completions."""
 
     def __get_completions(self):
         try:
-            rainmeter_section_content = self._get_yaml_content("completion/skin/", "rainmeter_section.yaml")
+            rainmeter_section_content = self._get_yaml_content(
+                "completion/skin/",
+                "rainmeter_section.yaml"
+            )
             skin_rainmeter_section = yaml.load(rainmeter_section_content)
 
-            general_image_options_content = self._get_yaml_content("completion/meter/", "general_image_options.yaml")
+            general_image_options_content = self._get_yaml_content(
+                "completion/meter/",
+                "general_image_options.yaml"
+            )
             meters_general_image_options = yaml.load(general_image_options_content)
 
             skin_rainmeter_section.extend(meters_general_image_options)
@@ -47,6 +54,11 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
 
     @staticmethod
     def get_compiled_value_completions(key, options):
+        """
+        Bake completions from the provided YAML options.
+
+        Considers stuff like hints and values.
+        """
         values = []
 
         for option in options:
@@ -77,7 +89,8 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
                         else:
                             logger.error(__file__,
                                          "get_compiled_value_completions",
-                                         "unexpected length of '" + length + "' for option key '" + option_key + "'")
+                                         "unexpected length of '" + length +
+                                         "' for option key '" + option_key + "'")
 
         return values
 
@@ -88,6 +101,7 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
     all_key_completions = None
 
     def get_key_context_completion(self, prefix, line_content, section, keyvalues):
+        """Get a list of keys for the current context."""
         if section.casefold() != "Rainmeter".casefold():
             return None
 
@@ -117,15 +131,20 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
         if not completions:
             return None
 
-        # only show sorted by distance if something was already typed because distance to empty string makes no sense
+        # only show sorted by distance if something was already typed
+        # because distance to empty string makes no sense
         if line_content != "":
             # sort by levenshtein distance
-            sorted_completions = sorted(completions, key=lambda completion: levenshtein(completion[1], prefix))
+            sorted_completions = sorted(
+                completions, key=lambda completion: levenshtein(completion[1], prefix)
+            )
+
             return sorted_completions, self.flags
         else:
             return completions, self.flags
 
     def get_value_context_completion(self, section, key_match):
+        """Get context completion for a specified found key."""
         if section != "Rainmeter":
             return None
 
@@ -133,7 +152,11 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
         if not self.all_completions:
             self.all_completions = self.__get_completions()
 
-        value_completions = SkinRainmeterSectionAutoComplete.get_compiled_value_completions(key_match, self.all_completions)
+        value_completions = SkinRainmeterSectionAutoComplete.get_compiled_value_completions(
+            key_match,
+            self.all_completions
+        )
+
         if not value_completions:
             return None
         else:

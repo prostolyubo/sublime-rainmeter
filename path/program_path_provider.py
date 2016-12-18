@@ -13,7 +13,7 @@ import sublime
 from .. import logger
 
 
-def _get_rm_path_from_default_path():
+def get_rm_path_from_default_path():
     r"""
     Default location is "C:\Program Files\Rainmeter" in windows.
 
@@ -35,7 +35,7 @@ def _get_rainmeter_registry_key():
     return winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rainmeter")
 
 
-def _get_rm_path_from_registry():
+def get_rm_path_from_registry():
     """Registry."""
     rainmeter_key = _get_rainmeter_registry_key()
     rainmeter_path = winreg.QueryValue(rainmeter_key, None)
@@ -78,12 +78,12 @@ def get_cached_program_path():
             "get_cached_program_path()",
             "rainmeter_path not found in settings. Trying default location."
         )
-        rm_path = _get_rm_path_from_default_path()
+        rm_path = get_rm_path_from_default_path()
 
     # if it is not even specified by default,
     # try using the registry to retrieve the installation path
     if not os.path.isdir(rm_path):
-        rm_path = _get_rm_path_from_registry()
+        rm_path = get_rm_path_from_registry()
 
     # Check if path exists and contains Rainmeter.exe
     if not os.path.isdir(rm_path):

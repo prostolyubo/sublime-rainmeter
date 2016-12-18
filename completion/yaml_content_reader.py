@@ -1,3 +1,6 @@
+"""This module is about reading YAML files for Rainmeter related definition files."""
+
+
 import os.path
 import zipfile
 
@@ -6,9 +9,10 @@ import sublime
 from .. import logger
 
 
-class YamlContentReader(object):
+class YamlContentReader(object): #pylint: disable=R0903; this is an abstract class
     """
-    use this to read the content of yamls inside of sublime text packages.
+    Use this to read the content of yamls inside of sublime text packages.
+
     supports multiple ways to access them:
     * .sublime-package
     * .zip
@@ -28,7 +32,12 @@ class YamlContentReader(object):
                 ret_value = zip_file.read(resource)
                 return ret_value.decode("utf-8")
 
-        logger.error(__file__, "__get_zip_content(self, path_to_zip, resource)", "no zip content with resource '" + resource + "' found in .")
+        logger.error(
+            __file__,
+            "__get_zip_content(self, path_to_zip, resource)",
+            "no zip content with resource '" + resource + "' found in ."
+        )
+
         return ret_value
 
     def __get_yaml_content_in_package(self, package, dir_of_yaml, yaml_file):
@@ -50,14 +59,14 @@ class YamlContentReader(object):
 
     def _get_yaml_content(self, dir_of_yaml, yaml_file):
         """
-        get yaml content of a yaml file located either in:
+        Get yaml content of a yaml file.
+
+        It is located either in:
         * Installed Packages/Rainmeter.sublime-package
         * Packages/Rainmeter
         Parameters
         ----------
-
         """
-
         # try over sublimes find resources first
         # should handle loose and packaged version
         for resource in sublime.find_resources(yaml_file):
@@ -93,6 +102,7 @@ class YamlContentReader(object):
         logger.error(
             __file__,
             "_get_yaml_content(dir_of_yaml, yaml_file)",
-            "found not yaml neither via sublime resources, nor absolute pathing, nor .sublime-package for '" + dir_of_yaml + yaml_file + "'."
+            "found not yaml neither via sublime resources, nor absolute pathing, " +
+            "nor .sublime-package for '" + dir_of_yaml + yaml_file + "'."
         )
         return None

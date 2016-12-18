@@ -22,7 +22,7 @@ from .levenshtein import levenshtein
 from .yaml_content_reader import YamlContentReader
 
 
-class SkinSectionAutoCompleter(YamlContentReader):
+class SkinSectionAutoCompleter(YamlContentReader): # pylint: disable=R0903; only provide one method
     """Ths class is the logical state holder for the auto completion suggestions.
 
     Upon the request the respective yaml file is parsed and converted into a logical
@@ -73,7 +73,7 @@ class SkinSectionAutoCompleter(YamlContentReader):
             self.all_completions = self.__get_completions()
             self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
 
-    def __filter_completions_by_already_defined_sections(self, sections):
+    def __filter_completions_by_sec(self, sections):
         # filter by already existing keys
         completions = []
 
@@ -105,7 +105,7 @@ class SkinSectionAutoCompleter(YamlContentReader):
         #     return None
 
         self.__lazy_initialize_completions()
-        completions = self.__filter_completions_by_already_defined_sections(sections)
+        completions = self.__filter_completions_by_sec(sections)
 
         # no results, means all keys are used up
         if not completions:

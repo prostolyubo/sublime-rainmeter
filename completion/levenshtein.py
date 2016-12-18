@@ -1,15 +1,14 @@
-"""
-This module provides distance calculations using the levenshtein metric.
-"""
+"""This module provides distance calculations using the levenshtein metric."""
 
 
 def levenshtein(top_string, bot_string):
     """
-    the Levenshtein distance is a string metric for measuring the difference between two sequences.
-    Informally, the Levenshtein distance between two words is the minimum number of single-character edits
+    The Levenshtein distance is a string metric for measuring the difference between two sequences.
+
+    Informally,
+    the Levenshtein distance between two words is the minimum number of single-character edits
     (i.e. insertions, deletions or substitutions) required to change one word into the other.
     """
-
     if len(top_string) < len(bot_string):
         return levenshtein(bot_string, top_string)
 
@@ -21,8 +20,10 @@ def levenshtein(top_string, bot_string):
     for i, top_char in enumerate(top_string):
         current_row = [i + 1]
         for j, bot_char in enumerate(bot_string):
-            insertions = previous_row[j + 1] + 1  # j+1 instead of j since previous_row and current_row are one character longer
-            deletions = current_row[j] + 1        # than bot_string
+            # j+1 instead of j since previous_row and current_row are one character longer
+            # than bot_string
+            insertions = previous_row[j + 1] + 1
+            deletions = current_row[j] + 1
             substitutions = previous_row[j] + (top_char != bot_char)
             current_row.append(min(insertions, deletions, substitutions))
         previous_row = current_row

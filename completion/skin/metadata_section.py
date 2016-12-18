@@ -1,3 +1,6 @@
+"""This module is about skin/metadata section completion."""
+
+
 import yaml
 
 import sublime
@@ -8,7 +11,8 @@ from ..levenshtein import levenshtein
 from ..yaml_content_reader import YamlContentReader
 
 
-class SkinMetadataSectionAutoComplete(YamlContentReader):
+class SkinMetadataSectionAutoComplete(YamlContentReader): # pylint: disable=R0903; only provide one method
+    """This uses the provided YAML files to extract the possible completions."""
 
     def __get_completions(self):
         try:
@@ -46,9 +50,10 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
             self.all_completions = self.__get_completions()
             self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
 
-    def __filter_completions_by_key_already_used(self, keyvalues):
+    def __filter_completions_by_keys(self, keyvalues):
         """
         In Rainmeter a key can only be used once in a section statement.
+
         If you declare it twice this is a code smell.
         """
         # filter by already existing keys
@@ -77,11 +82,16 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
     all_key_completions = None
 
     def get_key_context_completion(self, prefix, line_content, section, keyvalues):
+        """
+        Get context completion for a key.
+
+        This implies that it was entered in a non-key row.
+        """
         if section.casefold() != "Metadata".casefold():
             return None
 
         self.__lazy_initialize_completions()
-        completions = self.__filter_completions_by_key_already_used(keyvalues)
+        completions = self.__filter_completions_by_keys(keyvalues)
 
         # no results, means all keys are used up
         if not completions:
