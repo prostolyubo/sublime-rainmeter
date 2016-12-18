@@ -87,11 +87,11 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
         return "Refresh Rainmeter Config"
 
 
-class RainmeterRefreshCommand(sublime_plugin.ApplicationCommand):
-
-    """Refresh Rainmeter"""
+class RainmeterRefreshCommand(sublime_plugin.ApplicationCommand): #pylint: disable=R0903; sublime text API, methods are overriden
+    """Refresh Rainmeter."""
 
     def run(self): #pylint: disable=R0201; sublime text API, no need for class reference
+        """Called when the command is run."""
         sublime.run_command("rainmeter_refresh_config", {"cmd": []})
 
 
