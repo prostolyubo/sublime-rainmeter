@@ -106,7 +106,7 @@ class ContextSensAutoCompletion(object):
             logger.info(
                 __file__,
                 "on_query_completions",
-                "key/value found in '" + line_content + 
+                "key/value found in '" + line_content +
                 "' with ('" + key_match + "', '" + value_match + "')"
             )
 
