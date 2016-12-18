@@ -1,3 +1,10 @@
+"""
+This module is about refreshing Rainmeter from within Sublime Text.
+
+This can be either activated via a command or as part of the build system.
+"""
+
+
 import os.path
 
 import sublime
@@ -7,10 +14,10 @@ from .path.program_path_provider import get_cached_program_path
 
 
 class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
+    """Refresh a given skin file, or Rainmeter if no path is specified."""
 
-    """Refresh a given skin file, or Rainmeter if no path is specified"""
-
-    def run(self, cmd):
+    def run(self, cmd): #pylint: disable=R0201; sublime text API, no need for class reference
+        """Called when the command is run."""
         # Get Rainmeter exe path
         rainmeter_exe = get_cached_program_path()
 
@@ -69,7 +76,14 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
                     "exec",
                     {"cmd": [rainmeter_exe, "!Refresh", config]})
 
-    def description(self):
+    def description(self): #pylint: disable=R0201; sublime text API, no need for class reference
+        """
+        Return a description of the command with the given arguments.
+
+        Used in the menu, if no caption is provided.
+
+        Return None to get the default description.
+        """
         return "Refresh Rainmeter Config"
 
 
@@ -77,19 +91,25 @@ class RainmeterRefreshCommand(sublime_plugin.ApplicationCommand):
 
     """Refresh Rainmeter"""
 
-    def run(self):
+    def run(self): #pylint: disable=R0201; sublime text API, no need for class reference
         sublime.run_command("rainmeter_refresh_config", {"cmd": []})
 
 
 class RainmeterRefreshCurrentSkinCommand(sublime_plugin.TextCommand):
+    """
+    TextCommands are instantiated once per view.
 
-    """Refresh the current skin file opened in a view"""
+    The View object may be retrieved via self.view.
 
-    def run(self, _):
+    Refresh the current skin file opened in a view.
+    """
+
+    def run(self, _): #pylint: disable=R0201; sublime text API, no need for class reference
         """
+        Called when the command is run.
+
         edit param is not used
         """
-
         # Get current file's path
         filepath = self.view.file_name()
         if not filepath:
@@ -98,14 +118,24 @@ class RainmeterRefreshCurrentSkinCommand(sublime_plugin.TextCommand):
         # Refresh config
         sublime.run_command("rainmeter_refresh_config", {"cmd": [filepath]})
 
-    def is_enabled(self):
+    def is_enabled(self): #pylint: disable=R0201; sublime text API, no need for class reference
+        """
+        Return True if the command is able to be run at this time.
 
+        The default implementation simply always returns True.
+        """
         # Check if current syntax is rainmeter
         israinmeter = self.view.score_selector(self.view.sel()[0].a,
                                                "source.rainmeter")
 
         return israinmeter > 0
 
-    def description(self):
+    def description(self): #pylint: disable=R0201; sublime text API, no need for class reference
+        """
+        Return a description of the command with the given arguments.
 
+        Used in the menus, and for Undo/Redo descriptions.
+
+        Return None to get the default description.
+        """
         return "Refresh Current Rainmeter Skin"
