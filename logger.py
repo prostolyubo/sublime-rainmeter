@@ -14,39 +14,49 @@ from datetime import datetime
 
 import sublime
 
-__log = None
+__LOG = None
 
 '''
 Called automatically from ST3 if plugin is loaded
 # Is required now due to async call and ignoring sublime.* from main routine
 '''
 
-setting_key = "rainmeter_enable_logging"
+__SETTING_KEY = "rainmeter_enable_logging"
 
 
 def plugin_loaded():
+    """Will be called when sublime API is ready to use."""
     settings = __load_settings()
-    settings.add_on_change(setting_key, __load_settings)
+    settings.add_on_change(__SETTING_KEY, __load_settings)
 
     info(__file__, "plugin_loaded()", "Logger succesfully loaded.")
 
 
 def __load_settings():
     settings = sublime.load_settings("Rainmeter.sublime-settings")
-    key = "rainmeter_enable_logging"
 
-    global __log
-    __log = settings.get(key, False)
+    global __LOG
+    __LOG = settings.get(__SETTING_KEY, False)
 
     return settings
 
 
 def info(file_path, function, string):
-    if __log:
+    """
+    Display information about the current state it is in.
+
+    Only shown if logging is enabled.
+    """
+    if __LOG:
         _log("info", file_path, function, string)
 
 
 def error(file_path, function, string):
+    """
+    Display error states.
+
+    Always shown because supposed not to reach that level.
+    """
     _log("error", file_path, function, string)
 
 
