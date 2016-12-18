@@ -1,3 +1,11 @@
+"""
+This module provides commands to create new Rainmeter skins.
+
+This can be either by adding a new skin file to an existing/current skin
+or by create a whole new skin in general.
+"""
+
+
 import os
 import re
 
@@ -7,11 +15,11 @@ import sublime_plugin
 from .path.skin_path_provider import get_cached_skin_path
 
 
-class RainmeterNewSkinFileCommand(sublime_plugin.WindowCommand):
-
-    """Open a new view and insert a skin skeleton"""
+class RainmeterNewSkinFileCommand(sublime_plugin.WindowCommand): #pylint: disable=R0903; sublime text API, methods are overriden
+    """Open a new view and insert a skin skeleton."""
 
     def run(self):
+        """Called when the command is run."""
         view = self.window.new_file()
         view.run_command(
             "insert_snippet",
@@ -24,16 +32,16 @@ class RainmeterNewSkinFileCommand(sublime_plugin.WindowCommand):
 
 
 class RainmeterNewSkinCommand(sublime_plugin.WindowCommand):
-
-    """Create a new skin, complete with folders, open it and refresh Rainmeter
+    """
+    Create a new skin, complete with folders, open it and refresh Rainmeter.
 
     Prompts the user for the name of a skin and creates a new skin of that
     name in the skins folder, if it doesn't already exist. Then opens the skin
     file, inserts a basic skin skeleton and refreshes Rainmeter.
-
     """
 
     def run(self):
+        """Called when the command is run."""
         self.window.show_input_panel("Enter Skin Name:",
                                      "",
                                      self.create_skin,
@@ -41,6 +49,7 @@ class RainmeterNewSkinCommand(sublime_plugin.WindowCommand):
                                      None)
 
     def create_skin(self, name):
+        """Callback method executed after the user entered the skin name."""
         skinspath = get_cached_skin_path()
         if not skinspath or not os.path.exists(skinspath):
             sublime.error_message(
@@ -106,6 +115,7 @@ class RainmeterNewSkinCommand(sublime_plugin.WindowCommand):
         sublime.set_timeout((lambda: self.open_skin_file(newview)), 100)
 
     def open_skin_file(self, view):
+        """Callback method executed after the file is fully loaded."""
         if view.is_loading():
             sublime.set_timeout(lambda: self.open_skin_file(view),
                                 100)
