@@ -1,4 +1,5 @@
-""" This module does blabla """
+"""This module is about the skin/rainmeter section handling."""
+
 
 import yaml
 
@@ -6,8 +7,8 @@ import sublime
 
 # import own libs
 from ... import logger
-from ...completion.levenshtein import levenshtein
-from ...completion.yaml_content_reader import YamlContentReader
+from ..levenshtein import levenshtein
+from ..yaml_content_reader import YamlContentReader
 
 
 class SkinRainmeterSectionAutoComplete(YamlContentReader):
@@ -28,7 +29,8 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):
             logger.error(__file__, "get_completions", error)
             return []
 
-    def __get_compiled_key_completions(self, options):
+    @staticmethod
+    def __get_compiled_key_completions(options):
         keys = []
         for option in options:
             title = option['title'] + "\t" + option['hint']

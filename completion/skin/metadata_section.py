@@ -4,15 +4,18 @@ import sublime
 
 # import own libs
 from ... import logger
-from ...completion.levenshtein import levenshtein
-from ...completion.yaml_content_reader import YamlContentReader
+from ..levenshtein import levenshtein
+from ..yaml_content_reader import YamlContentReader
 
 
 class SkinMetadataSectionAutoComplete(YamlContentReader):
 
     def __get_completions(self):
         try:
-            skin_metadata_section_content = self._get_yaml_content("completion/skin/", "metadata_section.yaml")
+            skin_metadata_section_content = self._get_yaml_content(
+                "completion/skin/",
+                "metadata_section.yaml"
+            )
             skin_metadata_section = yaml.load(skin_metadata_section_content)
 
             return skin_metadata_section
@@ -21,7 +24,8 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
             logger.error(__file__, "get_completions", error)
             return []
 
-    def __get_compiled_key_completions(self, options):
+    @staticmethod
+    def __get_compiled_key_completions(options):
         keys = []
         for option in options:
             title = option['title'] + "\t" + option['hint']
@@ -88,10 +92,13 @@ class SkinMetadataSectionAutoComplete(YamlContentReader):
             )
             return None
 
-        # only show sorted by distance if something was already typed because distance to empty string makes no sense
+        # only show sorted by distance if something was already typed
+        # because distance to empty string makes no sense
         if line_content != "":
             # sort by levenshtein distance
-            sorted_completions = sorted(completions, key=lambda completion: levenshtein(completion[1], prefix))
+            sorted_completions = sorted(
+                completions, key=lambda completion: levenshtein(completion[1], prefix)
+            )
             return sorted_completions, self.flags
         else:
             return completions, self.flags

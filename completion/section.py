@@ -45,7 +45,8 @@ class SkinSectionAutoCompleter(YamlContentReader):
             logger.error(__file__, "__get_completions(self)", error)
             return []
 
-    def __get_compiled_key_completions(self, options):
+    @staticmethod
+    def __get_compiled_key_completions(options):
         """Completion can contain lots of duplicate information.
 
         For example the trigger is most of the time also the result.
