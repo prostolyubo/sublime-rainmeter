@@ -1,3 +1,10 @@
+"""
+This module handles the indention of the rainmeter files.
+
+Default indention is required to allow collapsing of code blocks.
+"""
+
+
 import re
 
 import sublime
@@ -5,18 +12,18 @@ import sublime_plugin
 
 
 class RainmeterIndentCommand(sublime_plugin.TextCommand):
-
-    """Indents a Rainmeter file so code folding is possible in a sensible way.
+    """
+    Indent a Rainmeter file so code folding is possible in a sensible way.
 
     Double semicolons at the start of a line indent everything until the next
     double semicolon so you can create custom fold markers. If nothing is
     selected, the whole file will be indented. If one or more regions are
     selected, only these lines will be indented without paying attention to
     the surroundings
-
     """
 
-    def run(self, edit):
+    def run(self, edit): #pylint: disable=R0201; sublime text API, no need for class reference
+        """Called when the command is run."""
         # Compile regexs to be used later
         rwhitespace_line = re.compile("^([ \\t]*)(.*)$")
         rfold_comment = re.compile("^([ \\t]*)(;;.*)")
@@ -71,12 +78,24 @@ class RainmeterIndentCommand(sublime_plugin.TextCommand):
                             "\t" * (current_indent + 2 + adjustment) +
                             stripped_line)
 
-    def is_enabled(self):
+    def is_enabled(self): #pylint: disable=R0201; sublime text API, no need for class reference
+        """
+        Return True if the command is able to be run at this time.
+
+        The default implementation simply always returns True.
+        """
         # Check if current syntax is rainmeter
         israinmeter = self.view.score_selector(self.view.sel()[0].a,
                                                "source.rainmeter")
 
         return israinmeter > 0
 
-    def description(self):
+    def description(self): #pylint: disable=R0201; sublime text API, no need for class reference
+        """
+        Return a description of the command with the given arguments.
+
+        Used in the menus, and for Undo/Redo descriptions.
+
+        Return None to get the default description.
+        """
         return "Indent Ini for Code Folding"
