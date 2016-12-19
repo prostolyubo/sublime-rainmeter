@@ -8,24 +8,20 @@
 !LICENSE
 !README.md
 
-# include completion feature
-!completion
-
 # include snippets
 !Snippets
-
-# include misc
-!lib
-!yaml
-
-# include path detection
-!path
 
 # include all python files
 !*.py
 !tests
 # exclude compiled python files
 *.pyc
+
+# include path detection
+!path
+
+# include completion feature
+!completion
 
 # include coloring
 !color/
