@@ -23,47 +23,19 @@ import sublime_plugin
 from . import logger
 from .color import converter
 
-# if sublime.platform() == 'windows':
-#     import ctypes
-#     from ctypes import c_int32, c_uint32, c_void_p, c_wchar_p, POINTER
+class RainmeterReplaceColorCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
+    
+    def run(self, edit, **args):
+        low = args["low"]
+        high = args["high"]
+        output = args["output"]
 
-#     class CHOOSECOLOR(ctypes.Structure): # pylint: disable=R0903; this extends a data class
-#         """Data mapping representation contained for the color chooser."""
-
-#         _fields_ = [('lStructSize', c_uint32),
-#                     ('hwndOwner', c_void_p),
-#                     ('hInstance', c_void_p),
-#                     ('rgbResult', c_uint32),
-#                     ('lpCustColors', POINTER(c_uint32)),
-#                     ('Flags', c_uint32),
-#                     ('lCustData', c_void_p),
-#                     ('lpfnHook', c_void_p),
-#                     ('lpTemplateName', c_wchar_p)]
-
-#     CustomColorArray = c_uint32 * 16
-#     CC_SOLIDCOLOR = 0x80
-#     CC_RGBINIT = 0x01
-#     CC_FULLOPEN = 0x02
-
-#     ChooseColorW = ctypes.windll.Comdlg32.ChooseColorW
-#     ChooseColorW.argtypes = [POINTER(CHOOSECOLOR)]
-#     ChooseColorW.restype = c_int32
-
-#     GetDC = ctypes.windll.User32.GetDC
-#     GetDC.argtypes = [c_void_p]
-#     GetDC.restype = c_void_p
-
-#     ReleaseDC = ctypes.windll.User32.ReleaseDC
-#     ReleaseDC.argtypes = [c_void_p, c_void_p]  # hwnd, hdc
-#     ReleaseDC.restype = c_int32
-
-
+        region = sublime.Region(low, high)
+        self.view.replace(edit, region, output)
 
 
 class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
     """Sublime Text integration running this through an action."""
-
-    output = None
 
     def run(self, _):
         """
@@ -77,7 +49,6 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
     def delegate_async(self):
         """Proxy for calling multiple methods."""
         self.__run_picker()
-        self.__write_back()
 
     def __get_first_selection(self):
         selections = self.view.sel()
@@ -113,19 +84,22 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         # catch case with multiple colors in same line
         for match in dec_color_exp.finditer(line_content):
+            low = line_index + match.start()
+            high = line_index + match.end()
+
             # need to shift the caret to the current line
-            if line_index + match.start() <= caret <= line_index + match.end():
+            if low <= caret <= high:
                 rgba_raw = match.groups()
                 rgba = [int(color) for color in rgba_raw if color is not None]
                 hexes = converter.rgbs_to_hexes(rgba)
                 hex_string = converter.hexes_to_string(hexes)
                 with_alpha = self.__convert_hex_to_hex_with_alpha(hex_string)
 
-                return with_alpha
+                return low, high, with_alpha
 
         # if no match was iterated we process furthere starting here
         hex_color_exp = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
-        
+
         # we can find multiple color values in the same row
         # after iterating through the single elements
         # we can use start() and end() of each match to determine the length
@@ -140,13 +114,13 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                 # color picker requires RGBA
                 with_alpha = self.__convert_hex_to_hex_with_alpha(hex_values)
 
-                return with_alpha
+                return low, high, with_alpha
             else:
                 logger.info(__file__, "__get_selected_color_or_none(self)", low)
                 logger.info(__file__, "__get_selected_color_or_none(self)", high)
                 logger.info(__file__, "__get_selected_color_or_none(self)", caret)
 
-        return
+        return None, None, None
 
     def __convert_hex_to_hex_with_alpha(self, hexes):
         """If no alpha value is provided it defaults to FF."""
@@ -156,7 +130,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
             return hexes
 
     def __run_picker(self):
-        maybe_color = self.__get_selected_color_or_none()
+        low, high, maybe_color = self.__get_selected_color_or_none()
         
         # no color selected, we call the color picker and insert the color at that position
         color = "FFFFFFFF" if maybe_color is None else maybe_color
@@ -169,62 +143,37 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
             stderr=subprocess.PIPE,
             shell=False
         )
-        out, err = picker.communicate()
-        self.output = out.decode("utf-8")
-        logger.info(__file__, "__run_picker(self)", "output: " + self.output)
-        error = err.decode("utf-8")
+        output_channel, error_channel = picker.communicate()
+        raw_output = output_channel.decode("utf-8")
+        logger.info(__file__, "__run_picker(self)", "output: " + raw_output)
+
+        # checking for errors first
+        error = error_channel.decode("utf-8")
         if error is not None and len(error) != 0:
-            logger.error(__file__, "__run_picker(self)", "Color Picker Error:\n" + err)
+            logger.error(__file__, "__run_picker(self)", "Color Picker Error:\n" + error_channel)
+            return
 
-    def __write_back(self):
-        if self.output is not None and len(self.output) == 9 and self.output != 'CANCEL':
-            logger.info(__file__, "__write_back(self)", "can write back: " + self.output)
-            # self.view.substr(self.words[0][0])
-            # self.view.run_command(
-                # "ch_replace_color",
-                # {
-                    # "words": "\t".join(map(lambda x: str((x[0], x[1], self.output)), self.words))
-                # }
-            # )
+        # len is 9 because of RGBA and '#' resulting into 9 characters
+        if raw_output is not None and len(raw_output) == 9 and raw_output != 'CANCEL':
+            logger.info(__file__, "__write_back(self)", "can write back: " + raw_output)
 
-        # reset output value so next iteration does not go through the if close
-        self.output = None
+            # cut output from the '#' because Rainmeter does not use # for color codes
+            output = raw_output[1:]
+            self.view.run_command(
+                "rainmeter_replace_color",
+                {
+                    "low": low,
+                    "high": high,
+                    "output": output
+                }
+            )
+            # self.view.replace(edit, region, output)
+            # TODO can convert it back to decimal?
+            # TODO convert it back to lower case or upper case
+            # TODO convert it back without alpha channel or with
 
 
-    #     sel = self.view.sel()
-    #     start_color_win = 0x000000
 
-    #     # Get the currently selected color - if any
-    #     if len(sel) > 0:
-    #         selected = self.view.substr(self.view.word(sel[0])).strip()
-    #         if selected.startswith('#'):
-    #             selected = selected[1:]
-    #         if self.__is_valid_hex_color(selected):
-    #             if len(selected) > 6:
-    #                 selected = selected[0:6]
-    #             start_color_win = self.__hexstr_to_bgr(selected)
-
-    #     if sublime.platform() == 'windows':
-
-    #         settings = sublime.load_settings("ColorPicker.sublime-settings")
-    #         custom_colors = settings.get("custom_colors", ['0'] * 16)
-
-    #         if len(custom_colors) < 16:
-    #             custom_colors = ['0'] * 16
-    #             settings.set('custom_colors', custom_colors)
-
-    #         choose_color = CHOOSECOLOR()
-    #         ctypes.memset(ctypes.byref(choose_color), 0, ctypes.sizeof(choose_color))
-    #         choose_color.lStructSize = ctypes.sizeof(choose_color)
-    #         choose_color.hwndOwner = None
-    #         choose_color.Flags = CC_SOLIDCOLOR | CC_FULLOPEN | CC_RGBINIT
-    #         choose_color.rgbResult = c_uint32(start_color_win)
-    #         choose_color.lpCustColors = self.__to_custom_color_array(custom_colors)
-
-    #         if ChooseColorW(ctypes.byref(choose_color)):
-    #             color = self.__bgr_to_hexstr(choose_color.rgbResult)
-    #         else:
-    #             color = None
 
     #     if color:
     #         # Replace all regions with color
@@ -236,61 +185,6 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
     #                     word = sublime.Region(word.a, word.a + 6)
     #                 # Include '#' if present
     #                 self.view.replace(edit, word, color)
-    #             # If the selected region starts with a #, keep it
-    #             elif self.view.substr(region).startswith('#'):
-    #                 reduced = sublime.Region(region.begin() + 1, region.end())
-    #                 if self.__is_valid_hex_color(self.view.substr(reduced)):
-    #                     if len(reduced) > 6:
-    #                         reduced = sublime.Region(reduced.a, reduced.a + 6)
-    #                     self.view.replace(edit, reduced, color)
-    #                 else:
-    #                     self.view.replace(edit, region, '#' + color)
     #             # Otherwise just replace the selected region
     #             else:
     #                 self.view.replace(edit, region, color)
-
-    # @classmethod
-    # def __to_custom_color_array(cls, custom_colors):
-    #     cca = CustomColorArray()
-    #     for i in range(16):
-    #         cca[i] = int(custom_colors[i])
-    #     return cca
-
-    # @classmethod
-    # def __from_custom_color_array(cls, custom_colors):
-    #     cca = [0] * 16
-    #     for i in range(16):
-    #         cca[i] = str(custom_colors[i])
-    #     return cca
-
-    # @classmethod
-    # def __is_valid_hex_color(cls, string):
-    #     if len(string) not in (3, 6, 8):
-    #         return False
-    #     try:
-    #         return 0 <= int(string, 16) <= 0xffffffff
-    #     except ValueError:
-    #         return False
-
-    # byte_table = list(['{0:02X}'.format(b) for b in range(256)])
-
-    # @classmethod
-    # def __bgr_to_hexstr(cls, bgr):
-    #     # 0x00BBGGRR
-    #     blue = cls.byte_table[(bgr >> 16) & 0xff]
-    #     green = cls.byte_table[(bgr >> 8) & 0xff]
-    #     red = cls.byte_table[bgr & 0xff]
-
-    #     return red + green + blue
-
-    # @classmethod
-    # def __hexstr_to_bgr(cls, hexstr):
-    #     if len(hexstr) == 3:
-    #         hexstr = hexstr[0] + hexstr[0] + hexstr[1] + \
-    #             hexstr[1] + hexstr[2] + hexstr[2]
-
-    #     red = int(hexstr[0:2], 16)
-    #     green = int(hexstr[2:4], 16)
-    #     blue = int(hexstr[4:6], 16)
-
-    #     return (blue << 16) | (green << 8) | red
