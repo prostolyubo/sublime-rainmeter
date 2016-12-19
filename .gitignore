@@ -27,6 +27,9 @@
 # exclude compiled python files
 *.pyc
 
+# include coloring
+!color/
+
 # include theming
 !theme
 !*.tmTheme
