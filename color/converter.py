@@ -35,11 +35,10 @@ def hexes_to_rgbs(hexes):
 
     return [hex_to_int(hex_value) for hex_value in hexes]
 
-def hexes_to_string(hexes, spacing=1):
+def hexes_to_string(hexes):
     """Convert hexes into a string representation."""
-    joiner = ",".ljust(spacing + 1)
 
-    return joiner.join(hexes)
+    return "".join(hexes)
 
 
 def int_to_hex(int_value, letter_case=LetterCase.Upper):

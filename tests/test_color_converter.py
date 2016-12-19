@@ -76,19 +76,13 @@ class HexesToStringTest(TestCase):
         """Default case with one spacing."""
         stringed = COLOR_CONVERTER.hexes_to_string(["80", "80", "80"])
 
-        self.assertEqual(stringed, "80, 80, 80")
+        self.assertEqual(stringed, "808080")
 
-    def test_without_spacing(self):
-        """Without spacing."""
-        stringed = COLOR_CONVERTER.hexes_to_string(["80", "80", "80"], spacing=0)
+    def test_rgba(self):
+        """RGBA case."""
+        stringed = COLOR_CONVERTER.hexes_to_string(["80", "80", "80", "80"])
 
-        self.assertEqual(stringed, "80,80,80")
-
-    def test_with_more_spacing(self):
-        """Testing with more spacing."""
-        stringed = COLOR_CONVERTER.hexes_to_string(["80", "80", "80"], spacing=5)
-
-        self.assertEqual(stringed, "80,     80,     80")
+        self.assertEqual(stringed, "80808080")
 
 
 class HexToIntTest(TestCase):

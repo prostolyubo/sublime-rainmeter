@@ -14,6 +14,7 @@ It supports both ways Rainmeter defines color.
 which is hexadecimal and decimal format.
 """
 import os
+import re
 import subprocess
 
 import sublime
@@ -78,19 +79,92 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         self.__run_picker()
         self.__write_back()
 
-    def __run_picker(self):
+    def __get_first_selection(self):
         selections = self.view.sel()
         first_selection = selections[0]
+
+        return first_selection
+
+    def __get_selected_line_index(self):
+        first_selection = self.__get_first_selection()
+        selection_start = first_selection.begin()
+        line_cursor = self.view.line(selection_start)
+        line_index = line_cursor.begin()
+
+        return line_index
+
+    def __get_selected_line_content(self):
+        first_selection = self.__get_first_selection()
         selection_start = first_selection.begin()
         line_cursor = self.view.line(selection_start)
         line_content = self.view.substr(line_cursor)
 
+        return line_content
+
+    def __get_selected_color_or_none(self):
+        """Return None in case of not finding the color aka no color is selected."""
+        caret = self.__get_first_selection().begin()
+        line_index = self.__get_selected_line_index()
+        line_content = self.__get_selected_line_content()
+
+        dec_color_exp = re.compile(
+            r"(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d{1,3}))?"
+        )
+
+        # catch case with multiple colors in same line
+        for match in dec_color_exp.finditer(line_content):
+            # need to shift the caret to the current line
+            if line_index + match.start() <= caret <= line_index + match.end():
+                rgba_raw = match.groups()
+                rgba = [int(color) for color in rgba_raw if color is not None]
+                hexes = converter.rgbs_to_hexes(rgba)
+                hex_string = converter.hexes_to_string(hexes)
+                with_alpha = self.__convert_hex_to_hex_with_alpha(hex_string)
+
+                return with_alpha
+
+        # if no match was iterated we process furthere starting here
+        hex_color_exp = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
+        
+        # we can find multiple color values in the same row
+        # after iterating through the single elements
+        # we can use start() and end() of each match to determine the length
+        # and thus the area the caret had to be in,
+        # to identify th1e one we are currently in
+        for match in hex_color_exp.finditer(line_content):
+            low = line_index + match.start()
+            high = line_index + match.end()
+
+            if low <= caret <= high:
+                hex_values = match.group(0)
+                # color picker requires RGBA
+                with_alpha = self.__convert_hex_to_hex_with_alpha(hex_values)
+
+                return with_alpha
+            else:
+                logger.info(__file__, "__get_selected_color_or_none(self)", low)
+                logger.info(__file__, "__get_selected_color_or_none(self)", high)
+                logger.info(__file__, "__get_selected_color_or_none(self)", caret)
+
+        return
+
+    def __convert_hex_to_hex_with_alpha(self, hexes):
+        """If no alpha value is provided it defaults to FF."""
+        if len(hexes) == 6:
+            return hexes + "FF"
+        else:
+            return hexes
+
+    def __run_picker(self):
+        maybe_color = self.__get_selected_color_or_none()
+        
+        # no color selected, we call the color picker and insert the color at that position
+        color = "FFFFFFFF" if maybe_color is None else maybe_color
 
         project_root = os.path.dirname(__file__)
         picker_path = os.path.join(project_root, "color", "picker", "ColorPicker_win.exe")
-        print(os.path.exists(picker_path))
         picker = subprocess.Popen(
-            [picker_path, "FFFFFFFF"],
+            [picker_path, color],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             shell=False
