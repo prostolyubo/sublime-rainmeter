@@ -57,6 +57,8 @@ from .color import converter
 #     ReleaseDC.restype = c_int32
 
 
+
+
 class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
     """Sublime Text integration running this through an action."""
 
@@ -77,6 +79,12 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         self.__write_back()
 
     def __run_picker(self):
+        selections = self.view.sel()
+        first_selection = selections[0]
+        selection_start = first_selection.begin()
+        line_cursor = self.view.line(selection_start)
+        line_content = self.view.substr(line_cursor)
+
 
         project_root = os.path.dirname(__file__)
         picker_path = os.path.join(project_root, "color", "picker", "ColorPicker_win.exe")
@@ -99,11 +107,13 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
             logger.info(__file__, "__write_back(self)", "can write back: " + self.output)
             # self.view.substr(self.words[0][0])
             # self.view.run_command(
-                # "ch_replace_color", 
+                # "ch_replace_color",
                 # {
                     # "words": "\t".join(map(lambda x: str((x[0], x[1], self.output)), self.words))
                 # }
             # )
+
+        # reset output value so next iteration does not go through the if close
         self.output = None
 
 
