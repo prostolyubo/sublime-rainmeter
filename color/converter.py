@@ -12,13 +12,15 @@ class LetterCase(object): # pylint: disable=R0903; used as enum, but we only hav
 
 
 def hex_to_int(hex_value):
+    """Convert single hex value into a dec value."""
     int_value = int(hex_value, 16)
 
-    assert 0 <= int_value <= 255 
+    assert 0 <= int_value <= 255
 
     return int_value
 
 def hexes_to_rgbs(hexes):
+    """Convert a list of hex values into a list of dec values."""
     assert 3 <= len(hexes) <= 4
 
     return [hex_to_int(hex_value) for hex_value in hexes]
@@ -50,7 +52,8 @@ def convert_hex_to_hex_with_alpha(hexes):
         return hexes
 
 def int_to_hex(int_value, letter_case=LetterCase.Upper):
-    assert 0 <= int_value <= 255 
+    """Convert single int value in a specific letter case to hex value."""
+    assert 0 <= int_value <= 255
 
     # returns lower case hex values
     hex_value = hex(int_value)
@@ -63,6 +66,7 @@ def int_to_hex(int_value, letter_case=LetterCase.Upper):
     return padded
 
 def rgbs_to_hexes(rgbs):
+    """Convert a list of dec values into a list of hex values."""
     assert 3 <= len(rgbs) <= 4
 
     return [int_to_hex(rgb) for rgb in rgbs]

@@ -232,6 +232,4 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
             if is_lower:
                 output = output.lower()
 
-
-
         return output
