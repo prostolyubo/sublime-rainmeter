@@ -94,8 +94,8 @@ artifacts:
     - path: build\Rainmeter.sublime-package
 
 cache:
-    - .gradle
-    - '%userprofile%\.gradle'
+    - .gradle -> build.gradle
+    - '%userprofile%\.gradle -> build.gradle'
 
 # enable this to block the VM from closing
 # on_finish:
