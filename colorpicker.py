@@ -166,7 +166,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         if selected_hex_or_none is not None:
             return selected_hex_or_none
 
-        return None, None, None, None, None
+        return None, None, None, None, None, None
 
 
     @staticmethod
@@ -177,7 +177,8 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         return picker_path
 
     def __run_picker(self):
-        low, high, maybe_color, is_dec, is_lower, has_alpha = self.__get_selected_color_or_none()
+        maybe_none = self.__get_selected_color_or_none()
+        low, high, maybe_color, is_dec, is_lower, has_alpha = maybe_none
 
         # no color selected, we call the color picker and insert the color at that position
         color = "FFFFFFFF" if maybe_color is None else maybe_color
@@ -203,7 +204,19 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         if raw_output is not None and len(raw_output) == 9 and raw_output != 'CANCEL':
             logger.info(__file__, "__write_back(self)", "can write back: " + raw_output)
 
-            output = self.__transform_raw_to_original_fmt(raw_output, is_dec, has_alpha, is_lower)
+            # if no color is selected we need to modify the low and high to match the caret
+            if all(value is None for value in maybe_none):
+                caret = self.__get_first_selection().begin()
+                low = caret
+                high = caret
+                output = raw_output[1:]
+            else:
+                output = self.__transform_raw_to_original_fmt(
+                    raw_output,
+                    is_dec,
+                    has_alpha,
+                    is_lower
+                )
 
             self.view.run_command(
                 "rainmeter_replace_color",
