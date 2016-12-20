@@ -56,11 +56,7 @@ class RainmeterReplaceColorCommand(sublime_plugin.TextCommand): # pylint: disabl
         original_str = self.view.substr(region)
         self.view.replace(edit, region, output)
 
-        logger.info(
-            __file__,
-            "run(self, edit, **args)",
-            "Replacing '" + original_str + "' with '" + output + "'"
-        )
+        logger.info("Replacing '" + original_str + "' with '" + output + "'")
 
 # encodes RRR,GGG,BBB,AAA with optional alpha channel and supporting all numbers from 0 to 999
 # converter will check for 255
@@ -144,9 +140,9 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
                 return low, high, with_alpha, False, is_lower, has_alpha
             else:
-                logger.info(__file__, "__get_selected_color_or_none(self)", low)
-                logger.info(__file__, "__get_selected_color_or_none(self)", high)
-                logger.info(__file__, "__get_selected_color_or_none(self)", caret)
+                logger.info(low)
+                logger.info(high)
+                logger.info(caret)
 
         return None
 
@@ -192,17 +188,17 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         )
         output_channel, error_channel = picker.communicate()
         raw_output = output_channel.decode("utf-8")
-        logger.info(__file__, "__run_picker(self)", "output: " + raw_output)
+        logger.info("output: " + raw_output)
 
         # checking for errors first
         error = error_channel.decode("utf-8")
         if error is not None and len(error) != 0:
-            logger.error(__file__, "__run_picker(self)", "Color Picker Error:\n" + error_channel)
+            logger.error("Color Picker Error:\n" + error)
             return
 
         # len is 9 because of RGBA and '#' resulting into 9 characters
         if raw_output is not None and len(raw_output) == 9 and raw_output != 'CANCEL':
-            logger.info(__file__, "__write_back(self)", "can write back: " + raw_output)
+            logger.info("can write back: " + raw_output)
 
             # if no color is selected we need to modify the low and high to match the caret
             if all(value is None for value in maybe_none):

@@ -32,11 +32,7 @@ class YamlContentReader(object): #pylint: disable=R0903; this is an abstract cla
                 ret_value = zip_file.read(resource)
                 return ret_value.decode("utf-8")
 
-        logger.error(
-            __file__,
-            "__get_zip_content(self, path_to_zip, resource)",
-            "no zip content with resource '" + resource + "' found in ."
-        )
+        logger.error("no zip content with resource '" + resource + "' found in .")
 
         return ret_value
 
@@ -46,11 +42,7 @@ class YamlContentReader(object): #pylint: disable=R0903; this is an abstract cla
         sublime_package = package + ".sublime-package"
         rm_package_path = os.path.join(packages_path, sublime_package)
         if os.path.exists(rm_package_path):
-            logger.info(
-                __file__,
-                "__get_yaml_content_in_package(package, dir_of_yaml, yaml_file)",
-                "found packaged resource in '" + rm_package_path + "'"
-            )
+            logger.info("found packaged resource in '" + rm_package_path + "'")
             resource = dir_of_yaml + yaml_file
 
             return self.__get_zip_content(rm_package_path, resource)
@@ -72,8 +64,6 @@ class YamlContentReader(object): #pylint: disable=R0903; this is an abstract cla
         for resource in sublime.find_resources(yaml_file):
             if dir_of_yaml in resource:
                 logger.info(
-                    __file__,
-                    "_get_yaml_content(dir_of_yaml, yaml_file)",
                     "found sublime resource '" + dir_of_yaml + yaml_file + "' in '" + resource + "'"
                 )
                 return sublime.load_resource(resource)
@@ -86,11 +76,7 @@ class YamlContentReader(object): #pylint: disable=R0903; this is an abstract cla
         yaml_path = os.path.join(rm_root_path, norm_dir_of_yaml, yaml_file)
 
         if os.path.exists(yaml_path):
-            logger.info(
-                __file__,
-                "_get_yaml_content(dir_of_yaml, yaml_file)",
-                "found absolute resource in '" + yaml_path + "'"
-            )
+            logger.info("found absolute resource in '" + yaml_path + "'")
             with open(yaml_path, 'r') as yaml_content_stream:
                 return yaml_content_stream.read()
 
@@ -100,8 +86,6 @@ class YamlContentReader(object): #pylint: disable=R0903; this is an abstract cla
             return rm_package
 
         logger.error(
-            __file__,
-            "_get_yaml_content(dir_of_yaml, yaml_file)",
             "found not yaml neither via sublime resources, nor absolute pathing, " +
             "nor .sublime-package for '" + dir_of_yaml + yaml_file + "'."
         )

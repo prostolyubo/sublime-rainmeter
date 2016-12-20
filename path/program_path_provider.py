@@ -50,7 +50,7 @@ def __executable_exists(rm_path):
     if not os.path.exists(rainmeter_exe):
         message = """Rainmeter path was found, but no Rainmeter.exe found.
                      Check if you have installed Rainmeter correctly."""
-        logger.error(__file__, "get_cached_program_path()", message)
+        logger.error(message)
         sublime.error_message(message)
         return False
 
@@ -73,11 +73,7 @@ def get_cached_program_path():
 
     # If setting is not set, try default location
     if not rm_path:
-        logger.info(
-            __file__,
-            "get_cached_program_path()",
-            "rainmeter_path not found in settings. Trying default location."
-        )
+        logger.info("rainmeter_path not found in settings. Trying default location.")
         rm_path = get_rm_path_from_default_path()
 
     # if it is not even specified by default,
@@ -94,12 +90,12 @@ def get_cached_program_path():
                      * nor via registry.
 
                      Check your \"rainmeter_path\" setting."""
-        logger.info(__file__, "get_cached_program_path()", message)
+        logger.info(message)
         sublime.error_message(message)
         return
 
     if not __executable_exists(rm_path):
         return
 
-    logger.info(__file__, "get_cached_program_path()", "Rainmeter found in " + rm_path)
+    logger.info("Rainmeter found in " + rm_path)
     return rm_path + "\\"

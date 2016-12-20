@@ -33,7 +33,7 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader): # pylint: disable=R09
             return skin_rainmeter_section
 
         except yaml.YAMLError as error:
-            logger.error(__file__, "get_completions", error)
+            logger.error(error)
             return []
 
     @staticmethod
@@ -87,9 +87,7 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader): # pylint: disable=R09
                             pair = (open_value_key + "\t" + option_value_hint, option_value_value)
                             values.append(pair)
                         else:
-                            logger.error(__file__,
-                                         "get_compiled_value_completions",
-                                         "unexpected length of '" + length +
+                            logger.error("unexpected length of '" + str(length) +
                                          "' for option key '" + option_key + "'")
 
         return values
@@ -136,7 +134,7 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader): # pylint: disable=R09
         if line_content != "":
             # sort by levenshtein distance
             sorted_completions = sorted(
-                completions, key=lambda completion: levenshtein(completion[1], prefix)
+                completions, key=lambda c: levenshtein(c[1], prefix)
             )
 
             return sorted_completions, self.flags

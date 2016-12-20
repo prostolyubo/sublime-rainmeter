@@ -28,7 +28,7 @@ def get_current_path(filepath):
 
     skinspath = get_cached_skin_path()
     if not skinspath or not filepath.startswith(skinspath):
-        logger.info(__file__, "get_current_path", "current path could not be found because" +
+        logger.info("current path could not be found because" +
                     " either the skins path could not be found or the current file" +
                     " is not located in the skins path.")
         return
@@ -48,14 +48,13 @@ def get_root_config_path(filepath):
 
     skinspath = get_cached_skin_path()
     if not skinspath or not filepath.startswith(skinspath):
-        logger.info(__file__, "get_root_config_path", "root config path could not be found" +
+        logger.info("root config path could not be found" +
                     " because either the skins path could not be found or the" +
                     " current file is not located in the skins path.")
         return
 
     relpath = os.path.relpath(filepath, skinspath)
-    logger.info(__file__, "get_root_config_path",
-                os.path.join(skinspath, relpath.split("\\")[0]) + "\\")
+    logger.info(os.path.join(skinspath, relpath.split("\\")[0]) + "\\")
 
     return os.path.join(skinspath, relpath.split("\\")[0]) + "\\"
 
@@ -69,7 +68,7 @@ def get_current_file(filepath):
 
     skinspath = get_cached_skin_path()
     if not skinspath or not filepath.startswith(skinspath):
-        logger.info(__file__, "get_current_file", "current file could not be found because" +
+        logger.info("current file could not be found because" +
                     " either the skins path could not be found or the current" +
                     " file is not located in the skins path.")
         return
@@ -77,7 +76,7 @@ def get_current_file(filepath):
     if os.path.isfile(filepath):
         return os.path.basename(filepath)
     else:
-        logger.info(__file__, "get_current_file", "specified path is not a file.")
+        logger.info("specified path is not a file.")
         return
 
 
@@ -90,7 +89,7 @@ def get_current_config(filepath):
 
     skinspath = get_cached_skin_path()
     if not skinspath or not filepath.startswith(skinspath):
-        logger.info(__file__, "get_current_config", "current config could not be found" +
+        logger.info("current config could not be found" +
                     " because either the skins path could not be found or the" +
                     " current file is not located in the skins path.")
         return
@@ -110,7 +109,7 @@ def get_resources_path(filepath):
 
     if not rfp:
         return
-    logger.info(__file__, "get_resources_path", os.path.join(rfp, "@Resources") + "\\")
+    logger.info(os.path.join(rfp, "@Resources") + "\\")
     return os.path.join(rfp, "@Resources") + "\\"
 
 
@@ -211,12 +210,12 @@ def plugin_loaded():
     global SETTINGS
     SETTINGS = sublime.load_settings("Rainmeter.sublime-settings")
 
-    logger.info(__file__, "plugin_loaded()", "#PROGRAMPATH#:\t\t" + get_cached_program_path())
-    logger.info(__file__, "plugin_loaded()", "#PROGRAMDRIVE#:\t" + get_cached_program_drive())
-    logger.info(__file__, "plugin_loaded()", "#SETTINGSPATH#:\t" + get_cached_setting_path())
-    logger.info(__file__, "plugin_loaded()", "#SKINSPATH#:\t\t" + get_cached_skin_path())
-    logger.info(__file__, "plugin_loaded()", "#PLUGINSPATH#:\t\t" + get_cached_plugin_path())
-    logger.info(__file__, "plugin_loaded()", "#ADDONSPATH#:\t\t" + get_cached_addon_path())
+    logger.info("#PROGRAMPATH#:\t\t" + get_cached_program_path())
+    logger.info("#PROGRAMDRIVE#:\t" + get_cached_program_drive())
+    logger.info("#SETTINGSPATH#:\t" + get_cached_setting_path())
+    logger.info("#SKINSPATH#:\t\t" + get_cached_skin_path())
+    logger.info("#PLUGINSPATH#:\t\t" + get_cached_plugin_path())
+    logger.info("#ADDONSPATH#:\t\t" + get_cached_addon_path())
 
 
 class MeterAutoComplete(sublime_plugin.EventListener):
@@ -343,9 +342,9 @@ class MeterAutoComplete(sublime_plugin.EventListener):
         """
         Called upon auto completion request.
 
-        @param view
-        @param prefix unused
-        @param locations
+        :param view: current view upon the text buffer
+        :param _: unused prefix
+        :param locations: selected regions
         """
         for location in locations:
             # checks if the current scope is correct

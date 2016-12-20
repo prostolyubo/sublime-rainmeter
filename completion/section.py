@@ -42,7 +42,7 @@ class SkinSectionAutoCompleter(YamlContentReader): # pylint: disable=R0903; only
             return section
 
         except yaml.YAMLError as error:
-            logger.error(__file__, "__get_completions(self)", error)
+            logger.error(error)
             return []
 
     @staticmethod

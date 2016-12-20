@@ -21,16 +21,12 @@ def get_cached_program_drive():
     rainmeterpath = get_cached_program_path()
 
     if not rainmeterpath:
-        logger.info(__file__, "get_cached_program_drive", "Rainmeter program path not found.")
+        logger.info("Rainmeter program path not found.")
         return
 
     probe_drive = os.path.splitdrive(rainmeterpath)
     if not probe_drive:
-        logger.info(
-            __file__,
-            "get_cached_program_drive",
-            "Drive could not be extracted from '" + rainmeterpath + "'."
-        )
+        logger.info("Drive could not be extracted from '" + rainmeterpath + "'.")
         return
 
     # can be either a drive like C:\

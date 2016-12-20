@@ -35,7 +35,7 @@ class EditThemeCommand(sublime_plugin.ApplicationCommand):
 
         # only list rainmeter themes
         # could be installed via "add repository" then the file is named after the repository
-        rm_exp = re.compile(r"Packages\/Rainmeter\/", re.IGNORECASE)
+        rm_exp = re.compile(r"Packages/Rainmeter/", re.IGNORECASE)
 
         theme_exp = re.compile(re.escape(theme))
         filtered_themes = list(
@@ -57,7 +57,7 @@ class EditThemeCommand(sublime_plugin.ApplicationCommand):
                 stringified_all_themes=stringified_all_themes,
                 stringified_filtered_themes=stringified_filtered_themes
             )
-            logger.error(__file__, "run(self, theme)", formatted_message)
+            logger.error(formatted_message)
             sublime.error_message(formatted_message)
 
         # we found only one

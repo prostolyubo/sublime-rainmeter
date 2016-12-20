@@ -9,6 +9,7 @@ with these operations it is easier to track from where the information is printe
 """
 
 import os
+import inspect
 
 from datetime import datetime
 
@@ -29,7 +30,7 @@ def plugin_loaded():
     settings = __load_settings()
     settings.add_on_change(__SETTING_KEY, __load_settings)
 
-    info(__file__, "plugin_loaded()", "Logger succesfully loaded.")
+    info("Logger succesfully loaded.")
 
 
 def __load_settings():
@@ -41,23 +42,35 @@ def __load_settings():
     return settings
 
 
-def info(file_path, function, string):
+def info(message):
     """
     Display information about the current state it is in.
 
     Only shown if logging is enabled.
     """
     if __LOG:
-        _log("info", file_path, function, string)
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        caller = calframe[1]
+        caller_name = caller[3]
+        caller_file = caller[1]
+
+        _log("info", caller_file, caller_name, message)
 
 
-def error(file_path, function, string):
+def error(message):
     """
     Display error states.
 
     Always shown because supposed not to reach that level.
     """
-    _log("error", file_path, function, string)
+    curframe = inspect.currentframe()
+    calframe = inspect.getouterframes(curframe, 2)
+    caller = calframe[1]
+    caller_name = caller[3]
+    caller_file = caller[1]
+
+    _log("error", caller_file, caller_name, message)
 
 
 def _log(error_type, file_path, function, string):

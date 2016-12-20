@@ -31,11 +31,7 @@ def get_cached_skin_path():
     # We trust the user to enter something meaningful here
     # and don't check anything.
     if skinspath:
-        logger.info(
-            __file__,
-            "get_skins_path",
-            "Skins path '" + skinspath + "' found in sublime-settings file."
-        )
+        logger.info("Skins path '" + skinspath + "' found in sublime-settings file.")
         return os.path.normpath(skinspath) + "\\"
 
     # If it's not set, try to detect it automagically
@@ -71,7 +67,7 @@ def get_cached_skin_path():
 
     # if skinspath setting was found, return it
     if match:
-        logger.info(__file__, "get_skins_path", "Skins path found in Rainmeter.ini.")
+        logger.info("Skins path found in Rainmeter.ini.")
         return match.group("skinpath").strip().replace("/", "\\")
 
     # if it's not found in the settings file, try to guess it
@@ -80,7 +76,7 @@ def get_cached_skin_path():
     # installation. In this case, the Skins folder is inside the rainmeter
     # path
     if os.path.samefile(rainmeterpath, settingspath):
-        logger.info(__file__, "get_skins_path", "Skin path found in #PROGRAMPATH#" +
+        logger.info("Skin path found in #PROGRAMPATH#" +
                     " because portable installation")
         return os.path.join(rainmeterpath, "Skins") + "\\"
 
@@ -100,7 +96,7 @@ def get_cached_skin_path():
         # variables that have to be expanded first
         pathrep = os.path.expandvars(pathrep)
 
-        logger.info(__file__, "get_skins_path", "Guessed Skin path from My Documents" +
+        logger.info("Guessed Skin path from My Documents" +
                     " location in registry")
         return os.path.join(pathrep, "Rainmeter\\Skins") + "\\"
 
@@ -112,7 +108,7 @@ def get_cached_skin_path():
     try:
         username = getpass.getuser()
     except Exception: # pylint: disable=W0703; The docs to not specify the exception type
-        logger.info(__file__, "get_skins_path", "Skins path could not be located." +
+        logger.info("Skins path could not be located." +
                     " Please set the \"skins_path\" setting in your Rainmeter" +
                     " settings file.")
         return
@@ -124,7 +120,7 @@ def get_cached_skin_path():
                                        username,
                                        "My Documents") + "\\"
 
-            logger.info(__file__, "get_skins_path", "Found Windows XP or lower." +
+            logger.info("Found Windows XP or lower." +
                         " Skins path assumed to be " + mydocuments +
                         "Rainmeter\\Skins\\")
         else:
@@ -132,10 +128,10 @@ def get_cached_skin_path():
                                        username,
                                        "Documents") + "\\"
 
-            logger.info(__file__, "get_skins_path", "Found Windows Vista or higher." +
+            logger.info("Found Windows Vista or higher." +
                         " Skins path assumed to be " + mydocuments +
                         "Rainmeter\\Skins\\")
 
-        logger.info(__file__, "get_skins_path", "Skin path guessed from user name" +
+        logger.info("Skin path guessed from user name" +
                     " and Windows version")
         return os.path.join(mydocuments, "Rainmeter\\Skins") + "\\"

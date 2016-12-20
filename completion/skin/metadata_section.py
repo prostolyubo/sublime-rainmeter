@@ -25,7 +25,7 @@ class SkinMetadataSectionAutoComplete(YamlContentReader): # pylint: disable=R090
             return skin_metadata_section
 
         except yaml.YAMLError as error:
-            logger.error(__file__, "get_completions", error)
+            logger.error(error)
             return []
 
     @staticmethod
@@ -95,11 +95,7 @@ class SkinMetadataSectionAutoComplete(YamlContentReader): # pylint: disable=R090
 
         # no results, means all keys are used up
         if not completions:
-            logger.info(
-                __file__,
-                "get_key_context_completion",
-                "no results, all keys are used up"
-            )
+            logger.info("no results, all keys are used up")
             return None
 
         # only show sorted by distance if something was already typed

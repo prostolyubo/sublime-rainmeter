@@ -36,8 +36,8 @@ class ContextSensAutoCompletion(object):
     # enable searching for [] in multiline environment
     bracket_expression = re.compile(r'^\s*\[.+\]\s*$', re.MULTILINE)
     section_expression = re.compile(r'^\s*\[(.+)\]\s*$', re.I)
-    key_expression = re.compile(r'^\s*(.+)\s*\=?\s*(.*?)\s*$', re.MULTILINE)
-    key_value_expression = re.compile(r'^\s*(.+?)\s*\=\s*(.*?)\s*$', re.MULTILINE)
+    key_expression = re.compile(r'^\s*(.+)\s*=?\s*(.*?)\s*$', re.MULTILINE)
+    key_value_expression = re.compile(r'^\s*(.+?)\s*=\s*(.*?)\s*$', re.MULTILINE)
 
     def __init__(self):
         """Initialize the different completer components."""
@@ -104,8 +104,6 @@ class ContextSensAutoCompletion(object):
             key_match = key_value_match.group(1)
             value_match = key_value_match.group(2)
             logger.info(
-                __file__,
-                "on_query_completions",
                 "key/value found in '" + line_content +
                 "' with ('" + key_match + "', '" + value_match + "')"
             )
@@ -114,11 +112,7 @@ class ContextSensAutoCompletion(object):
 
         key_only_match = self.key_expression.search(line_content)
         if key_only_match:
-            logger.info(
-                __file__,
-                "on_query_completions",
-                "potential key found in '" + line_content + "'"
-            )
+            logger.info("potential key found in '" + line_content + "'")
             return key_only_match.group(1), None
 
         return None, None
@@ -151,7 +145,7 @@ class ContextSensAutoCompletion(object):
             cursor_line = view.line(location)
             line_content = view.substr(cursor_line)
             if self.comment_exp.search(line_content):
-                logger.info(__file__, "on_query_completions", "found comment")
+                logger.info("found comment")
                 return None
 
             # find last occurance of the [] to determine the ini sections
@@ -162,7 +156,7 @@ class ContextSensAutoCompletion(object):
             lines = list(filter(lambda l: not self.comment_exp.search(l), lines))
 
             if not lines:
-                logger.info(__file__, "bootstrap.on_query_completions", "section is empty")
+                logger.info("section is empty")
                 size = view.size()
                 content = view.substr(sublime.Region(0, size))
                 sections = self.bracket_expression.findall(content)
@@ -176,7 +170,7 @@ class ContextSensAutoCompletion(object):
             # no section defined
             # TODO section suggestion
             # if not match:
-            #     logger.info(__file__, "on_query_completions", "no section found")
+            #     logger.info("no section found")
             #     size = view.size()
             #     content = view.substr(sublime.Region(0, size))
             #     sections = self.bracket_expression.findall(content)
@@ -188,11 +182,7 @@ class ContextSensAutoCompletion(object):
             key_values = self.get_key_values(lines)
 
             if value_match == "":
-                logger.info(
-                    __file__,
-                    "on_query_completions",
-                    "after equal trigger in '" + line_content + "'"
-                )
+                logger.info("after equal trigger in '" + line_content + "'")
                 # value trigger
                 value_result = self.skin_rainmeter_section.get_value_context_completion(
                     section,
@@ -205,11 +195,7 @@ class ContextSensAutoCompletion(object):
             # only do key completion if we are in the key are
             # that means in front of the equal or no equal at all
             else:
-                logger.info(
-                    __file__,
-                    "on_query_completions",
-                    "before equal trigger in '" + line_content + "'"
-                )
+                logger.info("before equal trigger in '" + line_content + "'")
                 key_result = self.skin_rainmeter_section.get_key_context_completion(
                     prefix,
                     line_content,

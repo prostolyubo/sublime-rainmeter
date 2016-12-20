@@ -104,11 +104,7 @@ class TryOpenThread(threading.Thread):
         # 1. Selected text
         selected = self.line[self.region.a:self.region.b]
         if self.opn(selected):
-            logger.info(
-                __file__,
-                "TryOpenThread.run(self)",
-                "Open selected text"
-            )
+            logger.info("Open selected text")
             return
 
         # 2. String enclosed in double quotes
@@ -126,11 +122,7 @@ class TryOpenThread(threading.Thread):
                     and self.line[nextquote] == "\"":
                 string = self.line[lastquote: nextquote].strip("\"")
                 if self.opn(string):
-                    logger.info(
-                        __file__,
-                        "TryOpenThread.run",
-                        "Open string enclosed in quotes: " + string
-                    )
+                    logger.info("Open string enclosed in quotes: " + string)
                     return
 
         # 3. Region from last whitespace to next whitespace
@@ -160,34 +152,20 @@ class TryOpenThread(threading.Thread):
                     or self.line[nextspace] == "\t":
                 string = self.line[lastspace: nextspace].strip()
                 if self.opn(string):
-                    logger.info(
-                        __file__,
-                        "TryOpenThread.run",
-                        "Open string enclosed in whitespace: " + string
-                    )
+                    logger.info("Open string enclosed in whitespace: " + string)
                     return
 
         # 4. Everything after the first \"=\" until the end
         # of the line (strip quotes)
         mtch = re.search(r"=\s*(.*)\s*$", self.line)
         if mtch and self.opn(mtch.group(1).strip("\"")):
-            logger.info(
-                __file__,
-                "TryOpenThread.run",
-                "Open text after \"=\": " +
-                mtch.group(1).strip("\"")
-            )
+            logger.info("Open text after \"=\": " + mtch.group(1).strip("\""))
             return
 
         # 5. Whole line (strip comment character at start)
         stripmatch = re.search(r"^[ \t;]*?([^ \t;].*)\s*$", self.line)
         if self.opn(stripmatch.group(1)):
-            logger.info(
-                __file__,
-                "TryOpenThread.run",
-                "Open whole line: " +
-                stripmatch.group(1)
-            )
+            logger.info("Open whole line: " + stripmatch.group(1))
             return
 
 
@@ -231,11 +209,7 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
             """
             opened = open_path(rainmeter.make_path(string, fnm)) or open_url(string)
             if opened:
-                logger.info(
-                    __file__,
-                    "run(self, edit)",
-                    "found file or url '" + string + "' to open"
-                )
+                logger.info("found file or url '" + string + "' to open")
 
         for linereg in lines:
             wholeline = self.view.line(linereg)
@@ -248,7 +222,7 @@ class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
     def run(self, _):
         """Detect various scenarios of file paths and try to open them one after the other.
 
-        @param edit unused
+        :param _: _ edit unused
         """
         selection = self.view.sel()
         lines = self.__split_selection_by_new_lines(selection)
