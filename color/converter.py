@@ -1,12 +1,13 @@
 """This module is about converting from/to Rainmeter RGB(A)."""
 
-class LetterCase(object):
+class LetterCase(object): # pylint: disable=R0903; used as enum, but we only have Py3.3
     """
     Represent how a hex value should be displayed.
 
     Depending on the incoming String
     we need to convert it to upper case or lower case.
     """
+
     Upper, Lower = range(1, 3)
 
 
@@ -24,9 +25,29 @@ def hexes_to_rgbs(hexes):
 
 def hexes_to_string(hexes):
     """Convert hexes into a string representation."""
-
     return "".join(hexes)
 
+def convert_hex_str_to_rgba_str(hex_string, has_alpha):
+    """Provided 'FFFFFFFF' it should return 255, 255, 255, 255."""
+    hexes = [hex_string[i:i+2] for i in range(0, len(hex_string), 2)]
+    rgba = hexes_to_rgbs(hexes)
+    alpha = rgba[-1]
+    if alpha is 255 and not has_alpha:
+        rgba = rgba[:-1]
+    rgba_str = rgbs_to_string(rgba)
+
+    return rgba_str
+
+def convert_hex_to_hex_with_alpha(hexes):
+    """If no alpha value is provided it defaults to FF."""
+    if len(hexes) == 6:
+        if hexes.islower():
+            return hexes + "ff"
+        else:
+            # we default to upper case if user chose upper and lower
+            return hexes + "FF"
+    else:
+        return hexes
 
 def int_to_hex(int_value, letter_case=LetterCase.Upper):
     assert 0 <= int_value <= 255 

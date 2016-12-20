@@ -104,7 +104,8 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return line_content
 
-    def __get_selected_dec_or_none(self, caret, line_index, line_content):
+    @staticmethod
+    def __get_selected_dec_or_none(caret, line_index, line_content):
         # catch case with multiple colors in same line
         for match in DEC_COLOR_EXP.finditer(line_content):
             low = line_index + match.start()
@@ -116,14 +117,15 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                 rgba = [int(color) for color in rgba_raw if color is not None]
                 hexes = converter.rgbs_to_hexes(rgba)
                 hex_string = converter.hexes_to_string(hexes)
-                with_alpha = self.__convert_hex_to_hex_with_alpha(hex_string)
+                with_alpha = converter.convert_hex_to_hex_with_alpha(hex_string)
                 has_alpha = len(rgba) == 4
 
                 return low, high, with_alpha, True, False, has_alpha
 
         return None
 
-    def __get_selected_hex_or_none(self, caret, line_index, line_content):
+    @staticmethod
+    def __get_selected_hex_or_none(caret, line_index, line_content):
         # we can find multiple color values in the same row
         # after iterating through the single elements
         # we can use start() and end() of each match to determine the length
@@ -137,7 +139,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                 hex_values = match.group(0)
                 is_lower = hex_values.islower()
                 # color picker requires RGBA
-                with_alpha = self.__convert_hex_to_hex_with_alpha(hex_values)
+                with_alpha = converter.convert_hex_to_hex_with_alpha(hex_values)
                 has_alpha = len(hex_values) == 8
 
                 return low, high, with_alpha, False, is_lower, has_alpha
@@ -166,29 +168,6 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return None, None, None, None, None
 
-    @staticmethod
-    def __convert_hex_to_hex_with_alpha(hexes):
-        """If no alpha value is provided it defaults to FF."""
-        if len(hexes) == 6:
-            if hexes.islower():
-                return hexes + "ff"
-            else:
-                # we default to upper case if user chose upper and lower
-                return hexes + "FF"
-        else:
-            return hexes
-
-    @staticmethod
-    def __convert_hex_str_to_rgba_str(hex_string, has_alpha):
-        """Provided 'FFFFFFFF' it should return 255, 255, 255, 255."""
-        hexes = [hex_string[i:i+2] for i in range(0, len(hex_string), 2)]
-        rgba = converter.hexes_to_rgbs(hexes)
-        alpha = rgba[-1]
-        if alpha is 255 and not has_alpha:
-            rgba = rgba[:-1]
-        rgba_str = converter.rgbs_to_string(rgba)
-
-        return rgba_str
 
     @staticmethod
     def __get_picker_path():
@@ -235,18 +214,24 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                 }
             )
 
-    def __transform_raw_to_original_fmt(self, raw, is_dec, has_alpha, is_lower):
+    @staticmethod
+    def __transform_raw_to_original_fmt(raw, is_dec, has_alpha, is_lower):
         # cut output from the '#' because Rainmeter does not use # for color codes
         output = raw[1:]
         if is_dec:
-            output = self.__convert_hex_str_to_rgba_str(output, has_alpha)
+            output = converter.convert_hex_str_to_rgba_str(output, has_alpha)
 
         # in case of hexadecimial representation
         else:
+            # doing alpha calculation first so we do not need to catch ff and FF
+            alpha = output[-2:]
+            if not has_alpha and alpha is "FF":
+                output = output[:-2]
+
             # it can be either originally in lower or upper case
             if is_lower:
                 output = output.lower()
-            if not has_alpha:
-                output = output[:-2]
+
+
 
         return output
