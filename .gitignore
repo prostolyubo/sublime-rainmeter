@@ -14,6 +14,7 @@
 # include all python files
 !*.py
 !tests
+!unittesting.json
 # exclude compiled python files
 *.pyc
 
@@ -28,7 +29,6 @@
 
 # include theming
 !theme
-!*.tmTheme
 !*.hidden-tmTheme
 
 # include important sublime text files
@@ -46,9 +46,7 @@
 !dependencies.json
 
 # include important build system files
-!.travis.yml
 !appveyor.yml
-!requirements.txt
 !gradle
 !build.gradle
 !gradlew
