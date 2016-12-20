@@ -196,10 +196,11 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
             if is_dec:
                 output = self.__convert_hex_str_to_rgba_str(output, has_alpha)
 
-            # in case of hexadecimial representation 
-            # it can be either originally in lower or upper case
-            elif is_lower:
-                output = output.lower()
+            # in case of hexadecimial representation
+            else:
+                # it can be either originally in lower or upper case
+                if is_lower:
+                    output = output.lower()
                 if not has_alpha:
                     output = output[:-2]
 
@@ -211,6 +212,4 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                     "output": output
                 }
             )
-            # TODO can convert it back to decimal?
-            # TODO convert it back without alpha channel or with
             # TODO spacing of decimal
