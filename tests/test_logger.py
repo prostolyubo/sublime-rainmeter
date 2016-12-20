@@ -17,11 +17,11 @@ class TestFunctions(TestCase):
         try:
             LOGGER.info("info test")
         except Exception as error:
-            self.fail("logger.info() raised exception '" + error + "'")
+            self.fail("logger.info() raised exception '" + str(error) + "'")
 
     def test_error(self):
         """Error should not through exception due to settings."""
         try:
             LOGGER.error("error test")
         except Exception as error:
-            self.fail("logger.error() raised exception '" + error + "'")
+            self.fail("logger.error() raised exception '" + str(error) + "'")
