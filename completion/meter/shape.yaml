@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 shape_types:
-	- [Rectangle, "X,Y,W,H,(RX),(RY)", "Rectangle ${1:X},${2:Y},${3:Width},${4:Height}${5:,(${6:RadiusX})}${7:,(${8:RadiusY})}"]
+  - [Rectangle, "X,Y,W,H,(RX),(RY)", "Rectangle ${1:X},${2:Y},${3:Width},${4:Height}${5:,(${6:RadiusX})}${7:,(${8:RadiusY})}"]
   - [Ellipse, "CX,CY,RX,(RY)", "Ellipse ${1:CenterX},${2:CenterY},${3:RadiusX}${4:,(${5:RadiusY})}"]
   - [Line, "SX,SY,EX,EY", "Line ${1:StartX},${2:StartY},${3:EndX},${4:EndY}"]
   - [Arc, "SX,SY,EX,EY,RX,RY,RA,SD,AS,SE", "${1:StartX},${2:StartY},${3:EndX},${4:EndY}${5:,(${6:RadiusX})}${7:,(${8:RadiusY})}${9:,(${10:RotationAngle})}${11:,(${12:SweepDirection})}${13:,(${14:ArcSize})}${15:,(${16:ShapeEnding})}"]

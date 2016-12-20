@@ -5,7 +5,7 @@
   title: LineCount
   hint: Number of lines
   values:
-  	- [1, Default]
+  - [1, Default]
 - 
   title: MeasureName
   hint: Name of percentual measure
@@ -28,57 +28,57 @@
   title: LineWidth
   hint: Width of the line(s) in pixels
   values:
-  	- [1, "Default"]
+  - [1, "Default"]
 - 
   # ignored on AutoScale
   title: Scale
   hint: Scales measure
   values:
-  	- ["1.0", "Default: no scale"]
+  - ["1.0", "Default: no scale"]
 - 
   # ignored on AutoScale
   title: Scale2
   hint: Scales second measure
   values:
-  	- ["1.0", "Default: no scale"]
+  - ["1.0", "Default: no scale"]
 - 
   # ignored on AutoScale
   title: ScaleN
   hint: Scales nth measure
   values:
-  	- ["1.0", "Default: no scale"]
+  - ["1.0", "Default: no scale"]
 - 
   title: AutoScale
   hint: Automatically scale largest
   values:
-  	- [0, "Default: no scale"]
-    - [1, "Scale"]
+  - [0, "Default: no scale"]
+  - [1, "Scale"]
 - 
   title: HorizontalLines
   hint: Marker lines
   values:
-  	- [0, "Default: no markers"]
-    - [1, "Show markers"]
+  - [0, "Default: no markers"]
+  - [1, "Show markers"]
 - 
   title: HorizontalLineColor
   hint: Color of marker
   values:
-  	- ["0,0,0,255", "Default"]
+  - ["0,0,0,255", "Default"]
 - 
   title: GraphStart
   hint: Starting point of the graph
   values:
-  	- [Right, Default]
-    - [Left]
+  - [Right, Default]
+  - [Left]
 - 
   title: GraphOrientation
   hint: Orientation of the graph elements
   values:
-    - [Vertical, Default]
-    - [Horizontal]
+  - [Vertical, Default]
+  - [Horizontal]
 - 
   title: Flip
   hint: Flipped vertically
   values:
-    - [0, Default]
-    - [1]
+  - [0, Default]
+  - [1]

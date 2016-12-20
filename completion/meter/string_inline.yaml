@@ -103,9 +103,11 @@ options:
     # requires InlineSetting2
     title: InlinePattern2
     hint: PCRE for InlineSetting2
+    values:
     - [.*, Default]
   - 
     # requires InlineSettingN
     title: InlinePatternN
     hint: PCRE for InlineSettingN
+    values:
     - [.*, Default]

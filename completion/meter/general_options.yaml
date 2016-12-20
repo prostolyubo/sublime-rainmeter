@@ -18,7 +18,7 @@
   hint: Inherit styles. Delimit with |
 -
   title: MeasureName
-  hint: "Binds" meter to one measure
+  hint: "Binds meter to one measure"
 -
   title: MeasureNameN
   hint: Tint image with color
