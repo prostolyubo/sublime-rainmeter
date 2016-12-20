@@ -24,8 +24,26 @@ from . import logger
 from .color import converter
 
 class RainmeterReplaceColorCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
-    
+    """
+    Replace a region with a text.
+
+    This command is required because the edit objects passed to TextCommand
+    are not transferable. We have to call this from the other command
+    to get a valid edit object.
+    """
+
     def run(self, edit, **args):
+        """
+        Method is provided by Sublime Text through the super class TextCommand.
+
+        This is run automatically if you initialize the command
+        through an "command": "rainmeter_replace_color" command
+        with additional arguments:
+
+        * low: start of the region to replace
+        * high: end of the region to replace
+        * output: text which will replace the region
+        """
         low = args["low"]
         high = args["high"]
         output = args["output"]
@@ -95,7 +113,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                 hex_string = converter.hexes_to_string(hexes)
                 with_alpha = self.__convert_hex_to_hex_with_alpha(hex_string)
 
-                return low, high, with_alpha
+                return low, high, with_alpha, True, False
 
         # if no match was iterated we process furthere starting here
         hex_color_exp = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
@@ -111,27 +129,38 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
             if low <= caret <= high:
                 hex_values = match.group(0)
+                to_lower = hex_values.islower()
                 # color picker requires RGBA
                 with_alpha = self.__convert_hex_to_hex_with_alpha(hex_values)
 
-                return low, high, with_alpha
+                return low, high, with_alpha, False, to_lower
             else:
                 logger.info(__file__, "__get_selected_color_or_none(self)", low)
                 logger.info(__file__, "__get_selected_color_or_none(self)", high)
                 logger.info(__file__, "__get_selected_color_or_none(self)", caret)
 
-        return None, None, None
+        return None, None, None, None, None
 
-    def __convert_hex_to_hex_with_alpha(self, hexes):
+    @staticmethod
+    def __convert_hex_to_hex_with_alpha(hexes):
         """If no alpha value is provided it defaults to FF."""
         if len(hexes) == 6:
             return hexes + "FF"
         else:
             return hexes
 
+    @staticmethod
+    def __convert_hex_str_to_rgba_str(hex_string):
+        """Provided 'FFFFFFFF' it should return 255, 255, 255, 255."""
+        hexes = [hex_string[i:i+2] for i in range(0, len(hex_string), 2)]
+        rgba = converter.hexes_to_rgbs(hexes)
+        rgba_str = converter.rgbs_to_string(rgba)
+
+        return rgba_str
+
     def __run_picker(self):
-        low, high, maybe_color = self.__get_selected_color_or_none()
-        
+        low, high, maybe_color, is_dec, is_lower = self.__get_selected_color_or_none()
+
         # no color selected, we call the color picker and insert the color at that position
         color = "FFFFFFFF" if maybe_color is None else maybe_color
 
@@ -159,32 +188,21 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
             # cut output from the '#' because Rainmeter does not use # for color codes
             output = raw_output[1:]
+            if is_dec:
+                output = self.__convert_hex_str_to_rgba_str(output)
+            elif is_lower:
+                output = output.lower()
+
             self.view.run_command(
                 "rainmeter_replace_color",
                 {
                     "low": low,
                     "high": high,
-                    "output": output
+                    "output": output,
+                    "is_dec": is_dec,
+                    "is_lower": is_lower
                 }
             )
-            # self.view.replace(edit, region, output)
             # TODO can convert it back to decimal?
             # TODO convert it back to lower case or upper case
             # TODO convert it back without alpha channel or with
-
-
-
-
-    #     if color:
-    #         # Replace all regions with color
-    #         for region in sel:
-    #             word = self.view.word(region)
-    #             # If the selected word is a valid color, replace it
-    #             if self.__is_valid_hex_color(self.view.substr(word)):
-    #                 if len(self.view.substr(word)) > 6:
-    #                     word = sublime.Region(word.a, word.a + 6)
-    #                 # Include '#' if present
-    #                 self.view.replace(edit, word, color)
-    #             # Otherwise just replace the selected region
-    #             else:
-    #                 self.view.replace(edit, region, color)
