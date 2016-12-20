@@ -112,8 +112,9 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                 hexes = converter.rgbs_to_hexes(rgba)
                 hex_string = converter.hexes_to_string(hexes)
                 with_alpha = self.__convert_hex_to_hex_with_alpha(hex_string)
+                has_alpha = len(rgba) == 4
 
-                return low, high, with_alpha, True, False
+                return low, high, with_alpha, True, False, has_alpha
 
         # if no match was iterated we process furthere starting here
         hex_color_exp = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
@@ -129,11 +130,12 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
             if low <= caret <= high:
                 hex_values = match.group(0)
-                to_lower = hex_values.islower()
+                is_lower = hex_values.islower()
                 # color picker requires RGBA
                 with_alpha = self.__convert_hex_to_hex_with_alpha(hex_values)
+                has_alpha = len(hex_values) == 8
 
-                return low, high, with_alpha, False, to_lower
+                return low, high, with_alpha, False, is_lower, has_alpha
             else:
                 logger.info(__file__, "__get_selected_color_or_none(self)", low)
                 logger.info(__file__, "__get_selected_color_or_none(self)", high)
@@ -150,16 +152,19 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
             return hexes
 
     @staticmethod
-    def __convert_hex_str_to_rgba_str(hex_string):
+    def __convert_hex_str_to_rgba_str(hex_string, has_alpha):
         """Provided 'FFFFFFFF' it should return 255, 255, 255, 255."""
         hexes = [hex_string[i:i+2] for i in range(0, len(hex_string), 2)]
         rgba = converter.hexes_to_rgbs(hexes)
+        alpha = rgba[-1]
+        if alpha is 255 and not has_alpha:
+            rgba = rgba[:-1]
         rgba_str = converter.rgbs_to_string(rgba)
 
         return rgba_str
 
     def __run_picker(self):
-        low, high, maybe_color, is_dec, is_lower = self.__get_selected_color_or_none()
+        low, high, maybe_color, is_dec, is_lower, has_alpha = self.__get_selected_color_or_none()
 
         # no color selected, we call the color picker and insert the color at that position
         color = "FFFFFFFF" if maybe_color is None else maybe_color
@@ -189,20 +194,23 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
             # cut output from the '#' because Rainmeter does not use # for color codes
             output = raw_output[1:]
             if is_dec:
-                output = self.__convert_hex_str_to_rgba_str(output)
+                output = self.__convert_hex_str_to_rgba_str(output, has_alpha)
+
+            # in case of hexadecimial representation 
+            # it can be either originally in lower or upper case
             elif is_lower:
                 output = output.lower()
+                if not has_alpha:
+                    output = output[:-2]
 
             self.view.run_command(
                 "rainmeter_replace_color",
                 {
                     "low": low,
                     "high": high,
-                    "output": output,
-                    "is_dec": is_dec,
-                    "is_lower": is_lower
+                    "output": output
                 }
             )
             # TODO can convert it back to decimal?
-            # TODO convert it back to lower case or upper case
             # TODO convert it back without alpha channel or with
+            # TODO spacing of decimal
