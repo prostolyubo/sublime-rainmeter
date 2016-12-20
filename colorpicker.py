@@ -242,3 +242,24 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                 output = output.lower()
 
         return output
+
+    def is_enabled(self): #pylint: disable=R0201; sublime text API, no need for class reference
+        """
+        Return True if the command is able to be run at this time.
+
+        The default implementation simply always returns True.
+        """
+        # Check if current syntax is rainmeter
+        israinmeter = self.view.score_selector(self.view.sel()[0].a,
+                                               "source.rainmeter")
+
+        return israinmeter > 0
+
+    def is_visible(self, **args):
+        """."""
+        if self.is_enabled():
+            return True
+
+        env = args["env"]
+
+        return env != "context"

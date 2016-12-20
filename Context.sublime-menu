@@ -1,3 +1,4 @@
 [
-	{"caption": "Open Selected Paths...", "command": "rainmeter_open_paths"}
+	{"caption": "Open Selected Paths...", "command": "rainmeter_open_paths"},
+	{"caption": "Pick Color...", "command": "rainmeter_color_pick", "args": {"env": "context"}}
 ]
