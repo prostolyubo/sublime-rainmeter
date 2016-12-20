@@ -1,4 +1,5 @@
-"""This module is about the integration with the color picker.
+"""
+This module is about the integration with the color picker.
 
 The color picker can detect a color in a substring
 and launch a tool to display the current color,
@@ -13,6 +14,9 @@ It supports both ways Rainmeter defines color.
 
 which is hexadecimal and decimal format.
 """
+
+# TO DO spacing of decimal if required, but maybe too much overhead
+
 import os
 import re
 import subprocess
@@ -49,7 +53,21 @@ class RainmeterReplaceColorCommand(sublime_plugin.TextCommand): # pylint: disabl
         output = args["output"]
 
         region = sublime.Region(low, high)
+        original_str = self.view.substr(region)
         self.view.replace(edit, region, output)
+
+        logger.info(
+            __file__,
+            "run(self, edit, **args)",
+            "Replacing '" + original_str + "' with '" + output + "'"
+        )
+
+# encodes RRR,GGG,BBB,AAA with optional alpha channel and supporting all numbers from 0 to 999
+# converter will check for 255
+# numbers can be spaced anyway
+DEC_COLOR_EXP = re.compile(r"(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d{1,3}))?")
+# support lower and upper case hexadecimal with optional alpha channel
+HEX_COLOR_EXP = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
 
 
 class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
@@ -62,11 +80,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         This is run automatically if you initialize the command
         through an "command": "rainmeter_color_pick" command.
         """
-        sublime.set_timeout_async(self.delegate_async, 0)
-
-    def delegate_async(self):
-        """Proxy for calling multiple methods."""
-        self.__run_picker()
+        sublime.set_timeout_async(self.__run_picker, 0)
 
     def __get_first_selection(self):
         selections = self.view.sel()
@@ -90,18 +104,9 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return line_content
 
-    def __get_selected_color_or_none(self):
-        """Return None in case of not finding the color aka no color is selected."""
-        caret = self.__get_first_selection().begin()
-        line_index = self.__get_selected_line_index()
-        line_content = self.__get_selected_line_content()
-
-        dec_color_exp = re.compile(
-            r"(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d{1,3}))?"
-        )
-
+    def __get_selected_dec_or_none(self, caret, line_index, line_content):
         # catch case with multiple colors in same line
-        for match in dec_color_exp.finditer(line_content):
+        for match in DEC_COLOR_EXP.finditer(line_content):
             low = line_index + match.start()
             high = line_index + match.end()
 
@@ -116,15 +121,15 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
                 return low, high, with_alpha, True, False, has_alpha
 
-        # if no match was iterated we process furthere starting here
-        hex_color_exp = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
+        return None
 
+    def __get_selected_hex_or_none(self, caret, line_index, line_content):
         # we can find multiple color values in the same row
         # after iterating through the single elements
         # we can use start() and end() of each match to determine the length
         # and thus the area the caret had to be in,
         # to identify th1e one we are currently in
-        for match in hex_color_exp.finditer(line_content):
+        for match in HEX_COLOR_EXP.finditer(line_content):
             low = line_index + match.start()
             high = line_index + match.end()
 
@@ -141,13 +146,35 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                 logger.info(__file__, "__get_selected_color_or_none(self)", high)
                 logger.info(__file__, "__get_selected_color_or_none(self)", caret)
 
+        return None
+
+    def __get_selected_color_or_none(self):
+        """Return None in case of not finding the color aka no color is selected."""
+        caret = self.__get_first_selection().begin()
+        line_index = self.__get_selected_line_index()
+        line_content = self.__get_selected_line_content()
+
+        # catch case with multiple colors in same line
+        selected_dec_or_none = self.__get_selected_dec_or_none(caret, line_index, line_content)
+        if selected_dec_or_none is not None:
+            return selected_dec_or_none
+
+        # if no match was iterated we process furthere starting here
+        selected_hex_or_none = self.__get_selected_hex_or_none(caret, line_index, line_content)
+        if selected_hex_or_none is not None:
+            return selected_hex_or_none
+
         return None, None, None, None, None
 
     @staticmethod
     def __convert_hex_to_hex_with_alpha(hexes):
         """If no alpha value is provided it defaults to FF."""
         if len(hexes) == 6:
-            return hexes + "FF"
+            if hexes.islower():
+                return hexes + "ff"
+            else:
+                # we default to upper case if user chose upper and lower
+                return hexes + "FF"
         else:
             return hexes
 
@@ -163,14 +190,20 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return rgba_str
 
+    @staticmethod
+    def __get_picker_path():
+        project_root = os.path.dirname(__file__)
+        picker_path = os.path.join(project_root, "color", "picker", "ColorPicker_win.exe")
+
+        return picker_path
+
     def __run_picker(self):
         low, high, maybe_color, is_dec, is_lower, has_alpha = self.__get_selected_color_or_none()
 
         # no color selected, we call the color picker and insert the color at that position
         color = "FFFFFFFF" if maybe_color is None else maybe_color
 
-        project_root = os.path.dirname(__file__)
-        picker_path = os.path.join(project_root, "color", "picker", "ColorPicker_win.exe")
+        picker_path = self.__get_picker_path()
         picker = subprocess.Popen(
             [picker_path, color],
             stdout=subprocess.PIPE,
@@ -191,18 +224,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         if raw_output is not None and len(raw_output) == 9 and raw_output != 'CANCEL':
             logger.info(__file__, "__write_back(self)", "can write back: " + raw_output)
 
-            # cut output from the '#' because Rainmeter does not use # for color codes
-            output = raw_output[1:]
-            if is_dec:
-                output = self.__convert_hex_str_to_rgba_str(output, has_alpha)
-
-            # in case of hexadecimial representation
-            else:
-                # it can be either originally in lower or upper case
-                if is_lower:
-                    output = output.lower()
-                if not has_alpha:
-                    output = output[:-2]
+            output = self.__transform_raw_to_original_fmt(raw_output, is_dec, has_alpha, is_lower)
 
             self.view.run_command(
                 "rainmeter_replace_color",
@@ -212,4 +234,19 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
                     "output": output
                 }
             )
-            # TODO spacing of decimal
+
+    def __transform_raw_to_original_fmt(self, raw, is_dec, has_alpha, is_lower):
+        # cut output from the '#' because Rainmeter does not use # for color codes
+        output = raw[1:]
+        if is_dec:
+            output = self.__convert_hex_str_to_rgba_str(output, has_alpha)
+
+        # in case of hexadecimial representation
+        else:
+            # it can be either originally in lower or upper case
+            if is_lower:
+                output = output.lower()
+            if not has_alpha:
+                output = output[:-2]
+
+        return output

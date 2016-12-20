@@ -147,16 +147,19 @@ class RGBsToStringTest(TestCase):
     """This test guerentees that a proper string conversion ."""
 
     def test_stringing(self):
+        """Default Rainmeter decimal color representation."""
+        stringed = COLOR_CONVERTER.rgbs_to_string([128, 128, 128])
+
+        self.assertEqual(stringed, "128,128,128")
+
+    def test_with_spacing(self):
+        """For people who like to space things."""
         stringed = COLOR_CONVERTER.rgbs_to_string([128, 128, 128], spacing=1)
 
         self.assertEqual(stringed, "128, 128, 128")
 
-    def test_without_spacing(self):
-        stringed = COLOR_CONVERTER.rgbs_to_string([128, 128, 128], spacing=0)
-
-        self.assertEqual(stringed, "128,128,128")
-
     def test_with_more_spacing(self):
+        """For people who like to use a lot of spacings."""
         stringed = COLOR_CONVERTER.rgbs_to_string([128, 128, 128], spacing=5)
 
         self.assertEqual(stringed, "128,     128,     128")

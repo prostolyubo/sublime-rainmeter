@@ -1,18 +1,5 @@
 """This module is about converting from/to Rainmeter RGB(A)."""
 
-# import os
-# import re
-# import subprocess
-# import threading
-# import codecs
-
-# import sublime
-# import sublime_plugin
-
-
-# import colorsys
-
-
 class LetterCase(object):
     """
     Represent how a hex value should be displayed.
@@ -59,7 +46,7 @@ def rgbs_to_hexes(rgbs):
 
     return [int_to_hex(rgb) for rgb in rgbs]
 
-def rgbs_to_string(rgbs, spacing=1):
+def rgbs_to_string(rgbs, spacing=0):
     """Convert RGBs into a string representation."""
     joiner = ",".ljust(spacing + 1)
 
