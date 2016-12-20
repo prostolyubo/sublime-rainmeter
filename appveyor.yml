@@ -15,6 +15,16 @@ matrix:
 #   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 install:
+    # check versions for curling
+    # - curl --version
+    # - grep --version
+    # - head --version
+    # - cut --version
+    # - xargs --version
+
+    # check github API status
+    # - curl -i https://api.github.com/repos/rainmeter/rainmeter/releases
+
     # install rainmeter
     # we use the github API to determine the latest rainmeter
     # we assume that the first entry is the latest
@@ -22,7 +32,12 @@ install:
     # rainmeter is typically offered as a pre-release
 
     # requests all releases from rainmeter                              | search for field bdu      | first entry| easier delimiter | 4th col without *        | pass url to curl -L to follow redirect
-    - curl -s https://api.github.com/repos/rainmeter/rainmeter/releases | grep browser_download_url | head -n 1 | sed -e "s/""/*/g" | cut --delimiter="*" -f 4 | xargs curl -o C:\rainmeter-setup.exe -L
+    # - curl -s https://api.github.com/repos/rainmeter/rainmeter/releases
+    # - curl -s https://api.github.com/repos/rainmeter/rainmeter/releases | grep browser_download_url
+    # - curl -s https://api.github.com/repos/rainmeter/rainmeter/releases | grep browser_download_url | head -n 1
+    # - curl -s https://api.github.com/repos/rainmeter/rainmeter/releases | grep browser_download_url | head -n 1 | sed -e "s/""/*/g"
+    # - curl -s https://api.github.com/repos/rainmeter/rainmeter/releases | grep browser_download_url | head -n 1 | sed -e "s/""/*/g" | cut --delimiter="*" -f 4
+    - 'curl -s -H "Authorization: token %GITHUB_ACCESS_TOKEN%" https://api.github.com/repos/rainmeter/rainmeter/releases | grep browser_download_url | head -n 1 | sed -e "s/""/*/g" | cut --delimiter="*" -f 4 | xargs curl -o C:\rainmeter-setup.exe -L'
 
     # the project is installed into C:\projects\sublime-rainmeter via AppVeyor
     # the installer is located in the tests folder since this is used for integration testing
@@ -48,7 +63,7 @@ after_test:
 
     # check if actually copied
     - ps: coverage report
-
+    
     # set via AppVeyor environment token for privacy
     # or use encrypted versions and decrypt it here
     # - bat: set COVERALLS_REPO_TOKEN=XXXX
@@ -56,6 +71,17 @@ after_test:
     # this is already copied for us from the "%appdata%\Roaming\Sublime Text 3\Packages\User\UnitTesting\Rainmeter\coverage" folder
     # - bat: copy "%appdata%\Roaming\Sublime Text 3\Packages\User\UnitTesting\Rainmeter\coverage" .coverage
     - coveralls
+
+
+    # additional support for codacy
+    - ps: pip install codacy-coverage
+
+    # To generate the required coverage XML file, calculate coverage for your project as normal, by running:
+    - ps: coverage xml
+
+    # Next, simply run the Codacy reporter. It will find the current commit and send all details to your project dashboard:
+    - python-codacy-coverage -r coverage.xml
+
 
     # this needs to be here in after_test and not in on_success because artifacts are collected directly after after_test
     # package application without ps
