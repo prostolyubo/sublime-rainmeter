@@ -105,8 +105,9 @@ class SkinSectionAutoCompleter(YamlContentReader): # pylint: disable=R0903; only
         #     return None
 
         self.__lazy_initialize_completions()
+        print("--- sections:", sections)
         completions = self.__filter_completions_by_sec(sections)
-
+        print("--- completions:", completions)
         # no results, means all keys are used up
         if not completions:
             return None

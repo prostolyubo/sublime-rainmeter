@@ -57,7 +57,7 @@ class ContextSensAutoCompletion(object):
         section = view.substr(sublime.Region(start_index, end_index))
         lines = section.splitlines()
 
-        return lines
+        return start_index, lines
 
     def get_start_index_of_section(self, start_content):
         """
@@ -128,6 +128,7 @@ class ContextSensAutoCompletion(object):
 
         return key_values
 
+
     def on_query_completions(self, view, prefix, locations):
         """"Execute if a auto completion is requested.
 
@@ -149,13 +150,31 @@ class ContextSensAutoCompletion(object):
                 return None
 
             # find last occurance of the [] to determine the ini sections
-            lines = self.get_lines_of_section_on_cursor(view, location)
-            # filter empty lines
-            lines = list(filter(None, lines))
-            # filter comments
-            lines = list(filter(lambda l: not self.comment_exp.search(l), lines))
+            section_start_index, section_lines = self.get_lines_of_section_on_cursor(view, location)
 
-            if not lines:
+            # determine auto completions of sections on double newline
+            line_start_coord = cursor_line.begin()
+            row, _ = view.rowcol(line_start_coord)
+            section_start = view.rowcol(section_start_index)
+            section_start_row, _ = section_start
+
+            if row > 2:
+                line_above_empty = section_lines[row - section_start_row - 1] == ''
+                line_aabove_empty = section_lines[row - section_start_row - 2] == ''
+
+                if line_above_empty and line_aabove_empty:
+                    size = view.size()
+                    content = view.substr(sublime.Region(0, size))
+                    sections = self.bracket_expression.findall(content)
+
+                    return self.section.get_key_context_completion(prefix, line_content, sections)
+
+            # filter empty lines
+            section_lines = list(filter(None, section_lines))
+            # filter comments
+            section_lines = list(filter(lambda l: not self.comment_exp.search(l), section_lines))
+
+            if not section_lines:
                 logger.info("section is empty")
                 size = view.size()
                 content = view.substr(sublime.Region(0, size))
@@ -164,7 +183,7 @@ class ContextSensAutoCompletion(object):
                 return self.section.get_key_context_completion(prefix, line_content, sections)
 
             # extract section
-            first_line = lines[0]
+            first_line = section_lines[0]
             match = self.section_expression.search(first_line)
 
             # no section defined
@@ -179,7 +198,7 @@ class ContextSensAutoCompletion(object):
             section = match.group(1)
 
             key_match, value_match = self.get_key_value(line_content)
-            key_values = self.get_key_values(lines)
+            key_values = self.get_key_values(section_lines)
 
             if value_match == "":
                 logger.info("after equal trigger in '" + line_content + "'")

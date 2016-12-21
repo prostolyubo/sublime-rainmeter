@@ -3,21 +3,24 @@
 -
   title: "[Rainmeter]"
   hint: Defines skin options
+  value: "[Rainmeter]\n$1"
 - 
   title: "[Metadata]"
   hint: Presented in Manage window
+  value: "[Metadata]\n$1"
 -
   title: "[Variables]"
   hint: Reusable text strings
+  value: "[Variables]\n$1"
 -
   title: "[Measure]"
   hint: Retrieve information
-  value: "[${1:MeasureName}]"
+  value: "[${1:MeasureIdentifier}]\nMeasure=${2:}"
 -
   title: "[Meter]"
   hint: Display information
-  value: "[${1:MeterName}]"
+  value: "[${1:MeterIdentifier}]\nMeter=${2:}"
 -
   title: "[MeterStyle]"
   hint: Style meters
-  value: "[${1:MeterStyleName}]"
+  value: "[${1:MeterStyleIdentifier}]\n"
