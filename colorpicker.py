@@ -69,7 +69,7 @@ HEX_COLOR_EXP = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
 class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
     """Sublime Text integration running this through an action."""
 
-    def run(self, _):
+    def run(self, edit, **args):
         """
         Method is provided by Sublime Text through the super class TextCommand.
 
@@ -243,7 +243,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return output
 
-    def is_enabled(self): #pylint: disable=R0201; sublime text API, no need for class reference
+    def is_enabled(self, **args): #pylint: disable=R0201; sublime text API, no need for class reference
         """
         Return True if the command is able to be run at this time.
 
@@ -260,6 +260,6 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         if self.is_enabled():
             return True
 
-        env = args["env"]
+        env = args.get("call_env", "")
 
         return env != "context"

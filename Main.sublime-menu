@@ -14,7 +14,7 @@
 					{"caption": "Refresh Current Skin", "command": "rainmeter_refresh_current_skin"},
 					{"caption": "Refresh Rainmeter", "command": "rainmeter_refresh_config", "args": {"cmd": []}},
 					{"caption": "-"},
-					{"caption": "Pick Color...", "command": "rainmeter_color_pick", "args": {"env": "main"}},
+					{"caption": "Pick Color...", "command": "rainmeter_color_pick", "args": {"call_env": "main"}},
 					{"caption": "Indent for Code Folding", "command": "rainmeter_indent"},
 					{"caption": "-"},
 					{"caption": "New Skin File...", "command": "rainmeter_new_skin_file"},
