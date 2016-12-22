@@ -69,7 +69,7 @@ HEX_COLOR_EXP = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
 class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
     """Sublime Text integration running this through an action."""
 
-    def run(self, edit, **args):
+    def run(self, _edit, **_args):
         """
         Method is provided by Sublime Text through the super class TextCommand.
 
@@ -167,7 +167,6 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
     @staticmethod
     def __get_picker_path():
-        # project_root = os.path.dirname(__file__)
         packages = sublime.packages_path()
         picker_path = os.path.join(
             packages,
@@ -184,16 +183,40 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return picker_path
 
+    def __replace_color(self, maybe_none, raw_output):
+        low, high, _, is_dec, is_lower, has_alpha = maybe_none
+        # if no color is selected we need to modify the low and high to match the caret
+        if all(value is None for value in maybe_none):
+            caret = self.__get_first_selection().begin()
+            low = caret
+            high = caret
+            output = raw_output[1:]
+        else:
+            output = self.__transform_raw_to_original_fmt(
+                raw_output,
+                is_dec,
+                has_alpha,
+                is_lower
+            )
+
+        self.view.run_command(
+            "rainmeter_replace_color",
+            {
+                "low": low,
+                "high": high,
+                "output": output
+            }
+        )
+
     def __run_picker(self):
         maybe_none = self.__get_selected_color_or_none()
-        low, high, maybe_color, is_dec, is_lower, has_alpha = maybe_none
+        _, _, maybe_color, _, _, _ = maybe_none
 
         # no color selected, we call the color picker and insert the color at that position
         color = "FFFFFFFF" if maybe_color is None else maybe_color
 
-        picker_path = self.__get_picker_path()
         picker = subprocess.Popen(
-            [picker_path, color],
+            [self.__get_picker_path(), color],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             shell=False
@@ -212,28 +235,8 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         if raw_output is not None and len(raw_output) == 9 and raw_output != 'CANCEL':
             logger.info("can write back: " + raw_output)
 
-            # if no color is selected we need to modify the low and high to match the caret
-            if all(value is None for value in maybe_none):
-                caret = self.__get_first_selection().begin()
-                low = caret
-                high = caret
-                output = raw_output[1:]
-            else:
-                output = self.__transform_raw_to_original_fmt(
-                    raw_output,
-                    is_dec,
-                    has_alpha,
-                    is_lower
-                )
+            self.__replace_color(maybe_none, raw_output)
 
-            self.view.run_command(
-                "rainmeter_replace_color",
-                {
-                    "low": low,
-                    "high": high,
-                    "output": output
-                }
-            )
 
     @staticmethod
     def __transform_raw_to_original_fmt(raw, is_dec, has_alpha, is_lower):
@@ -255,7 +258,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return output
 
-    def is_enabled(self, **args): #pylint: disable=R0201; sublime text API, no need for class reference
+    def is_enabled(self, **_args): #pylint: disable=R0201; sublime text API, no need for class reference
         """
         Return True if the command is able to be run at this time.
 
@@ -281,6 +284,10 @@ def __require_path(path):
         os.makedirs(path)
 
 def plugin_loaded():
+    """Called automatically from ST3 if plugin is loaded.
+
+    Is required now due to async call and ignoring sublime.* from main routine
+    """
     packages = sublime.packages_path()
     colorpicker_dir = os.path.join(packages, "User", "Rainmeter", "color", "picker")
 
@@ -303,8 +310,8 @@ def plugin_loaded():
         logger.info(
             "Newer version of color picker found. Copying data over to '" + colorpicker_exe + "'"
         )
-        with open(colorpicker_exe, "wb") as f:
-            f.write(binary_picker)
+        with open(colorpicker_exe, "wb") as file_handler:
+            file_handler.write(binary_picker)
     else:
         logger.info(
             "You are using the most current version of color picker. Continue loading..."
