@@ -37,6 +37,8 @@ contexts:
           captures:
             0: comment.line.character.rainmeter
         - include: color-definition
+        - include: bangs
+        - include: all-variables
         # All other options in a section
         - match: "(?i)^\\s*(?!@include([^=])*)([^\\s=]+)\\s*(=)"
           captures:
@@ -73,25 +75,7 @@ contexts:
         - match: "$"
           pop: true
 
-    # Rainmeter builtin variables
-    - match: "(?i)(#@#|#PROGRAMDRIVE#)|(#PROGRAMPATH#)|(#SETTINGSPATH#)|(#SKINSPATH#)|(#PLUGINSPATH#)|(#ADDONSPATH#)|(#CURRENTPATH#)|(#ROOTCONFIGPATH#)|(#CURRENTFILE#)|(#CURRENTCONFIG#)|(#CURRENTSECTION#)|(#CURRENTCONFIGWIDTH#)|(#CURRENTCONFIGHEIGHT#)|(#CURRENTCONFIGX#)|(#CURRENTCONFIGY#)|(#[Pp]?WORKAREAX#)|(#[Pp]?WORKAREAY#)|(#[Pp]?WORKAREAWIDTH#)|(#[Pp]?WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAWIDTH#)|(#[PpVv]?SCREENAREAHEIGHT#)|(#CRLF#)|(#WORKAREAWIDTH#)|(#WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAX#)|(#[PpVv]?SCREENAREAY#)|(#WORKAREAX@\\d+#)|(#WORKAREAY@\\d+#)|(#WORKAREAWIDTH@\\d+#)|(#WORKAREAHEIGHT@\\d+#)|(#SCREENAREAX@\\d+#)|(#SCREENAREAY@\\d+#)|(#SCREENAREAWIDTH@\\d+#)|(#SCREENAREAHEIGHT@\\d+#)"
-      scope: support.variable.rainmeter
-
-    # Escaped variables (must be before normal ones to override them)
-    - match: "#\\*[^#\\s]+?\\*#"
-      scope: meta.text.rainmeter
-
-    # Normal variables
-    - match: "#[^#\\s]+?#"
-      scope: variable.other.static.rainmeter
-
-    # Environment variables
-    - match: "%[A-Za-z][0-9a-zA-Z_]+?%"
-      scope: variable.other.env.rainmeter
-
-    # Mouse position variables
-    - match: "(?i)\\$Mouse(X|Y)(:%)?\\$"
-      scope: support.variable.rainmeter
+    - include: all-variables
 
     # UserInput variable of InputText plugin
     - match: "(?i)\\$Userinput\\$"
@@ -101,9 +85,7 @@ contexts:
     - match: "(?i)!((Rainmeter((SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Update)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Show|Hide)(Group)?)))|Execute|(Rainmeter)?PluginBang)\\b"
       scope: invalid.deprecated.bang.rainmeter
 
-    # Bangs
-    - match: "(?i)!((SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Un|Toggle)?PauseMeasure)|((Show|Hide)(Group)?|(Update)|(LoadLayout)))\\b"
-      scope: support.function.bang.rainmeter
+    - include: bangs
       
     # Escaped dynamic sections (must be before normal ones to override them)
     - match: "\\[\\*[^\\[\\]\\s]+?\\*\\]"
@@ -616,6 +598,45 @@ contexts:
         2: constant.numeric.color.green.hex.rainmeter
         3: constant.numeric.color.blue.hex.rainmeter
         4: constant.numeric.color.alpha.hex.rainmeter   
+
+
+  all-variables:
+    - include: built-in-variables
+    - include: escaped-variables
+    - include: static-variables
+    - include: env-variables
+    - include: mouse-variables
+
+  built-in-variables:
+      # Rainmeter builtin variables
+    - match: "(?i)(#@#|#PROGRAMDRIVE#)|(#PROGRAMPATH#)|(#SETTINGSPATH#)|(#SKINSPATH#)|(#PLUGINSPATH#)|(#ADDONSPATH#)|(#CURRENTPATH#)|(#ROOTCONFIGPATH#)|(#CURRENTFILE#)|(#CURRENTCONFIG#)|(#CURRENTSECTION#)|(#CURRENTCONFIGWIDTH#)|(#CURRENTCONFIGHEIGHT#)|(#CURRENTCONFIGX#)|(#CURRENTCONFIGY#)|(#[Pp]?WORKAREAX#)|(#[Pp]?WORKAREAY#)|(#[Pp]?WORKAREAWIDTH#)|(#[Pp]?WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAWIDTH#)|(#[PpVv]?SCREENAREAHEIGHT#)|(#CRLF#)|(#WORKAREAWIDTH#)|(#WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAX#)|(#[PpVv]?SCREENAREAY#)|(#WORKAREAX@\\d+#)|(#WORKAREAY@\\d+#)|(#WORKAREAWIDTH@\\d+#)|(#WORKAREAHEIGHT@\\d+#)|(#SCREENAREAX@\\d+#)|(#SCREENAREAY@\\d+#)|(#SCREENAREAWIDTH@\\d+#)|(#SCREENAREAHEIGHT@\\d+#)"
+      scope: support.variable.rainmeter
+
+  escaped-variables:
+    # Escaped variables (must be before normal ones to override them)
+    - match: "#\\*[^#\\s]+?\\*#"
+      scope: meta.text.rainmeter
+
+  static-variables:
+    # Normal variables
+    - match: "#[^#\\s]+?#"
+      scope: variable.other.static.rainmeter
+
+  env-variables:
+    # Environment variables
+    - match: "%[A-Za-z][0-9a-zA-Z_]+?%"
+      scope: variable.other.env.rainmeter
+
+  mouse-variables:
+    # Mouse position variables
+    - match: "(?i)\\$Mouse(X|Y)(:%)?\\$"
+      scope: support.variable.rainmeter
+
+
+  bangs:
+    # Bangs
+    - match: "(?i)!((SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Un|Toggle)?PauseMeasure)|((Show|Hide)(Group)?|(Update)|(LoadLayout)))\\b"
+      scope: support.function.bang.rainmeter
 
 
   meter-shape-modifier:
