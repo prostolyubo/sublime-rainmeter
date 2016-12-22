@@ -36,6 +36,7 @@ contexts:
         - match: "^\\s*;.*$"
           captures:
             0: comment.line.character.rainmeter
+        - include: color-definition
         # All other options in a section
         - match: "(?i)^\\s*(?!@include([^=])*)([^\\s=]+)\\s*(=)"
           captures:
@@ -589,16 +590,15 @@ contexts:
     - match: "![0-9]*i!"
       scope: constant.language.format.rainmeter
 
-    # Hex color definition
-    - match: "\\b(\\h{2,2})(\\h{2,2})(\\h{2,2})(\\h{2,2})?\\b"
-      scope: meta.numeric.color.hex.rainmeter
-      captures: 
-        1: constant.numeric.color.red.hex.rainmeter
-        2: constant.numeric.color.green.hex.rainmeter
-        3: constant.numeric.color.blue.hex.rainmeter
-        4: constant.numeric.color.alpha.hex.rainmeter
+    - include: color-definition
 
-    # RGB color definition
+
+  color-definition:
+    - include: dec-color-definition
+    - include: hex-color-definition
+  
+  # RGB color definition
+  dec-color-definition:
     - match: "\\b(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})(\\s*,\\s*(\\d{1,3}))?\\b"
       scope: meta.numeric.color.numeric.rainmeter
       captures: 
@@ -606,6 +606,17 @@ contexts:
         2: constant.numeric.color.green.numericrainmeter
         3: constant.numeric.color.blue.numeric.rainmeter
         5: constant.numeric.color.alpha.numeric.rainmeter
+
+  # Hex color definition
+  hex-color-definition:
+    - match: "\\b(\\h{2,2})(\\h{2,2})(\\h{2,2})(\\h{2,2})?\\b"
+      scope: meta.numeric.color.hex.rainmeter
+      captures: 
+        1: constant.numeric.color.red.hex.rainmeter
+        2: constant.numeric.color.green.hex.rainmeter
+        3: constant.numeric.color.blue.hex.rainmeter
+        4: constant.numeric.color.alpha.hex.rainmeter   
+
 
   meter-shape-modifier:
     # - meta_scope: source.rainmeter
