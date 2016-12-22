@@ -303,8 +303,8 @@ def plugin_loaded():
         logger.info(
             "Newer version of color picker found. Copying data over to '" + colorpicker_exe + "'"
         )
-        with open(colorpicker_exe, "wb") as file:
-            file.write(binary_picker)
+        with open(colorpicker_exe, "wb") as f:
+            f.write(binary_picker)
     else:
         logger.info(
             "You are using the most current version of color picker. Continue loading..."
