@@ -167,8 +167,20 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
     @staticmethod
     def __get_picker_path():
-        project_root = os.path.dirname(__file__)
-        picker_path = os.path.join(project_root, "color", "picker", "ColorPicker_win.exe")
+        # project_root = os.path.dirname(__file__)
+        packages = sublime.packages_path()
+        picker_path = os.path.join(
+            packages,
+            "User",
+            "Rainmeter",
+            "color",
+            "picker",
+            "ColorPicker_win.exe"
+        )
+        if not os.path.exists(picker_path):
+            logger.error("color picker was suposed to be copied to '" + picker_path + "'")
+
+        logger.info("found picker in '" + picker_path + "'")
 
         return picker_path
 
@@ -263,3 +275,37 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
         env = args.get("call_env", "")
 
         return env != "context"
+
+def __require_path(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def plugin_loaded():
+    packages = sublime.packages_path()
+    colorpicker_dir = os.path.join(packages, "User", "Rainmeter", "color", "picker")
+
+    __require_path(colorpicker_dir)
+
+    colorpicker_exe = os.path.join(colorpicker_dir, "ColorPicker_win.exe")
+
+    # could be already copied on a previous run
+    need_picker_exe = not os.path.exists(colorpicker_exe)
+    binary_picker = sublime.load_binary_resource(
+        "Packages/Rainmeter/color/picker/ColorPicker_win.exe"
+    )
+
+    # could be a newer version of the color picker be there
+    # only check if no newer is required since expensive
+    # generally happens in consecutive calls without updates
+    if not need_picker_exe:
+        need_picker_exe = os.path.getsize(colorpicker_exe) != len(binary_picker)
+    if need_picker_exe:
+        logger.info(
+            "Newer version of color picker found. Copying data over to '" + colorpicker_exe + "'"
+        )
+        with open(colorpicker_exe, "wb") as file:
+            file.write(binary_picker)
+    else:
+        logger.info(
+            "You are using the most current version of color picker. Continue loading..."
+        )
