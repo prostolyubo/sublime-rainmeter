@@ -196,26 +196,17 @@ def make_path(string, filepath):
     return
 
 
-# Initialize Module
-# Global Variables
-SETTINGS = None
-
-
 def plugin_loaded():
     """Called automatically from ST3 if plugin is loaded.
 
     Is required now due to async call and ignoring sublime.* from main routine
     """
-    # define variables from the global scope
-    global SETTINGS
-    SETTINGS = sublime.load_settings("Rainmeter.sublime-settings")
-
-    logger.info("#PROGRAMPATH#:\t\t" + get_cached_program_path())
+    logger.info("#PROGRAMPATH#:\t" + get_cached_program_path())
     logger.info("#PROGRAMDRIVE#:\t" + get_cached_program_drive())
     logger.info("#SETTINGSPATH#:\t" + get_cached_setting_path())
     logger.info("#SKINSPATH#:\t\t" + get_cached_skin_path())
-    logger.info("#PLUGINSPATH#:\t\t" + get_cached_plugin_path())
-    logger.info("#ADDONSPATH#:\t\t" + get_cached_addon_path())
+    logger.info("#PLUGINSPATH#:\t" + get_cached_plugin_path())
+    logger.info("#ADDONSPATH#:\t" + get_cached_addon_path())
 
 
 class MeterAutoComplete(sublime_plugin.EventListener):
