@@ -4,14 +4,17 @@
   title: "[Rainmeter]"
   hint: Defines skin options
   value: "[Rainmeter]\n$1"
+  unique: true
 - 
   title: "[Metadata]"
   hint: Presented in Manage window
   value: "[Metadata]\n$1"
+  unique: true
 -
   title: "[Variables]"
   hint: Reusable text strings
   value: "[Variables]\n$1"
+  unique: true
 -
   title: "[Measure]"
   hint: Retrieve information

@@ -55,14 +55,19 @@ class SkinSectionAutoCompleter(YamlContentReader): # pylint: disable=R0903; only
         """
         keys = []
         for option in options:
-            title = option['title'] + "\t" + option['hint']
+            section = option['title']
+            display = option['title'] + "\t" + option['hint']
 
             if 'value' in option:
                 result = option['value']
             else:
                 result = option['title']
+            if 'unique' in option:
+                unique = option['unique']
+            else:
+                unique = False
 
-            pair = (title, result)
+            pair = (section, display, result, unique)
             keys.append(pair)
 
         return keys
@@ -77,19 +82,28 @@ class SkinSectionAutoCompleter(YamlContentReader): # pylint: disable=R0903; only
         # filter by already existing keys
         completions = []
 
+        settings = sublime.load_settings("Rainmeter.sublime-settings")
+        allow_duplicates = settings.get("allow_completion_section_duplicates", False)
+
         for completion in self.all_key_completions:
             # trigger is not used here
-            _, content = completion
+            section_id, display, content, unique = completion
 
-            contained = 0
-            # value not used here
-            for section in sections:
-                if section.casefold() == content.casefold():
-                    contained = 1
-                    break
+            # we only need to search for duplicates
+            # if we are having a unique section like [Rainmeter]
+            # and not allow duplicates
+            if unique and not allow_duplicates:
+                contained = 0
+                # value not used here
+                for section in sections:
+                    if section.casefold() == section_id.casefold():
+                        contained = 1
+                        break
 
-            if contained == 0:
-                completions.append(completion)
+                if contained == 0:
+                    completions.append((display, content))
+            else:
+                completions.append((display, content))
 
         return completions
 
@@ -105,9 +119,7 @@ class SkinSectionAutoCompleter(YamlContentReader): # pylint: disable=R0903; only
         #     return None
 
         self.__lazy_initialize_completions()
-        print("--- sections:", sections)
         completions = self.__filter_completions_by_sec(sections)
-        print("--- completions:", completions)
         # no results, means all keys are used up
         if not completions:
             return None

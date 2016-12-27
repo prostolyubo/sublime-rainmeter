@@ -85,6 +85,11 @@
 	//(e.g. after typing a section head and hitting enter)
 	"smart_indent": false,
 
+	// If you set this to 'true' you can auto complete unique sections
+	// like [Rainmeter] within the same file. 
+	// Default: false
+	"allow_completion_section_duplicates": false,
+
 	//File extensions to use with Rainmeter.
 	"extensions":
 	[

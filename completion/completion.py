@@ -34,7 +34,7 @@ class ContextSensAutoCompletion(object):
     comment_exp = re.compile(r'^\s*;.*')
 
     # enable searching for [] in multiline environment
-    bracket_expression = re.compile(r'^\s*\[.+\]\s*$', re.MULTILINE)
+    bracket_expression = re.compile(r'^\s*(\[.+\])\s*$', re.MULTILINE)
     section_expression = re.compile(r'^\s*\[(.+)\]\s*$', re.I)
     key_expression = re.compile(r'^\s*(.+)\s*=?\s*(.*?)\s*$', re.MULTILINE)
     key_value_expression = re.compile(r'^\s*(.+?)\s*=\s*(.*?)\s*$', re.MULTILINE)
