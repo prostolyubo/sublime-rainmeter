@@ -27,7 +27,8 @@ import sublime_plugin
 from . import logger
 from .color import converter
 
-class RainmeterReplaceColorCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
+
+class RainmeterReplaceColorCommand(sublime_plugin.TextCommand):  # pylint: disable=R0903; we only need one method
     """
     Replace a region with a text.
 
@@ -58,6 +59,7 @@ class RainmeterReplaceColorCommand(sublime_plugin.TextCommand): # pylint: disabl
 
         logger.info("Replacing '" + original_str + "' with '" + output + "'")
 
+
 # encodes RRR,GGG,BBB,AAA with optional alpha channel and supporting all numbers from 0 to 999
 # converter will check for 255
 # numbers can be spaced anyway
@@ -66,7 +68,7 @@ DEC_COLOR_EXP = re.compile(r"(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*
 HEX_COLOR_EXP = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
 
 
-class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R0903; we only need one method
+class RainmeterColorPickCommand(sublime_plugin.TextCommand):  # pylint: disable=R0903; we only need one method
     """Sublime Text integration running this through an action."""
 
     def run(self, dummy_edit, **dummy_args):
@@ -164,7 +166,6 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return None, None, None, None, None, None
 
-
     @staticmethod
     def __get_picker_path():
         packages = sublime.packages_path()
@@ -237,7 +238,6 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
             self.__replace_color(maybe_none, raw_output)
 
-
     @staticmethod
     def __transform_raw_to_original_fmt(raw, is_dec, has_alpha, is_lower):
         # cut output from the '#' because Rainmeter does not use # for color codes
@@ -258,7 +258,7 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return output
 
-    def is_enabled(self, **dummy_args): #pylint: disable=R0201; sublime text API, no need for class reference
+    def is_enabled(self, **dummy_args):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
         Return True if the command is able to be run at this time.
 
@@ -279,9 +279,11 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand): # pylint: disable=R
 
         return env != "context"
 
+
 def __require_path(path):
     if not os.path.exists(path):
         os.makedirs(path)
+
 
 def plugin_loaded():
     """Called automatically from ST3 if plugin is loaded.
