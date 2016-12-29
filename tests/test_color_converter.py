@@ -59,7 +59,6 @@ class RGBsToHexesTest(TestCase):
 
         self.assertEqual(hexes, ["80", "80", "80", "80"])
 
-
     def test_invalid_rgb_low_len(self):
         """RGB are at least 3 values."""
         self.assertRaises(AssertionError, COLOR_CONVERTER.rgbs_to_hexes, [128, 128])
