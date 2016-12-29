@@ -87,6 +87,9 @@ after_test:
     - pip install codeclimate-test-reporter
     - codeclimate-test-reporter
 
+    # additional support for scrutinizer-ci
+    - pip install scrutinizer-ocular
+    - ocular --data-file ".coverage"
 
     # this needs to be here in after_test and not in on_success because artifacts are collected directly after after_test
     # package application without ps
