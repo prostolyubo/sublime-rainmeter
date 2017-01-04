@@ -11,6 +11,68 @@ import sublime
 import sublime_plugin
 
 
+FOLD_MARKER_EXP = re.compile("^([ \\t]*)(;;.*)$")
+SECTION_EXP = re.compile("^([ \\t]*)(\\[.*)$")
+EMPTY_LINE_EXP = re.compile("^\\s*$")
+COMMENT_EXP = re.compile("^\\s*(;.*)")
+
+
+class IndentType:  # pylint: disable=R0903; enum
+    """Enum to store the several types of area blocks you can have in a rainmeter skin."""
+
+    # lvl 0, lvl 1,      lvl 1 or 2
+    Initial, FoldMarker, Section = range(1, 4)
+
+
+def calc_line_indention_depth(line, context, context_depth):
+    """."""
+    empty_line_match = EMPTY_LINE_EXP.match(line)
+    if empty_line_match:
+        return (0, context, context_depth)
+
+    folder_marker_match = FOLD_MARKER_EXP.match(line)
+    if folder_marker_match:
+        return (0, IndentType.FoldMarker, 1)
+
+    comment_match = COMMENT_EXP.match(line)
+    if comment_match:
+        return (context_depth, context, context_depth)
+
+    section_match = SECTION_EXP.match(line)
+    if section_match:
+        if context == IndentType.Section:
+            return (context_depth - 1, IndentType.Section, context_depth)
+        else:
+            return (context_depth, IndentType.Section, context_depth + 1)
+
+    # key value case
+    return (context_depth, context, context_depth)
+
+
+def get_line_replacement(line, context_depth):
+    """Replace the current line with the given indention level."""
+    stripped = line.lstrip()
+    replacement = "\t" * context_depth + stripped
+
+    return replacement
+
+
+def indent_text_by_tab_size(text):
+    """Main entry point for indenting text."""
+    lines = text.split("\n")
+    context = IndentType.Initial
+    context_depth = 0
+
+    result = []
+
+    for line in lines:
+        depth, context, context_depth = calc_line_indention_depth(line, context, context_depth)
+        replacement = get_line_replacement(line, depth)
+        result.append(replacement)
+
+    return "\n".join(result)
+
+
 class RainmeterIndentCommand(sublime_plugin.TextCommand):
     """
     Indent a Rainmeter file so code folding is possible in a sensible way.
@@ -22,11 +84,6 @@ class RainmeterIndentCommand(sublime_plugin.TextCommand):
     the surroundings
     """
 
-    # Compile regexs to be used later
-    rwhitespace_line = re.compile("^([ \\t]*)(.*)$")
-    rfold_comment = re.compile("^([ \\t]*)(;;.*)")
-    rsection_head = re.compile("^([ \\t]*)(\\[.*)$")
-
     def __get_selected_region(self):
         # If nothing is selected, apply to whole buffer
         if self.view.sel()[0].a == self.view.sel()[-1].b:
@@ -37,66 +94,27 @@ class RainmeterIndentCommand(sublime_plugin.TextCommand):
 
         return regions
 
-
-    def run(self, edit): #pylint: disable=R0201; sublime text API, no need for class reference
+    def run(self, edit):  # pylint: disable=R0201; sublime text API, no need for class reference
         """Called when the command is run."""
         regions = self.__get_selected_region()
 
         for region in regions:
-            # Get numbers of regions' lines
-            reg_lines = self.view.lines(region)
-            line_nums = map(lambda reg: self.view.rowcol(reg.a)[0], reg_lines)
+            text = self.view.substr(region)
+            indented_text = indent_text_by_tab_size(text)
+            self.view.replace(edit, region, indented_text)
 
-            # Traverse selected lines
-            current_indent = -1
-            adjustment = -1
-
-            lines = self.view.lines(sublime.Region(0, self.view.size()))
-            for i in line_nums:
-                line = lines[i]
-                line_content = self.view.substr(line)
-
-                mfc = self.rfold_comment.search(line_content)
-                # If current line is fold comment, extract indentation
-                if mfc:
-                    current_indent = len(mfc.group(1))
-                    adjustment = -1
-                # Else indent current line according to last fold comment
-                else:
-                    # Strip leading whitespace
-                    mwl = self.rwhitespace_line.search(line_content)
-                    stripped_line = ""
-                    if mwl:
-                        stripped_line = mwl.group(2)
-                    # Indent section heads by one more
-                    mse = self.rsection_head.search(stripped_line)
-                    if mse:
-                        adjustment = 0
-                        self.view.replace(
-                            edit,
-                            line,
-                            "\t" * (current_indent + 1) + stripped_line)
-                    # Indent key = value line two more
-                    else:
-                        self.view.replace(
-                            edit,
-                            line,
-                            "\t" * (current_indent + 2 + adjustment) +
-                            stripped_line)
-
-    def is_enabled(self): #pylint: disable=R0201; sublime text API, no need for class reference
+    def is_enabled(self):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
         Return True if the command is able to be run at this time.
 
         The default implementation simply always returns True.
         """
         # Check if current syntax is rainmeter
-        israinmeter = self.view.score_selector(self.view.sel()[0].a,
-                                               "source.rainmeter")
+        israinmeter = self.view.score_selector(self.view.sel()[0].a, "source.rainmeter")
 
         return israinmeter > 0
 
-    def description(self): #pylint: disable=R0201; sublime text API, no need for class reference
+    def description(self):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
         Return a description of the command with the given arguments.
 
