@@ -56,6 +56,7 @@ def __executable_exists(rm_path):
 
     return True
 
+
 @lru_cache(maxsize=None)
 def get_cached_program_path():
     """Try to retrieve the program path of RM through magic.
@@ -84,7 +85,7 @@ def get_cached_program_path():
     # Check if path exists and contains Rainmeter.exe
     if not os.path.isdir(rm_path):
         message = """Path to Rainmeter.exe could neither be found:
-                     
+
                      * in the settings,
                      * in the standard directory,
                      * nor via registry.
