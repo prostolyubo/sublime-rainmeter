@@ -1,0 +1,9 @@
+# exclude all
+/*
+
+# inlucde important git files
+!.gitignore
+
+# includes gh-pages files
+!index.html
+!resources/
