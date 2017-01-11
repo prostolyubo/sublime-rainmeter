@@ -18,7 +18,10 @@
 					{"caption": "Indent for Code Folding", "command": "rainmeter_indent"},
 					{"caption": "-"},
 					{"caption": "New Skin File...", "command": "rainmeter_new_skin_file"},
-					{"caption": "New Skin...", "command": "rainmeter_new_skin"}
+					{"caption": "New Skin...", "command": "rainmeter_new_skin"},
+					{"caption": "-"},
+					{"caption": "Documentation", "command": "open_url", "args": {"url": "https://thatsich.github.io/sublime-rainmeter/"} },
+					{"caption": "Report an Issue", "command": "open_url", "args": {"url": "https://github.com/thatsIch/sublime-rainmeter/issues/new"} },
 				]
 			}
 		]
