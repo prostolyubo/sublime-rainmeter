@@ -225,7 +225,6 @@
         "MouseScrollLeftAction",
         "MouseScrollRightAction",
         "MouseScrollUpAction",
-        "Name",
         "NetInSpeed",
         "NetOutSpeed",
         "NetTotalSpeed",
