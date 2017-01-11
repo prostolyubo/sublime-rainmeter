@@ -267,6 +267,44 @@ class TestCompletionCompilerValues(TestCase):
 
         self.assertEqual(compiled_key_values, expected)
 
+    def test_invalid_size_low(self):
+        """."""
+        options = [
+            {
+                "title": "title",
+                "values": [
+                    []
+                ]
+            }
+        ]
+
+        expected = {
+            "title": [None]
+        }
+
+        compiled_key_values = COMPLETION_COMPILER.compile_values(options)
+
+        self.assertEqual(compiled_key_values, expected)
+
+    def test_invalid_size_high(self):
+        """."""
+        options = [
+            {
+                "title": "title",
+                "values": [
+                    ["value_key", "value_hint", "value_content", "INVALID_FORTH"]
+                ]
+            }
+        ]
+
+        expected = {
+            "title": [None]
+        }
+
+        compiled_key_values = COMPLETION_COMPILER.compile_values(options)
+
+        self.assertEqual(compiled_key_values, expected)
+
     def test_all(self):
         """."""
         options = [

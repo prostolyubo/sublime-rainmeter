@@ -86,4 +86,4 @@ def __compile_value(value_elements):
 
     else:
         error("unexpected length of '" + str(length) +
-              "' with value elements '" + value_elements + "'")
+              "' with value elements '[" + ", ".join(value_elements) + "]'")
