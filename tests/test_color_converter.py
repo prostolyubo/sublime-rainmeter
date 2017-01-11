@@ -162,3 +162,31 @@ class RGBsToStringTest(TestCase):
         stringed = COLOR_CONVERTER.rgbs_to_string([128, 128, 128], spacing=5)
 
         self.assertEqual(stringed, "128,     128,     128")
+
+
+class HexAppendAlphaTest(TestCase):
+    """This test handles different cases of appended alpha values."""
+
+    def test_lower_case(self):
+        """Lower case hex string adds a lower-case full alpha channel."""
+        stringed = COLOR_CONVERTER.convert_hex_to_hex_with_alpha("ff8800")
+
+        self.assertEqual(stringed, "ff8800ff")
+
+    def test_upper_case(self):
+        """Upper case hex string adds upper-case full alpha channel."""
+        stringed = COLOR_CONVERTER.convert_hex_to_hex_with_alpha("FF8800")
+
+        self.assertEqual(stringed, "FF8800FF")
+
+    def test_mixed_case(self):
+        """If case is not clear add upper-case full alpha channel."""
+        stringed = COLOR_CONVERTER.convert_hex_to_hex_with_alpha("Ff8800")
+
+        self.assertEqual(stringed, "Ff8800FF")
+
+    def test_already_alpha(self):
+        """Only add alpha channel if have only RGB."""
+        stringed = COLOR_CONVERTER.convert_hex_to_hex_with_alpha("FF8800FF")
+
+        self.assertEqual(stringed, "FF8800FF")
