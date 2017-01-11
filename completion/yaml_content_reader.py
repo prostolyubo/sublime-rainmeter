@@ -9,7 +9,7 @@ import sublime
 from .. import logger
 
 
-class YamlContentReader(object): #pylint: disable=R0903; this is an abstract class
+class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract class
     """
     Use this to read the content of yamls inside of sublime text packages.
 
