@@ -190,3 +190,40 @@ class HexAppendAlphaTest(TestCase):
         stringed = COLOR_CONVERTER.convert_hex_to_hex_with_alpha("FF8800FF")
 
         self.assertEqual(stringed, "FF8800FF")
+
+
+class HexToRGBAStringTest(TestCase):
+    """Test behaviour of hex string to rgba string converter."""
+
+    def test_without_alpha(self):
+        """
+        We always get a RGBA String, but it depends if previously it had an alpha channel or not.
+
+        In case it had no alpha channel then we ignore the alpha channel
+        unless we have a value which differs from FF or 255.
+        The color picker will default to FF if a non alpha channel color is inputted.
+        """
+        stringed = COLOR_CONVERTER.convert_hex_str_to_rgba_str("FFFFFFFF", False)
+
+        self.assertEqual(stringed, "255,255,255")
+
+    def test_with_alpha(self):
+        """
+        If there was already an alpha channel there we have to respect that.
+
+        That way even FF is written back.
+        """
+        stringed = COLOR_CONVERTER.convert_hex_str_to_rgba_str("FFFFFFFF", True)
+
+        self.assertEqual(stringed, "255,255,255,255")
+
+    def test_without_alpha_but_non_max(self):
+        """
+        If we had no alpha channel but we get a value back which is different from FF.
+
+        In that case we have to translate that information too
+        and force add the alpha channel to the content.
+        """
+        stringed = COLOR_CONVERTER.convert_hex_str_to_rgba_str("FFFFFF01", False)
+
+        self.assertEqual(stringed, "255,255,255,1")
