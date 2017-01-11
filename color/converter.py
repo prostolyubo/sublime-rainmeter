@@ -1,6 +1,7 @@
 """This module is about converting from/to Rainmeter RGB(A)."""
 
-class LetterCase(object): # pylint: disable=R0903; used as enum, but we only have Py3.3
+
+class LetterCase(object):  # pylint: disable=R0903; used as enum, but we only have Py3.3
     """
     Represent how a hex value should be displayed.
 
@@ -19,19 +20,22 @@ def hex_to_int(hex_value):
 
     return int_value
 
+
 def hexes_to_rgbs(hexes):
     """Convert a list of hex values into a list of dec values."""
     assert 3 <= len(hexes) <= 4
 
     return [hex_to_int(hex_value) for hex_value in hexes]
 
+
 def hexes_to_string(hexes):
     """Convert hexes into a string representation."""
     return "".join(hexes)
 
+
 def convert_hex_str_to_rgba_str(hex_string, has_alpha):
     """Provided 'FFFFFFFF' it should return 255, 255, 255, 255."""
-    hexes = [hex_string[i:i+2] for i in range(0, len(hex_string), 2)]
+    hexes = [hex_string[i:i + 2] for i in range(0, len(hex_string), 2)]
     rgba = hexes_to_rgbs(hexes)
     alpha = rgba[-1]
     if alpha is 255 and not has_alpha:
@@ -39,6 +43,7 @@ def convert_hex_str_to_rgba_str(hex_string, has_alpha):
     rgba_str = rgbs_to_string(rgba)
 
     return rgba_str
+
 
 def convert_hex_to_hex_with_alpha(hexes):
     """If no alpha value is provided it defaults to FF."""
@@ -50,6 +55,7 @@ def convert_hex_to_hex_with_alpha(hexes):
             return hexes + "FF"
     else:
         return hexes
+
 
 def int_to_hex(int_value, letter_case=LetterCase.Upper):
     """Convert single int value in a specific letter case to hex value."""
@@ -65,11 +71,13 @@ def int_to_hex(int_value, letter_case=LetterCase.Upper):
 
     return padded
 
+
 def rgbs_to_hexes(rgbs):
     """Convert a list of dec values into a list of hex values."""
     assert 3 <= len(rgbs) <= 4
 
     return [int_to_hex(rgb) for rgb in rgbs]
+
 
 def rgbs_to_string(rgbs, spacing=0):
     """Convert RGBs into a string representation."""
