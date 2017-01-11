@@ -8,10 +8,11 @@ import sublime
 # import own libs
 from ... import logger
 from ..levenshtein import levenshtein
+from ..compiler import compile_keys, compile_values
 from ..yaml_content_reader import YamlContentReader
 
 
-class SkinRainmeterSectionAutoComplete(YamlContentReader): # pylint: disable=R0903; only provide one method
+class SkinRainmeterSectionAutoComplete(YamlContentReader):  # pylint: disable=R0903; only provide one method
     """This uses the provided YAML files to extract the possible completions."""
 
     def __get_completions(self):
@@ -36,67 +37,12 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader): # pylint: disable=R09
             logger.error(error)
             return []
 
-    @staticmethod
-    def __get_compiled_key_completions(options):
-        keys = []
-        for option in options:
-            title = option['title'] + "\t" + option['hint']
-
-            if 'value' in option:
-                result = option['value']
-            else:
-                result = option['title']
-
-            pair = (title, result)
-            keys.append(pair)
-
-        return keys
-
-    @staticmethod
-    def get_compiled_value_completions(key, options):
-        """
-        Bake completions from the provided YAML options.
-
-        Considers stuff like hints and values.
-        """
-        values = []
-
-        for option in options:
-            option_key = option['title']
-
-            if option_key == key:
-                if 'values' in option:
-                    option_values = option['values']
-                    for option_value in option_values:
-                        length = len(option_value)
-
-                        # case 1 is if only the key is provided, is generally the default case.
-                        # Meaning is generally explained in the key
-                        if length == 1:
-                            pair = (option_value[0] + "\tDefault", option_value[0])
-                            values.append(pair)
-
-                        # case 2 is if only the key and the special hint is given
-                        # means that the key is the value too
-                        elif length == 2:
-                            open_value_key, option_value_hint = option_value
-                            pair = (open_value_key + "\t" + option_value_hint, open_value_key)
-                            values.append(pair)
-                        elif length == 3:
-                            open_value_key, option_value_hint, option_value_value = option_value
-                            pair = (open_value_key + "\t" + option_value_hint, option_value_value)
-                            values.append(pair)
-                        else:
-                            logger.error("unexpected length of '" + str(length) +
-                                         "' for option key '" + option_key + "'")
-
-        return values
-
     # only show our completion list because nothing else makes sense in this context
     flags = sublime.INHIBIT_EXPLICIT_COMPLETIONS | sublime.INHIBIT_WORD_COMPLETIONS
 
     all_completions = None
     all_key_completions = None
+    all_value_completions = None
 
     def get_key_context_completion(self, prefix, line_content, section, keyvalues):
         """Get a list of keys for the current context."""
@@ -106,14 +52,13 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader): # pylint: disable=R09
         # use lazy initialization because else the API is not available yet
         if not self.all_completions:
             self.all_completions = self.__get_completions()
-            self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
+            self.all_key_completions = compile_keys(self.all_completions)
 
         # filter by already existing keys
         completions = []
 
         for completion in self.all_key_completions:
-            # trigger not needed
-            _, content = completion
+            dummy_key, display, content, dummy_unique = completion
 
             contained = 0
             # value not needed
@@ -123,7 +68,7 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader): # pylint: disable=R09
                     break
 
             if contained == 0:
-                completions.append(completion)
+                completions.append((display, content))
 
         # no results, means all keys are used up
         if not completions:
@@ -150,10 +95,10 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader): # pylint: disable=R09
         if not self.all_completions:
             self.all_completions = self.__get_completions()
 
-        value_completions = SkinRainmeterSectionAutoComplete.get_compiled_value_completions(
-            key_match,
-            self.all_completions
-        )
+        if not self.all_value_completions:
+            self.all_value_completions = compile_values(self.all_completions)
+
+        value_completions = self.all_value_completions[key_match]
 
         if not value_completions:
             return None

@@ -8,10 +8,11 @@ import sublime
 # import own libs
 from ... import logger
 from ..levenshtein import levenshtein
+from ..compiler import compile_keys
 from ..yaml_content_reader import YamlContentReader
 
 
-class SkinMetadataSectionAutoComplete(YamlContentReader): # pylint: disable=R0903; only provide one method
+class SkinMetadataSectionAutoComplete(YamlContentReader):  # pylint: disable=R0903; only provide one method
     """This uses the provided YAML files to extract the possible completions."""
 
     def __get_completions(self):
@@ -28,27 +29,11 @@ class SkinMetadataSectionAutoComplete(YamlContentReader): # pylint: disable=R090
             logger.error(error)
             return []
 
-    @staticmethod
-    def __get_compiled_key_completions(options):
-        keys = []
-        for option in options:
-            title = option['title'] + "\t" + option['hint']
-
-            if 'value' in option:
-                result = option['value']
-            else:
-                result = option['title']
-
-            pair = (title, result)
-            keys.append(pair)
-
-        return keys
-
     def __lazy_initialize_completions(self):
         # use lazy initialization because else the API is not available yet
         if not self.all_completions:
             self.all_completions = self.__get_completions()
-            self.all_key_completions = self.__get_compiled_key_completions(self.all_completions)
+            self.all_key_completions = compile_keys(self.all_completions)
 
     def __filter_completions_by_keys(self, keyvalues):
         """
@@ -60,8 +45,7 @@ class SkinMetadataSectionAutoComplete(YamlContentReader): # pylint: disable=R090
         completions = []
 
         for completion in self.all_key_completions:
-            # trigger is not used here
-            _, content = completion
+            dummy_key, display, content, dummy_unique = completion
 
             contained = 0
             # value not used here
@@ -71,7 +55,7 @@ class SkinMetadataSectionAutoComplete(YamlContentReader): # pylint: disable=R090
                     break
 
             if contained == 0:
-                completions.append(completion)
+                completions.append((display, content))
 
         return completions
 

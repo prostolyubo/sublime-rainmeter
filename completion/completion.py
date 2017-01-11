@@ -128,7 +128,6 @@ class ContextSensAutoCompletion(object):
 
         return key_values
 
-
     def on_query_completions(self, view, prefix, locations):
         """"Execute if a auto completion is requested.
 
