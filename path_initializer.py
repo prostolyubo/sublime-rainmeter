@@ -114,7 +114,7 @@ def plugin_loaded():
         browse_file(on_rainmeter_exe_browsed)
 
     skin_path = get_cached_skin_path()
-    if not skin_path or True:
+    if not skin_path:
         """
         Open folder dialog and set skin path.
         """
