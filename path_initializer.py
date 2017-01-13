@@ -91,6 +91,7 @@ def plugin_loaded():
                 settings.set("rainmeter_path", normed_rm_dir)
                 sublime.save_settings("Rainmeter.sublime-settings")
                 logger.info("Rewrote settings to include rainmeter path.")
+                sublime.message_dialog("Successfully set the Rainmeter application path to '" + normed_rm_dir + "'.")
 
                 # we have to reset every cache because all are dependent on the program path
                 # at least transitively
@@ -119,30 +120,30 @@ def plugin_loaded():
         Open folder dialog and set skin path.
         """
 
-        def on_skins_folder_browsed(message):
+        def on_skins_folder_browsed(skin_dir):
             """."""
-            logger.info("message:" + message)
-            if os.path.exists(message):
+            logger.info("skin_dir: " + skin_dir)
+            if os.path.exists(skin_dir):
                 # If folder is browsed:
                 # - verify skin folder
                 # - reset cache
                 # - save new path in settings
 
-                logger.info("Verified existence of Rainmeter Skin folder in '" + message + "'.")
+                logger.info("Verified existence of Rainmeter Skin folder in '" + skin_dir + "'.")
                 settings = sublime.load_settings("Rainmeter.sublime-settings")
-                skin_dir = os.path.dirname(message)
                 normed_skin_dir = os.path.normpath(skin_dir)
 
                 settings.set("rainmeter_skins_path", normed_skin_dir)
                 sublime.save_settings("Rainmeter.sublime-settings")
                 logger.info("Rewrote settings to include skin path.")
+                sublime.message_dialog("Successfully set the Rainmeter Skins path to '" + skin_dir + "'.")
 
                 # we have to reset every cache because all are dependent on the program path
                 # at least transitively
                 get_cached_skin_path.cache_clear()
                 logger.info("Cleared cache.")
 
-            elif message == "-1":
+            elif skin_dir == "-1":
                 logger.info("User canceled Rainmeter Skin folder input.")
                 pass
 

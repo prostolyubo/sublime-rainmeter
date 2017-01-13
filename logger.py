@@ -50,15 +50,13 @@ def info(message):
     """
     if __LOG:
         curframe = inspect.currentframe()
-        try:
-            calframe = inspect.getouterframes(curframe, 2)
-            caller = calframe[1]
-            caller_name = caller[3]
-            caller_file = caller[1]
 
-            _log("info", caller_file, caller_name, message)
-        except:
-            pass
+        calframe = inspect.getouterframes(curframe, 2)
+        caller = calframe[1]
+        caller_name = caller[3]
+        caller_file = caller[1]
+
+        _log("info", caller_file, caller_name, message)
 
 
 def error(message):
