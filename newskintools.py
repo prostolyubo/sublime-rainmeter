@@ -15,7 +15,7 @@ import sublime_plugin
 from .path.skin_path_provider import get_cached_skin_path
 
 
-class RainmeterNewSkinFileCommand(sublime_plugin.WindowCommand): #pylint: disable=R0903; sublime text API, methods are overriden
+class RainmeterNewSkinFileCommand(sublime_plugin.WindowCommand):  # pylint: disable=R0903; sublime text API, methods are overriden
     """Open a new view and insert a skin skeleton."""
 
     def run(self):
