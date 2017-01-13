@@ -63,14 +63,11 @@ def plugin_loaded():
 
     program_path = get_cached_program_path()
     if not program_path:
-        """
-        Open dialog and set program path.
-
-        Due to cache this might be annoying
-        since I cant call cached stuff
-        before I can assure that the path is correct
-        or just reset the cache.
-        """
+        # Open dialog and set program path.
+        # Due to cache this might be annoying
+        # since I cant call cached stuff
+        # before I can assure that the path is correct
+        # or just reset the cache.
 
         def on_rainmeter_exe_browsed(message):
             """
@@ -115,7 +112,7 @@ def plugin_loaded():
 
     skin_path = get_cached_skin_path()
     if not skin_path:
-        """Open folder dialog and set skin path."""
+        # Open folder dialog and set skin path.
 
         def on_skins_folder_browsed(skin_dir):
             """."""
