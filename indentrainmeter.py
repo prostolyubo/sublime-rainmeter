@@ -17,7 +17,7 @@ EMPTY_LINE_EXP = re.compile("^\\s*$")
 COMMENT_EXP = re.compile("^\\s*(;.*)")
 
 
-class IndentType:  # pylint: disable=R0903; enum
+class IndentType(object):  # pylint: disable=R0903; enum
     """Enum to store the several types of area blocks you can have in a rainmeter skin."""
 
     # lvl 0, lvl 1,      lvl 1 or 2
