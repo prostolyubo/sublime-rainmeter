@@ -15,8 +15,6 @@ It supports both ways Rainmeter defines color.
 which is hexadecimal and decimal format.
 """
 
-# TO DO spacing of decimal if required, but maybe too much overhead
-
 import os
 import re
 import subprocess

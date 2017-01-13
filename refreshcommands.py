@@ -16,7 +16,7 @@ from .path.program_path_provider import get_cached_program_path
 class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
     """Refresh a given skin file, or Rainmeter if no path is specified."""
 
-    def run(self, cmd): #pylint: disable=R0201; sublime text API, no need for class reference
+    def run(self, cmd):  # pylint: disable=R0201; sublime text API, no need for class reference
         """Called when the command is run."""
         # Get Rainmeter exe path
         rainmeter_exe = get_cached_program_path()
@@ -76,7 +76,7 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
                     "exec",
                     {"cmd": [rainmeter_exe, "!Refresh", config]})
 
-    def description(self): #pylint: disable=R0201; sublime text API, no need for class reference
+    def description(self):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
         Return a description of the command with the given arguments.
 
@@ -87,10 +87,10 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
         return "Refresh Rainmeter Config"
 
 
-class RainmeterRefreshCommand(sublime_plugin.ApplicationCommand): #pylint: disable=R0903; sublime text API, methods are overriden
+class RainmeterRefreshCommand(sublime_plugin.ApplicationCommand):  # pylint: disable=R0903; sublime text API, methods are overriden
     """Refresh Rainmeter."""
 
-    def run(self): #pylint: disable=R0201; sublime text API, no need for class reference
+    def run(self):  # pylint: disable=R0201; sublime text API, no need for class reference
         """Called when the command is run."""
         sublime.run_command("rainmeter_refresh_config", {"cmd": []})
 
@@ -104,7 +104,7 @@ class RainmeterRefreshCurrentSkinCommand(sublime_plugin.TextCommand):
     Refresh the current skin file opened in a view.
     """
 
-    def run(self, _): #pylint: disable=R0201; sublime text API, no need for class reference
+    def run(self, _):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
         Called when the command is run.
 
@@ -118,7 +118,7 @@ class RainmeterRefreshCurrentSkinCommand(sublime_plugin.TextCommand):
         # Refresh config
         sublime.run_command("rainmeter_refresh_config", {"cmd": [filepath]})
 
-    def is_enabled(self): #pylint: disable=R0201; sublime text API, no need for class reference
+    def is_enabled(self):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
         Return True if the command is able to be run at this time.
 
@@ -130,7 +130,7 @@ class RainmeterRefreshCurrentSkinCommand(sublime_plugin.TextCommand):
 
         return israinmeter > 0
 
-    def description(self): #pylint: disable=R0201; sublime text API, no need for class reference
+    def description(self):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
         Return a description of the command with the given arguments.
 

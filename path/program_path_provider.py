@@ -92,7 +92,6 @@ def get_cached_program_path():
 
                      Check your \"rainmeter_path\" setting."""
         logger.info(message)
-        sublime.error_message(message)
         return
 
     if not __executable_exists(rm_path):

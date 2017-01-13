@@ -16,7 +16,7 @@ from . import logger
 class EditThemeCommand(sublime_plugin.ApplicationCommand):
     """Command class to bind to the sublime text API via the ApplicationCommand."""
 
-    def run(self, theme): #pylint: disable=R0201; sublime text API, no need for class reference
+    def run(self, theme):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
         Search all *.tmTheme files in the Rainmeter space and tries to match it to the theme param.
 
@@ -66,7 +66,7 @@ class EditThemeCommand(sublime_plugin.ApplicationCommand):
         settings.set("color_scheme", theme)
         sublime.save_settings("Rainmeter.sublime-settings")
 
-    def is_checked(self, theme): #pylint: disable=R0201; sublime text API, no need for class reference
+    def is_checked(self, theme):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
         Return True if a checkbox should be shown next to the menu item.
 

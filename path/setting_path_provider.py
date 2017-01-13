@@ -28,12 +28,14 @@ def get_cached_setting_path():
     if os.path.exists(rainmeterpath + "Rainmeter.ini"):
         logger.info("Rainmeter.ini found in " + rainmeterpath)
         return rainmeterpath
+
     else:  # If not, look in %APPDATA%\Rainmeter\
         appdata = os.getenv("APPDATA")
         if os.path.exists(os.path.join(appdata, "Rainmeter\\Rainmeter.ini")):
             logger.info("Rainmeter.ini found in " +
                         os.path.join(appdata, "Rainmeter") + "\\")
             return os.path.join(appdata, "Rainmeter") + "\\"
+
         else:
             logger.info("Rainmeter.ini could not be located.")
             return None
