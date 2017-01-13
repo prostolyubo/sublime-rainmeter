@@ -48,11 +48,11 @@ def popen_and_call(callback, *popen_args, **popen_kwargs):
     return thread
 
 
-def call_file_and_callback(file, callback):
+def call_file_and_callback(file_basename, callback):
     """."""
     packages = sublime.packages_path()
     prompt_dir = os.path.join(packages, "User", "Rainmeter", "path")
-    script_path = os.path.join(prompt_dir, file)
+    script_path = os.path.join(prompt_dir, file_basename)
 
     popen_args = [
         'powershell.exe',
