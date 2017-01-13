@@ -24,6 +24,14 @@ class IndentType(object):  # pylint: disable=R0903; enum
     Initial, FoldMarker, Section = range(1, 4)
 
 
+def calc_section_indention_depth(context, context_depth):
+    """."""
+    if context == IndentType.Section:
+        return (context_depth - 1, IndentType.Section, context_depth)
+    else:
+        return (context_depth, IndentType.Section, context_depth + 1)
+
+
 def calc_line_indention_depth(line, context, context_depth):
     """."""
     empty_line_match = EMPTY_LINE_EXP.match(line)
@@ -40,10 +48,7 @@ def calc_line_indention_depth(line, context, context_depth):
 
     section_match = SECTION_EXP.match(line)
     if section_match:
-        if context == IndentType.Section:
-            return (context_depth - 1, IndentType.Section, context_depth)
-        else:
-            return (context_depth, IndentType.Section, context_depth + 1)
+        return calc_section_indention_depth(context, context_depth)
 
     # key value case
     return (context_depth, context, context_depth)
