@@ -105,7 +105,6 @@ def plugin_loaded():
 
             elif message == "-1":
                 logger.info("User canceled Rainmeter.exe input.")
-                pass
 
             else:
                 # retry by recalling it again.
@@ -145,7 +144,6 @@ def plugin_loaded():
 
             elif skin_dir == "-1":
                 logger.info("User canceled Rainmeter Skin folder input.")
-                pass
 
             else:
                 # retry by recalling it again.
