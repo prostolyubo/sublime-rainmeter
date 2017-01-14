@@ -43,24 +43,7 @@ def __copy_on_absence_or_newer(user_path, binary_path):
         logger.info("You are using the most current version of '" + binary_path + "'. Continue loading...")
 
 
-def plugin_loaded():
-    """
-    Called automatically from ST3 if plugin is loaded.
-
-    Is required now due to async call and ignoring sublime.* from main routine
-    """
-
-    packages = sublime.packages_path()
-    prompt_dir = os.path.join(packages, "User", "Rainmeter", "path")
-
-    __require_path(prompt_dir)
-
-    open_file_dialog_bat = os.path.join(prompt_dir, "open_file_dialog.ps1")
-    open_folder_dialog_bat = os.path.join(prompt_dir, "open_folder_dialog.ps1")
-
-    __copy_on_absence_or_newer(open_file_dialog_bat, "Packages/Rainmeter/path/open_file_dialog.ps1")
-    __copy_on_absence_or_newer(open_folder_dialog_bat, "Packages/Rainmeter/path/open_folder_dialog.ps1")
-
+def __handle_program_path_init():
     program_path = get_cached_program_path()
     if not program_path:
         # Open dialog and set program path.
@@ -110,6 +93,8 @@ def plugin_loaded():
 
         browse_file(on_rainmeter_exe_browsed)
 
+
+def __handle_skin_path_init():
     skin_path = get_cached_skin_path()
     if not skin_path:
         # Open folder dialog and set skin path.
@@ -146,6 +131,28 @@ def plugin_loaded():
                 browse_folder(on_skins_folder_browsed)
 
         browse_folder(on_skins_folder_browsed)
+
+
+def plugin_loaded():
+    """
+    Called automatically from ST3 if plugin is loaded.
+
+    Is required now due to async call and ignoring sublime.* from main routine
+    """
+
+    packages = sublime.packages_path()
+    prompt_dir = os.path.join(packages, "User", "Rainmeter", "path")
+
+    __require_path(prompt_dir)
+
+    open_file_dialog_bat = os.path.join(prompt_dir, "open_file_dialog.ps1")
+    open_folder_dialog_bat = os.path.join(prompt_dir, "open_folder_dialog.ps1")
+
+    __copy_on_absence_or_newer(open_file_dialog_bat, "Packages/Rainmeter/path/open_file_dialog.ps1")
+    __copy_on_absence_or_newer(open_folder_dialog_bat, "Packages/Rainmeter/path/open_folder_dialog.ps1")
+
+    __handle_program_path_init()
+    __handle_skin_path_init()
 
     padding = 16
     logger.info("#PROGRAMPATH#:".ljust(padding) + get_cached_program_path())  # Rainmeter.exe
