@@ -36,14 +36,16 @@ contexts:
         - match: "^\\s*;.*$"
           captures:
             0: comment.line.character.rainmeter
+
         - include: color-definition
         - include: bangs
         - include: all-variables
+        - include: includes
+
         # All other options in a section
-        - match: "(?i)^\\s*(?!@include([^=])*)([^\\s=]+)\\s*(=)"
-          captures:
-            2: storage.type.variable.rainmeter
-            3: keyword.operator.option.equal.rainmeter
+        - include: variable-section-variables
+
+        # next section
         - match: "^(?=\\s*\\[)"
           pop: true
 
@@ -637,6 +639,23 @@ contexts:
     # Bangs
     - match: "(?i)!((SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Un|Toggle)?PauseMeasure)|((Show|Hide)(Group)?|(Update)|(LoadLayout)))\\b"
       scope: support.function.bang.rainmeter
+
+
+  # Include statements
+  includes:
+    - match: "(?i)\\s*(@include([^=])*)\\s*(=)"
+      scope: meta.option.predefined.include.rainmeter
+      captures: 
+        1: storage.type.option.predefined.include.rainmeter
+        3: keyword.operator.option.equal.rainmeter
+
+
+  # negative lookahead to negate having @include as a variable
+  variable-section-variables:
+    - match: "(?i)^\\s*(?!@include([^=])*)([^\\s=]+)\\s*(=)"
+      captures:
+        2: storage.type.variable.rainmeter
+        3: keyword.operator.option.equal.rainmeter
 
 
   meter-shape-modifier:
