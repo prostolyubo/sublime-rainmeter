@@ -13,22 +13,42 @@ from . import rainmeter
 from .path.program_path_provider import get_cached_program_path
 
 
+def calculate_refresh_commands(rm_exe, config, fil, activate, is_inc):
+    refresh_config = [
+        rm_exe, "!Refresh", config
+    ]
+
+    if activate:
+        if is_inc:
+            cmds = [rm_exe, "!ActivateConfig", config, "&&"]
+            cmds.extend(refresh_config)
+
+            return cmds
+        else:
+            cmds = [rm_exe, "!ActivateConfig", config, fil, "&&"]
+            cmds.extend(refresh_config)
+
+            return cmds
+    else:
+        return refresh_config
+
+
 class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
     """Refresh a given skin file, or Rainmeter if no path is specified."""
 
     def run(self, cmd):  # pylint: disable=R0201; sublime text API, no need for class reference
         """Called when the command is run."""
         # Get Rainmeter exe path
-        rainmeter_exe = get_cached_program_path()
+        rm_path = get_cached_program_path()
 
-        if not rainmeter_exe:
+        if not rm_path:
             sublime.error_message(
                 "Error while trying to refresh Rainmeter" +
                 " skin: The Rainmeter executable could not be found." +
                 " Please check the value of your \"rainmeter_path\"" +
                 " setting.")
             return
-        rainmeter_exe = os.path.join(rainmeter_exe, "Rainmeter.exe")
+        rainmeter_exe = os.path.join(rm_path, "Rainmeter.exe")
 
         # Refresh skin (or whole rainmeter if no skin specified)
         if not cmd:
@@ -54,27 +74,10 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
             # Load activate setting
             settings = sublime.load_settings("Rainmeter.sublime-settings")
             activate = settings.get("rainmeter_refresh_and_activate", True)
+            is_inc = fil.endswith(".inc")
 
-            if activate:
-                sublime.active_window().run_command(
-                    "exec",
-                    {
-                        "cmd": [
-                            rainmeter_exe,
-                            "!ActivateConfig",
-                            config,
-                            fil,
-                            "&&",
-                            rainmeter_exe,
-                            "!Refresh",
-                            config
-                        ],
-                        "shell": True
-                    })
-            else:
-                sublime.active_window().run_command(
-                    "exec",
-                    {"cmd": [rainmeter_exe, "!Refresh", config]})
+            refresh_commands = calculate_refresh_commands(rainmeter_exe, config, fil, activate, is_inc)
+            sublime.active_window().run_command("exec", {"cmd": refresh_commands})
 
     def description(self):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
