@@ -35,6 +35,12 @@
 !theme
 !*.hidden-tmTheme
 
+# include http
+!http/
+
+# include install package which handles installing skins
+!install
+
 # include important sublime text files
 !*.sublime-build
 !*.sublime-commands

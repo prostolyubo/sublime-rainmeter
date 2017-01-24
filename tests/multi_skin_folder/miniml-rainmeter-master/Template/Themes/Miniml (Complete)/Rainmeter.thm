@@ -1,0 +1,83 @@
+[Miniml\Clock]
+Active=1
+WindowX=(#WORKAREAX# + (#WORKAREAWIDTH# - 210))
+WindowY=(#WORKAREAY# + 0)
+AlphaValue=75
+FadeDuration=150
+AlwaysOnTop=-2
+ClickThrough=0
+Draggable=1
+HideOnMouseOver=0
+KeepOnScreen=1
+SavePosition=1
+SnapEdges=1
+
+[Miniml\System]
+Active=1
+WindowX=(#WORKAREAX# + (#WORKAREAWIDTH# - 210))
+WindowY=(#WORKAREAY# + 54)
+AlphaValue=75
+FadeDuration=150
+AlwaysOnTop=-2
+ClickThrough=0
+Draggable=1
+HideOnMouseOver=0
+KeepOnScreen=1
+SavePosition=1
+SnapEdges=1
+
+[Miniml\Disk]
+Active=1
+WindowX=(#WORKAREAX# + (#WORKAREAWIDTH# - 210))
+WindowY=(#WORKAREAY# + 208)
+AlphaValue=75
+FadeDuration=150
+AlwaysOnTop=-2
+ClickThrough=0
+Draggable=1
+HideOnMouseOver=0
+KeepOnScreen=1
+SavePosition=1
+SnapEdges=1
+
+[Miniml\Network]
+Active=1
+WindowX=(#WORKAREAX# + (#WORKAREAWIDTH# - 210))
+WindowY=(#WORKAREAY# + 262)
+AlphaValue=75
+FadeDuration=150
+AlwaysOnTop=-2
+ClickThrough=0
+Draggable=1
+HideOnMouseOver=0
+KeepOnScreen=1
+SavePosition=1
+SnapEdges=1
+
+[Miniml\Weather]
+Active=3
+WindowX=(#WORKAREAX# + (#WORKAREAWIDTH# - 210))
+WindowY=(#WORKAREAY# + 396)
+AlphaValue=75
+FadeDuration=150
+AlwaysOnTop=-2
+ClickThrough=0
+Draggable=1
+HideOnMouseOver=0
+KeepOnScreen=1
+SavePosition=1
+SnapEdges=1
+
+[Miniml\Recycle Bin]
+Active=1
+WindowX=(#WORKAREAX# + (#WORKAREAWIDTH# - 210))
+WindowY=(#WORKAREAY# + 762)
+AlphaValue=75
+FadeDuration=150
+AlwaysOnTop=-2
+ClickThrough=0
+Draggable=1
+HideOnMouseOver=0
+KeepOnScreen=1
+SavePosition=1
+SnapEdges=1
