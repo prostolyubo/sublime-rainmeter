@@ -3,6 +3,7 @@
 	{"caption": "Rainmeter: New Skin File", "command": "rainmeter_new_skin_file"},
 	{"caption": "Rainmeter: New Skin", "command":"rainmeter_new_skin"},
 	{"caption": "Rainmeter: Open Selected Paths", "command": "rainmeter_open_paths"},
+	{"caption": "Rainmeter: Open Skin as Project", "command": "rainmeter_open_skin_as_project"},
 	{"caption": "Rainmeter: Open Skins Folder", "command": "rainmeter_open_skins_folder"},
 	{"caption": "Rainmeter: Pick Color", "command": "rainmeter_color_pick"},
 	{"caption": "Rainmeter: Refresh Current Skin", "command": "rainmeter_refresh_current_skin"},
