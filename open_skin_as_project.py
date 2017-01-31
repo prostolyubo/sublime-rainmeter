@@ -16,6 +16,9 @@ class RainmeterOpenSkinAsProjectCommand(sublime_plugin.ApplicationCommand):
         sublime.active_window().show_quick_panel(skins, self.on_skin_selected, 0, 0, None)
 
     def on_skin_selected(self, selected_skin_id):
+        if selected_skin_id == -1:
+            return
+
         skins_path = get_cached_skin_path()
         skins = os.listdir(skins_path)
         selected_skin = skins[selected_skin_id]
