@@ -10,6 +10,7 @@
 				"children":
 				[
 					{"caption": "Open Skins Folder...", "command": "rainmeter_open_skins_folder"},
+					{"caption": "Open Skin as Project...", "command": "rainmeter_open_skin_as_project"},
 					{"caption": "-"},
 					{"caption": "Refresh Current Skin", "command": "rainmeter_refresh_current_skin"},
 					{"caption": "Refresh Rainmeter", "command": "rainmeter_refresh_config", "args": {"cmd": []}},
