@@ -67,7 +67,8 @@ HEX_COLOR_EXP = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
 
 
 def color_or_default(color):
-        return "FFFFFFFF" if color is None else color
+    """If the color is none it returns FFFFFFFF."""
+    return "FFFFFFFF" if color is None else color
 
 
 class RainmeterColorPickCommand(sublime_plugin.TextCommand):  # pylint: disable=R0903; we only need one method
