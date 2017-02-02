@@ -1,3 +1,4 @@
+"""This module is handling native calls to user file and folder selection."""
 
 import os.path
 import subprocess
@@ -6,10 +7,6 @@ import threading
 import sublime
 
 from .. import logger
-
-
-def sink(message):
-    logger.info(message)
 
 
 def popen_and_call(callback, *popen_args, **popen_kwargs):
@@ -22,6 +19,11 @@ def popen_and_call(callback, *popen_args, **popen_kwargs):
     *popenArgs and **popenKWArgs are simply passed up to subprocess.Popen.
     """
     def run_in_thread(callback, popen_args, popen_kwargs):
+        """
+        This is a wrapped method call with a direct callback upon finishing the process.
+
+        You use this because the user input will halt the processing if not started in a new thread.
+        """
         proc = subprocess.Popen(*popen_args, **popen_kwargs)
         output_channel, error_channel = proc.communicate()
         message = output_channel.decode("utf-8")
