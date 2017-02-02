@@ -29,16 +29,19 @@ def str_equal_case_ignore(str1, str2):
 
 
 def sections_contain_section_id(sections, section_id):
-        # value not used here
-        for section in sections:
-            if str_equal_case_ignore(section, section_id):
-                return True
+    """Iterates through the sections container and checks if the section_id is in that container."""
 
-        return False
+    # value not used here
+    for section in sections:
+        if str_equal_case_ignore(section, section_id):
+            return True
+
+    return False
 
 
 class SkinSectionAutoCompleter(YamlContentReader):  # pylint: disable=R0903; only provide one method
-    """Ths class is the logical state holder for the auto completion suggestions.
+    """
+    Ths class is the logical state holder for the auto completion suggestions.
 
     Upon the request the respective yaml file is parsed and converted into a logical
     representation of the completions. Depending on the prior information the completions
