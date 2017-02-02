@@ -66,6 +66,10 @@ DEC_COLOR_EXP = re.compile(r"(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*
 HEX_COLOR_EXP = re.compile(r"(?:[0-9a-fA-F]{2}){3,4}")
 
 
+def color_or_default(color):
+        return "FFFFFFFF" if color is None else color
+
+
 class RainmeterColorPickCommand(sublime_plugin.TextCommand):  # pylint: disable=R0903; we only need one method
     """Sublime Text integration running this through an action."""
 
@@ -207,15 +211,12 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):  # pylint: disable=
             }
         )
 
-    def __color_or_default(self, color):
-        return "FFFFFFFF" if color is None else color
-
     def __run_picker(self):
         maybe_none = self.__get_selected_color_or_none()
         _, _, maybe_color, _, _, _ = maybe_none
 
         # no color selected, we call the color picker and insert the color at that position
-        color = self.__color_or_default(maybe_color)
+        color = color_or_default(maybe_color)
 
         picker = subprocess.Popen(
             [self.__get_picker_path(), color],
