@@ -41,7 +41,7 @@ def on_skin_selected(selected_skin_id):
     ])
 
 
-class RainmeterOpenSkinAsProjectCommand(sublime_plugin.ApplicationCommand):
+class RainmeterOpenSkinAsProjectCommand(sublime_plugin.ApplicationCommand):  # pylint: disable=R0903; only provide one method
     """You can execute this command via the sublime API like sublime.run_command("rainmeter_open_skin_as_project")."""
 
     def run(self):
