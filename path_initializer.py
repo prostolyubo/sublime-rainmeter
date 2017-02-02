@@ -1,3 +1,5 @@
+"""This module is to initialize common paths required for other plugins to work."""
+
 import os.path
 
 import sublime
