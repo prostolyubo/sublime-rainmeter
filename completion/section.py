@@ -52,7 +52,7 @@ class SkinSectionAutoCompleter(YamlContentReader):  # pylint: disable=R0903; onl
             self.all_completions = self.__get_completions()
             self.all_key_completions = compile_keys(self.all_completions)
 
-    def __str_equal_case_ignore(str1, str2):
+    def __str_equal_case_ignore(self, str1, str2):
         return str1.casefold() == str2.casefold()
 
     def __sections_contain_section_id(self, sections, section_id):
