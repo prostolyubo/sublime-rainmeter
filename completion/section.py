@@ -24,7 +24,9 @@ from .yaml_content_reader import YamlContentReader
 
 
 def str_equal_case_ignore(str1, str2):
+    """Compare two strings ignoring the case."""
     return str1.casefold() == str2.casefold()
+
 
 class SkinSectionAutoCompleter(YamlContentReader):  # pylint: disable=R0903; only provide one method
     """Ths class is the logical state holder for the auto completion suggestions.
