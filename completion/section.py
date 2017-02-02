@@ -28,6 +28,15 @@ def str_equal_case_ignore(str1, str2):
     return str1.casefold() == str2.casefold()
 
 
+def sections_contain_section_id(sections, section_id):
+        # value not used here
+        for section in sections:
+            if str_equal_case_ignore(section, section_id):
+                return True
+
+        return False
+
+
 class SkinSectionAutoCompleter(YamlContentReader):  # pylint: disable=R0903; only provide one method
     """Ths class is the logical state holder for the auto completion suggestions.
 
@@ -57,14 +66,6 @@ class SkinSectionAutoCompleter(YamlContentReader):  # pylint: disable=R0903; onl
             self.all_completions = self.__get_completions()
             self.all_key_completions = compile_keys(self.all_completions)
 
-    def __sections_contain_section_id(self, sections, section_id):
-        # value not used here
-        for section in sections:
-            if str_equal_case_ignore(section, section_id):
-                return True
-
-        return False
-
     def __filter_completions_by_sec(self, sections):
         # filter by already existing keys
         completions = []
@@ -80,7 +81,7 @@ class SkinSectionAutoCompleter(YamlContentReader):  # pylint: disable=R0903; onl
             # if we are having a unique section like [Rainmeter]
             # and not allow duplicates
             if unique and not allow_duplicates:
-                contained = self.__sections_contain_section_id(sections, section_id)
+                contained = sections_contain_section_id(sections, section_id)
 
                 if not contained:
                     completions.append((display, content))
