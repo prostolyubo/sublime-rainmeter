@@ -82,52 +82,10 @@ def call_file_and_callback(file_basename, callback):
 
 
 def browse_file(callback):
-    """."""
+    """Runs a script which displays a native open file dialog."""
     return call_file_and_callback("open_file_dialog.ps1", callback)
 
 
 def browse_folder(callback):
-    """."""
+    """Runs a script which displays a native open folder dialog."""
     return call_file_and_callback("open_folder_dialog.ps1", callback)
-
-
-def prompt_open_file_dialog():
-
-    packages = sublime.packages_path()
-    prompt_dir = os.path.join(packages, "User", "Rainmeter", "path")
-
-    open_file_dialog_bat = os.path.join(prompt_dir, "open_file_dialog.ps1")
-
-    st_inf = subprocess.STARTUPINFO()
-    st_inf.dwFlags = st_inf.dwFlags | subprocess.STARTF_USESHOWWINDOW
-
-    dialog = subprocess.Popen(
-        [
-            'powershell.exe',
-            '-NoProfile',
-            '-NonInteractive',
-            '-NoLogo',
-            '-ExecutionPolicy', 'RemoteSigned',
-            '-windowstyle', 'hidden',
-            '-File', open_file_dialog_bat
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        shell=False,
-        startupinfo=st_inf
-    )
-    output_channel, error_channel = dialog.communicate()
-    raw_output = output_channel.decode("utf-8")
-
-    # need to wait on the powershell script to execute and user interaction
-    dialog.wait()
-    # TODO need to rework it with http://stackoverflow.com/a/5209746/2787159
-    # concurrent callback when finished
-
-    # checking for errors first
-    error = error_channel.decode("utf-8")
-    if error is not None and len(error) != 0:
-        logger.error("Color Picker Error:\n" + error)
-        return
-
-    return raw_output
