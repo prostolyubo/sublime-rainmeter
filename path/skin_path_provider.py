@@ -71,7 +71,7 @@ def get_path_from_rm_settings(rm_path, settings_path):
         return match.group("skinpath").strip().replace("/", "\\")
 
 
-def get_path_from_portable_rm_installation(rm_path, settings_path):
+def get_path_from_portable_rm(rm_path, settings_path):
     """
     If program path and setting path are equal, we have a portable installation.
 
@@ -174,6 +174,6 @@ def get_cached_skin_path():
 
     return get_path_from_st_settings() \
         or get_path_from_rm_settings(rm_path, settings_path) \
-        or get_path_from_portable_rm_installation(rm_path, settings_path) \
+        or get_path_from_portable_rm(rm_path, settings_path) \
         or get_path_from_registry() \
         or guess_path_from_user_documents()
