@@ -44,7 +44,7 @@ def on_skin_selected(selected_skin_id):
 class RainmeterOpenSkinAsProjectCommand(sublime_plugin.ApplicationCommand):  # pylint: disable=R0903; only provide one method
     """You can execute this command via the sublime API like sublime.run_command("rainmeter_open_skin_as_project")."""
 
-    def run(self):
+    def run(self):  # pylint: disable=R0201; we do not need the self instance
         """Automatically called upon calling the command."""
         skins_path = get_cached_skin_path()
         skins = os.listdir(skins_path)
