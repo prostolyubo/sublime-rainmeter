@@ -23,6 +23,9 @@ from .compiler import compile_keys
 from .yaml_content_reader import YamlContentReader
 
 
+def str_equal_case_ignore(str1, str2):
+    return str1.casefold() == str2.casefold()
+
 class SkinSectionAutoCompleter(YamlContentReader):  # pylint: disable=R0903; only provide one method
     """Ths class is the logical state holder for the auto completion suggestions.
 
@@ -52,13 +55,10 @@ class SkinSectionAutoCompleter(YamlContentReader):  # pylint: disable=R0903; onl
             self.all_completions = self.__get_completions()
             self.all_key_completions = compile_keys(self.all_completions)
 
-    def __str_equal_case_ignore(self, str1, str2):
-        return str1.casefold() == str2.casefold()
-
     def __sections_contain_section_id(self, sections, section_id):
         # value not used here
         for section in sections:
-            if self.__str_equal_case_ignore(section, section_id):
+            if str_equal_case_ignore(section, section_id):
                 return True
 
         return False
