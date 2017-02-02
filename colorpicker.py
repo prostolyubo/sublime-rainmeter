@@ -207,12 +207,15 @@ class RainmeterColorPickCommand(sublime_plugin.TextCommand):  # pylint: disable=
             }
         )
 
+    def __color_or_default(self, color):
+        return "FFFFFFFF" if color is None else color
+
     def __run_picker(self):
         maybe_none = self.__get_selected_color_or_none()
         _, _, maybe_color, _, _, _ = maybe_none
 
         # no color selected, we call the color picker and insert the color at that position
-        color = "FFFFFFFF" if maybe_color is None else maybe_color
+        color = self.__color_or_default(maybe_color)
 
         picker = subprocess.Popen(
             [self.__get_picker_path(), color],
