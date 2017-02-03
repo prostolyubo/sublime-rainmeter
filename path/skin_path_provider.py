@@ -109,6 +109,27 @@ def get_path_from_registry():
         pass
 
 
+def _guess_documents_path(username):
+    # check if windows version is XP
+    winversion = platform.version()
+    if int(winversion[0]) < 6:
+        mydocuments = os.path.join("C:\\Documents and Settings",
+                                   username,
+                                   "My Documents") + "\\"
+
+        logger.info("Found Windows XP or lower." +
+                    " Skins path assumed to be " + mydocuments +
+                    "Rainmeter\\Skins\\")
+    else:
+        mydocuments = os.path.join("C:\\Users",
+                                   username,
+                                   "Documents") + "\\"
+
+        logger.info("Found Windows Vista or higher." +
+                    " Skins path assumed to be " + mydocuments +
+                    "Rainmeter\\Skins\\")
+
+
 def guess_path_from_user_documents():
     """If the value could not be retrieved from the registry, we try some educated guesses about default locations."""
 
@@ -120,24 +141,7 @@ def guess_path_from_user_documents():
                     " settings file.")
         return
     else:
-        # check if windows version is XP
-        winversion = platform.version()
-        if int(winversion[0]) < 6:
-            mydocuments = os.path.join("C:\\Documents and Settings",
-                                       username,
-                                       "My Documents") + "\\"
-
-            logger.info("Found Windows XP or lower." +
-                        " Skins path assumed to be " + mydocuments +
-                        "Rainmeter\\Skins\\")
-        else:
-            mydocuments = os.path.join("C:\\Users",
-                                       username,
-                                       "Documents") + "\\"
-
-            logger.info("Found Windows Vista or higher." +
-                        " Skins path assumed to be " + mydocuments +
-                        "Rainmeter\\Skins\\")
+        mydocuments = _guess_documents_path(username)
 
         logger.info("Skin path guessed from user name" +
                     " and Windows version")
