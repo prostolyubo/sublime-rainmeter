@@ -49,16 +49,7 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
 
         return None
 
-    def _get_yaml_content(self, dir_of_yaml, yaml_file):
-        """
-        Get yaml content of a yaml file.
-
-        It is located either in:
-        * Installed Packages/Rainmeter.sublime-package
-        * Packages/Rainmeter
-        Parameters
-        ----------
-        """
+    def __get_yaml_content_by_sublime_api(self, dir_of_yaml, yaml_file):
         # try over sublimes find resources first
         # should handle loose and packaged version
         for resource in sublime.find_resources(yaml_file):
@@ -68,6 +59,7 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
                 )
                 return sublime.load_resource(resource)
 
+    def __get_yaml_content_by_git_path(self, dir_of_yaml, yaml_file):
         # try over absolute paths determined from root e.g. by cloning with git
         rm_root_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
         # the dir_of_yaml comes in as foo/bar but internally python uses foo\\bar
@@ -80,13 +72,24 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
             with open(yaml_path, 'r') as yaml_content_stream:
                 return yaml_content_stream.read()
 
-        # if installed officially it is called Rainmeter.sublime-package or via packages.json
-        rm_package = self.__get_yaml_content_in_package("Rainmeter", dir_of_yaml, yaml_file)
-        if rm_package:
-            return rm_package
-
+    def __fail(self, dir_of_yaml, yaml_file):
         logger.error(
             "found not yaml neither via sublime resources, nor absolute pathing, " +
             "nor .sublime-package for '" + dir_of_yaml + yaml_file + "'."
         )
         return None
+
+    def _get_yaml_content(self, dir_of_yaml, yaml_file):
+        """
+        Get yaml content of a yaml file.
+
+        It is located either in:
+        * Installed Packages/Rainmeter.sublime-package
+        * Packages/Rainmeter
+        Parameters
+        ----------
+        """
+        return self.__get_yaml_content_by_sublime_api(dir_of_yaml, yaml_file) or \
+            self.__get_yaml_content_by_git_path(dir_of_yaml, yaml_file) or \
+            self.__get_yaml_content_in_package("Rainmeter", dir_of_yaml, yaml_file) or \
+            self.__fail(dir_of_yaml, yaml_file)
