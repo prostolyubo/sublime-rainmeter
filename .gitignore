@@ -20,7 +20,6 @@
 
 # include path detection
 !path
-!path/*.bat
 
 # include completion feature
 !completion
