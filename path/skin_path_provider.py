@@ -128,7 +128,7 @@ def _guess_documents_path(username):
         logger.info("Found Windows Vista or higher." +
                     " Skins path assumed to be " + mydocuments +
                     "Rainmeter\\Skins\\")
-    
+
     return mydocuments
 
 

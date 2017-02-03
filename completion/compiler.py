@@ -71,18 +71,18 @@ def __compile_value(value_elements):
     # case 1 is if only the key is provided, is generally the default case.
     # Meaning is generally explained in the key
     if length == 1:
-        return (value_elements[0] + "\tDefault", value_elements[0])
+        return value_elements[0] + "\tDefault", value_elements[0]
 
     # case 2 is if only the key and the special hint is given
     # means that the key is the value too
     elif length == 2:
         open_value_key, option_value_hint = value_elements
-        return (open_value_key + "\t" + option_value_hint, open_value_key)
+        return open_value_key + "\t" + option_value_hint, open_value_key
 
     # case 3 is when every option is implemneted
     elif length == 3:
         open_value_key, option_value_hint, option_value_value = value_elements
-        return (open_value_key + "\t" + option_value_hint, option_value_value)
+        return open_value_key + "\t" + option_value_hint, option_value_value
 
     else:
         error("unexpected length of '" + str(length) +

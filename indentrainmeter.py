@@ -27,31 +27,31 @@ class IndentType(object):  # pylint: disable=R0903; enum
 def calc_section_indention_depth(context, context_depth):
     """."""
     if context == IndentType.Section:
-        return (context_depth - 1, IndentType.Section, context_depth)
+        return context_depth - 1, IndentType.Section, context_depth
     else:
-        return (context_depth, IndentType.Section, context_depth + 1)
+        return context_depth, IndentType.Section, context_depth + 1
 
 
 def calc_line_indention_depth(line, context, context_depth):
     """."""
     empty_line_match = EMPTY_LINE_EXP.match(line)
     if empty_line_match:
-        return (0, context, context_depth)
+        return 0, context, context_depth
 
     folder_marker_match = FOLD_MARKER_EXP.match(line)
     if folder_marker_match:
-        return (0, IndentType.FoldMarker, 1)
+        return 0, IndentType.FoldMarker, 1
 
     comment_match = COMMENT_EXP.match(line)
     if comment_match:
-        return (context_depth, context, context_depth)
+        return context_depth, context, context_depth
 
     section_match = SECTION_EXP.match(line)
     if section_match:
         return calc_section_indention_depth(context, context_depth)
 
     # key value case
-    return (context_depth, context, context_depth)
+    return context_depth, context, context_depth
 
 
 def get_line_replacement(line, context_depth):
