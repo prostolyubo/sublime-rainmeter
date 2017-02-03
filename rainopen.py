@@ -124,9 +124,7 @@ class TryOpenThread(threading.Thread):
                     logger.info("Open string enclosed in quotes: " + string)
                     return True
 
-    def __open_whitespaced_region(self):
-        # 3. Region from last whitespace to next whitespace
-
+    def __find_front_nearest_whitespace(self):
         # Find the space before the current point (if any)
         lastspace = self.region.a - 1
         while lastspace >= 0 \
@@ -137,15 +135,28 @@ class TryOpenThread(threading.Thread):
         # Set to zero if nothing was found until the start of the line
         lastspace = max(lastspace, 0)
 
+        return lastspace
+
+    def __find_back_nearest_whitespace(self):
+        # Find the space after the current point (if any)
+        nextspace = self.region.b
+        while nextspace < len(self.line) \
+                and self.line[nextspace] != " " \
+                and self.line[nextspace] != "\t":
+            nextspace += 1
+
+        return nextspace
+
+    def __open_whitespaced_region(self):
+        # 3. Region from last whitespace to next whitespace
+
+        lastspace = self.__find_front_nearest_whitespace()
+
         if lastspace == 0 \
                 or self.line[lastspace] == " " \
                 or self.line[lastspace] == "\t":
-            # Find the space after the current point (if any)
-            nextspace = self.region.b
-            while nextspace < len(self.line) \
-                    and self.line[nextspace] != " " \
-                    and self.line[nextspace] != "\t":
-                nextspace += 1
+
+            nextspace = self.__find_back_nearest_whitespace()
 
             if nextspace >= len(self.line) \
                     or self.line[nextspace] == " " \
