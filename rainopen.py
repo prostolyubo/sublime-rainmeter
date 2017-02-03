@@ -152,20 +152,24 @@ class TryOpenThread(threading.Thread):
 
         return nextspace
 
+    def __is_front_space(self, lastspace):
+        return lastspace == 0 \
+            or self.line[lastspace] == " " \
+            or self.line[lastspace] == "\t"
+
+    def __is_back_space(self, nextspace):
+        return nextspace >= len(self.line) \
+            or self.line[nextspace] == " " \
+            or self.line[nextspace] == "\t"
+
     def __open_whitespaced_region(self):
         # 3. Region from last whitespace to next whitespace
 
         lastspace = self.__find_front_nearest_whitespace()
-
-        if lastspace == 0 \
-                or self.line[lastspace] == " " \
-                or self.line[lastspace] == "\t":
+        if self.__is_front_space(lastspace):
 
             nextspace = self.__find_back_nearest_whitespace()
-
-            if nextspace >= len(self.line) \
-                    or self.line[nextspace] == " " \
-                    or self.line[nextspace] == "\t":
+            if self.__is_back_space(nextspace):
                 string = self.line[lastspace: nextspace].strip()
                 if self.opn(string):
                     logger.info("Open string enclosed in whitespace: " + string)
