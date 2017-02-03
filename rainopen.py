@@ -99,16 +99,15 @@ class TryOpenThread(threading.Thread):
 
         return lastquote
 
-    def run(self):
-        """Run the thread."""
+    def __open_selected_text(self):
         # 1. Selected text
         selected = self.line[self.region.a:self.region.b]
         if self.opn(selected):
             logger.info("Open selected text")
-            return
+            return True
 
+    def __open_enclosed_string(self):
         # 2. String enclosed in double quotes
-
         # Find the quotes before the current point (if any)
         lastquote = self.__find_prior_quotation_mark()
 
@@ -123,8 +122,9 @@ class TryOpenThread(threading.Thread):
                 string = self.line[lastquote: nextquote].strip("\"")
                 if self.opn(string):
                     logger.info("Open string enclosed in quotes: " + string)
-                    return
+                    return True
 
+    def __open_whitespaced_region(self):
         # 3. Region from last whitespace to next whitespace
 
         # Find the space before the current point (if any)
@@ -153,20 +153,30 @@ class TryOpenThread(threading.Thread):
                 string = self.line[lastspace: nextspace].strip()
                 if self.opn(string):
                     logger.info("Open string enclosed in whitespace: " + string)
-                    return
+                    return True
 
+    def __open_after_equals_sign(self):
         # 4. Everything after the first \"=\" until the end
         # of the line (strip quotes)
         mtch = re.search(r"=\s*(.*)\s*$", self.line)
         if mtch and self.opn(mtch.group(1).strip("\"")):
             logger.info("Open text after \"=\": " + mtch.group(1).strip("\""))
-            return
+            return True
 
+    def __open_whole_line(self):
         # 5. Whole line (strip comment character at start)
         stripmatch = re.search(r"^[ \t;]*?([^ \t;].*)\s*$", self.line)
         if self.opn(stripmatch.group(1)):
             logger.info("Open whole line: " + stripmatch.group(1))
             return
+
+    def run(self):
+        """Run the thread."""
+        return self.__open_selected_text() or \
+            self.__open_enclosed_string() or \
+            self.__open_whitespaced_region() or \
+            self.__open_after_equals_sign() or \
+            self.__open_whole_line()
 
 
 class RainmeterOpenPathsCommand(sublime_plugin.TextCommand):
