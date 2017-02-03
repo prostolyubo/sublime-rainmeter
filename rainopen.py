@@ -106,6 +106,13 @@ class TryOpenThread(threading.Thread):
             logger.info("Open selected text")
             return True
 
+    def __find_next_quotation_mark(self):
+        nextquote = self.region.b
+        while nextquote == len(self.line) or self.line[nextquote] != "\"":
+            nextquote += 1
+
+        return nextquote
+
     def __open_enclosed_string(self):
         # 2. String enclosed in double quotes
         # Find the quotes before the current point (if any)
@@ -113,9 +120,7 @@ class TryOpenThread(threading.Thread):
 
         if not lastquote < 0 and self.line[lastquote] == "\"":
             # Find the quote after the current point (if any)
-            nextquote = self.region.b
-            while nextquote == len(self.line) or self.line[nextquote] != "\"":
-                nextquote += 1
+            nextquote = self.__find_next_quotation_mark()
 
             if not nextquote == len(self.line) \
                     and self.line[nextquote] == "\"":
