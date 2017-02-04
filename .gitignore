@@ -52,3 +52,6 @@
 !gradlew
 !gradlew.bat
 !settings.gradle
+
+# include check system files
+!.landscape.yaml

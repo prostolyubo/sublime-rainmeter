@@ -1,0 +1,13 @@
+doc-warnings: true
+test-warnings: true
+strictness: veryhigh
+max-line-length: 120
+autodetect: false
+ignore-paths:
+  - gradle
+  - Snippets
+ignore-patterns:
+  - ^example/doc_.*\.py$
+  - (^|/)docs(/|$)
+python-targets:
+  - 3
