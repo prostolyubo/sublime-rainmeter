@@ -27,6 +27,10 @@
 # include coloring
 !color/
 
+# include messaging
+!messages/
+!messages.json
+
 # include theming
 !theme
 !*.hidden-tmTheme

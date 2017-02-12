@@ -35,6 +35,8 @@ task distribute(type: Zip) {
             // include important feature folders
             include 'completion/**'
             include 'path/**'
+            include 'messages/**'
+            include 'messages.json'
             include 'Snippets/**'
             include 'theme/**'
             include 'color/**'
