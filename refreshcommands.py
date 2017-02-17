@@ -14,23 +14,13 @@ from .path.program_path_provider import get_cached_program_path
 
 
 def calculate_refresh_commands(rm_exe, config, fil, activate, is_inc):
-    refresh_config = [
-        rm_exe, "!Refresh", config
-    ]
-
     if activate:
-        if is_inc:
-            cmds = [rm_exe, "!ActivateConfig", config, "&&"]
-            cmds.extend(refresh_config)
-
-            return cmds
-        else:
-            cmds = [rm_exe, "!ActivateConfig", config, fil, "&&"]
-            cmds.extend(refresh_config)
-
-            return cmds
+        cmds = [rm_exe, "!ActivateConfig", config]
+        if not is_inc:
+            cmds.append(fil)
+        return cmds
     else:
-        return refresh_config
+        return None
 
 
 class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
@@ -77,7 +67,12 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
             is_inc = fil.endswith(".inc")
 
             refresh_commands = calculate_refresh_commands(rainmeter_exe, config, fil, activate, is_inc)
-            sublime.active_window().run_command("exec", {"cmd": refresh_commands})
+            if refresh_commands:
+                sublime.active_window().run_command("exec", {"cmd": refresh_commands})
+            refresh_config = [
+                rainmeter_exe, "!Refresh", config
+            ]
+            sublime.active_window().run_command("exec", {"cmd": refresh_config})
 
     def description(self):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
