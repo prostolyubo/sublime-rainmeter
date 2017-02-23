@@ -1,4 +1,5 @@
 import codecs
+import colorsys
 import os
 import re
 
@@ -6,6 +7,7 @@ import sublime
 import sublime_plugin
 
 from . import logger
+from .color import converter
 
 
 def __create_if_not_exists(path):
@@ -29,14 +31,6 @@ def plugin_loaded():
 
 def plugin_unloaded():
     print("unloaded")
-
-
-class ColorCache:
-
-    __cache = set()
-
-    def add_color(self, color, buffer_id, char_index):
-        self.__cache.add(color)
 
 
 class ColorHighlighterEventListener(sublime_plugin.EventListener):
@@ -67,6 +61,57 @@ class ColorHighlighterEventListener(sublime_plugin.EventListener):
 
     def on_query_context(self, view, key, op, operand, match_all):
         pass
+
+
+class ColorCache(object):
+
+    def __init__(self):
+        self.color_cache = {}
+        self.color_cache_candidates = []
+
+    def __register_color_cache_candidate(self, color):
+        """
+        Register color as a color cache candidate.
+
+        This is an abstraction to hide the internal collection.
+        """
+
+    def add_colors(self, colors):
+        for color in colors:
+            self.__register_color_cache_candidate(color)
+
+        return self.__flush_changes()
+
+    def __found_color_changes(self):
+        any_found = False
+        for candidate in self.color_cache_candidates:
+            if candidate in self.color_cache.keys():
+                continue
+
+            self.color_cache[candidate] = self.__push_lumiosity(candidate)
+            any_found = True
+
+        return any_found
+
+    def __push_lumiosity(rgb_hex_color):
+        r = int(rgb_hex_color[1:3], 16) / 255.0
+        g = int(rgb_hex_color[3:5], 16) / 255.0
+        b = int(rgb_hex_color[5:7], 16) / 255.0
+        (h, l, s) = colorsys.rgb_to_hls(r, g, b)
+
+        pushed_lumiosity = max(l, .15)
+
+        pushed_rgbs = colorsys.hls_to_rgb(h, pushed_lumiosity, s)
+        pushed_hexes = converter.rgbs_to_hexes(pushed_rgbs)
+
+        return converter.hexes_to_string(pushed_hexes)
+
+    def __flush_changes(self):
+        """."""
+        if self.__found_color_changes():
+            # load color scheme
+            # search for
+            pass
 
 
 class ColorHighlighter(sublime_plugin.EventListener):
@@ -131,11 +176,12 @@ class ColorHighlighter(sublime_plugin.EventListener):
         print("---", "loaded:", view)
 
     def on_activated_async(self, view):
-        current_pos = view.sel()[0].begin()
-        if not view.match_selector(current_pos, "source.rainmeter"):
-            return
+        if len(view.sel()) > 0:
+            current_pos = view.sel()[0].begin()
+            if not view.match_selector(current_pos, "source.rainmeter"):
+                return
 
-        print("---", "activated:", view, "buffer-id:", view.buffer_id())
+        # print("---", "activated:", view, "buffer-id:", view.buffer_id())
 
     def on_modified(self, view):
         # only handle rainmeter files
@@ -143,22 +189,27 @@ class ColorHighlighter(sublime_plugin.EventListener):
         if not view.match_selector(current_pos, "source.rainmeter"):
             return
 
-        print("---", "modified:", view)
+        # print("---", "modified:", view)
 
-    def on_selection_modified(self, view):
+    def on_selection_modified_async(self, view):
         """
         User interaction: user selects something in the :view: view
         """
-        view.erase_regions("test")
-        current_pos = view.sel()[0].begin()
 
         # selections generally mean something different, we only handle clicks
         if not view.sel()[0].empty():
             return
 
         # only handle rainmeter files
+        current_pos = view.sel()[0].begin()
         if not view.match_selector(current_pos, "source.rainmeter"):
             return
+        # print(view.match_selector(current_pos, "source.rainmeter"))
+
+        # print("---", "selection_modified", view, ", view name:", view.name(), ", view id:", view.id(), ", view buffer id:", view.buffer_id(), ", view primary?:", view.is_primary())
+        view.erase_regions("test")
+        # print("self", self)
+        # print
 
         # can be either decimal colors or hexadecimal colors with or without alpha channel
         # alpha channel seems be unimportant right now
@@ -168,16 +219,16 @@ class ColorHighlighter(sublime_plugin.EventListener):
 
         match = dec_color_exp.search(content)
         if match:
-            logger.info(__file__, "on_selection_modified(self)", "found color in '" + content + "'")
+            logger.info("found color in '" + content + "'" + str(self))
             red_channel_dec = int(match.group(1))
             green_channel_dec = int(match.group(2))
             blue_channel_dec = int(match.group(3))
             if red_channel_dec > 255:
-                logger.error(__file__, "on_selection_modified(self)", "found invalid definition of red: '" + str(red_channel_dec) + "'")
+                logger.error("found invalid definition of red: '" + str(red_channel_dec) + "'")
             if green_channel_dec > 255:
-                logger.error(__file__, "on_selection_modified(self)", "found invalid definition of green: '" + str(green_channel_dec) + "'")
+                logger.error("found invalid definition of green: '" + str(green_channel_dec) + "'")
             if blue_channel_dec > 255:
-                logger.error(__file__, "on_selection_modified(self)", "found invalid definition of blue: '" + str(blue_channel_dec) + "'")
+                logger.error("found invalid definition of blue: '" + str(blue_channel_dec) + "'")
 
             red_channel_hex = hex(red_channel_dec)[2:]
             green_channel_hex = hex(green_channel_dec)[2:]
@@ -219,8 +270,18 @@ class ColorHighlighter(sublime_plugin.EventListener):
             # with codecs.open(scheme_path, 'w', 'utf-8') as scheme_file:
             #     scheme_file.write(scheme_xml)
             # print(os.path.join("Packages", "User", "Rainmeter", "theme", scheme_name + ".hidden-tmTheme").replace("\\", "/"))
-            sublime.load_settings('Preferences.sublime-settings').set('color_scheme', "Packages/User/Rainmeter/theme/" + scheme_name + ".hidden-tmTheme")
+
+            # might need to set the current color scheme to the link of the new mirrored theme file
+            prefs = sublime.load_settings('Preferences.sublime-settings')
+            maybe_color_scheme = prefs.get('color_scheme', None)
+            if maybe_color_scheme == "Packages/User/Rainmeter/theme/" + scheme_name + ".hidden-tmTheme":
+                pass
+            else:
+                prefs.set('color_scheme', "Packages/User/Rainmeter/theme/" + scheme_name + ".hidden-tmTheme")
+
             view.add_regions("test", [found_region], scope="constant.numeric.color." + rgb_hex, flags=sublime.DRAW_NO_OUTLINE)
+            # view.add_regions("test", [found_region], scope="constant.numeric.color.", flags=sublime.DRAW_NO_OUTLINE)
+            # print(rgb_hex)
 
             # print(rgb_hex)
 

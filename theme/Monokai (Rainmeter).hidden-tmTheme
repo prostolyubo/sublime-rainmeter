@@ -739,18 +739,6 @@
 				<string>#E6DB74</string>
 			</dict>
 		</dict>
-
-		<!-- rainmeter -->
-        <dict>
-            <key>scope</key>
-            <string>constant.numeric.color.ffffff</string>
-            <key>settings</key>
-            <dict>
-                <key>foreground</key>
-                <string>#ffffff</string>
-            </dict>
-        </dict>
-        <!-- /rainmeter -->
 	</array>
 	<key>uuid</key>
 	<string>D8D5E82E-3D5B-46B5-B38E-8C841C21347D</string>
