@@ -95,7 +95,7 @@ def find_inis_in_folder(folder):
     """
     inis = []
 
-    for root, dirs, files in os.walk(folder):
+    for root, dummy_dirs, files in os.walk(folder):
         for fil in files:
             if fil.endswith('.ini'):
                 inis.append(os.path.join(os.path.abspath(root), fil))
