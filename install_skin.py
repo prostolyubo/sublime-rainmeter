@@ -266,9 +266,13 @@ class RainmeterInstallSkinFromGitCommand(sublime_plugin.ApplicationCommand):
 class RainmeterInstallSkinFromGithubCommand(sublime_plugin.ApplicationCommand):
 
     def run(self):
-        pass
+        default_path = "https://github.com/<user>/<repository>"
+        sublime.active_window().show_input_panel(
+            "Enter skin zip location:",
+            default_path,
+            self.on_github_path_entered, None, None
+        )
 
     def on_github_path_entered(self, path):
         if is_gh_online():
             print("Github is online")
-        pass
