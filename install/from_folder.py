@@ -1,4 +1,7 @@
-# def find_
+"""
+This module handles the business logic to install skins from a local directory.
+"""
+
 import os
 import re
 import shutil
