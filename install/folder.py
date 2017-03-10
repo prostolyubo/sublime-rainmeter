@@ -15,7 +15,7 @@ def check_skin_folder_already_exists(skin_folder):
     return os.path.exists(target_skin_folder)
 
 
-def install_skin_folder_into_skins_folder(skin_folder, overwrite=False):
+def install_skin_folder_into_skins_folder(skin_folder):
     skins_folder = get_cached_skin_path()
 
     inis = find_inis_in_folder(skin_folder)
@@ -52,7 +52,7 @@ def common_path(paths):
 
 def find_resources_folders_in_folder(folder):
     resources = []
-    for root, directories, files in os.walk(folder):
+    for root, directories, dummy_files in os.walk(folder):
         for directory in directories:
             if directory.lower() == "@resources":
                 resources.append(os.path.join(os.path.abspath(root), directory))
@@ -61,7 +61,7 @@ def find_resources_folders_in_folder(folder):
 
 
 def find_resources_folder_in_folder(folder):
-    for root, directories, files in os.walk(folder):
+    for root, directories, dummy_files in os.walk(folder):
         for directory in directories:
             if directory.lower() == "@resources":
                 return os.path.join(os.path.abspath(root), directory)
