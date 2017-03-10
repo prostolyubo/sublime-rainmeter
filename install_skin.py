@@ -10,7 +10,7 @@ import sublime_plugin
 
 from .http.online_checker import is_gh_online
 # from .http.content_downloader import download_from_to
-from .install import folder
+from .install import from_folder
 from .install import from_zip
 # from .path.skin_path_provider import get_cached_skin_path
 
@@ -181,7 +181,7 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
             sublime.error_message("The entered path '" + path + "' is not a directory. Please check your input.")
             return
 
-        if not folder.find_inis_in_folder(path):
+        if not from_folder.find_inis_in_folder(path):
             sublime.error_message("The entered path '" + path + "' is not a valid Rainmeter skin. Please check your input.")
             return
 
@@ -196,7 +196,7 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
         with open(install_cache_path, write_mode) as cache_handler:
             cache_handler.write(path)
 
-        dest_folder = folder.install_skin_folder_into_skins_folder(path)
+        dest_folder = from_folder.install_skin_folder_into_skins_folder(path)
         sublime.message_dialog("Skin was successfully installed into \n\n" + dest_folder)
 
 

@@ -8,7 +8,7 @@ import tempfile
 
 from unittest import TestCase
 
-FOLDER_INSTALLER = sys.modules["Rainmeter.install.folder"]
+FOLDER_INSTALLER = sys.modules["Rainmeter.install.from_folder"]
 SKIN_PATH_PROVIDER = sys.modules["Rainmeter.path.skin_path_provider"]
 
 
