@@ -10,6 +10,12 @@ from ..path.skin_path_provider import get_cached_skin_path
 
 
 def folder_already_exists(skin_folder):
+    """
+    Checks if the folder already exists.
+
+    This is to check if a skin is already installed determined by the skin folder.
+    This enables us to switch in case the user does not want to overwrite the current skin.
+    """
     skins_folder = get_cached_skin_path()
     inis = find_inis_in_folder(skin_folder)
     skin_name = os.path.basename(common_path(inis))
@@ -19,6 +25,11 @@ def folder_already_exists(skin_folder):
 
 
 def install_skin_folder_into_skins_folder(skin_folder):
+    """
+    Install skin folder into Rainmeter skins folder.
+
+    Main entry point to the from_folder module.
+    """
     skins_folder = get_cached_skin_path()
 
     inis = find_inis_in_folder(skin_folder)
@@ -36,8 +47,13 @@ def install_skin_folder_into_skins_folder(skin_folder):
     return transposed_paths
 
 
-# todo: problem because I mix files and folders -> easier to just transpose folders thus we need only copytree
 def transpose_paths(paths, target):
+    """
+    Transpose a subtree to a new location.
+
+    With that we can determine a root node which acts as a source folder
+    and from which we can copy everything recursively to the target folder.
+    """
     commoner = common_path(paths)
 
     return shutil.copytree(commoner, target)
@@ -54,6 +70,12 @@ def common_path(paths):
 
 
 def find_resources_folders_in_folder(folder):
+    """
+    Find @Resources folders in the given folder.
+
+    Is case insensitive.
+    Will search for every @Resources folder found in the folder (e.g. in case of multi skin config).
+    """
     resources = []
     for root, directories, dummy_files in os.walk(folder):
         for directory in directories:
@@ -64,6 +86,9 @@ def find_resources_folders_in_folder(folder):
 
 
 def find_resources_folder_in_folder(folder):
+    """
+    Find a single @Resources folder in the given folder.
+    """
     for root, directories, dummy_files in os.walk(folder):
         for directory in directories:
             if directory.lower() == "@resources":
