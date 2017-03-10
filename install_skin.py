@@ -269,4 +269,6 @@ class RainmeterInstallSkinFromGithubCommand(sublime_plugin.ApplicationCommand):
         pass
 
     def on_github_path_entered(self, path):
+        if is_gh_online():
+            print("Github is online")
         pass
