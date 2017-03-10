@@ -169,9 +169,9 @@ class ContextSensAutoCompletion(object):
                     return self.section.get_key_context_completion(prefix, line_content, sections)
 
             # filter empty lines
-            section_lines = list(filter(None, section_lines))
+            section_lines = [section_line for section_line in section_lines if section_line]
             # filter comments
-            section_lines = list(filter(lambda l: not self.comment_exp.search(l), section_lines))
+            section_lines = [line for line in section_lines if not self.comment_exp.search(line)]
 
             if not section_lines:
                 logger.info("section is empty")
