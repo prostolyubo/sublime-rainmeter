@@ -6,7 +6,7 @@ import shutil
 from ..path.skin_path_provider import get_cached_skin_path
 
 
-def check_skin_folder_already_exists(skin_folder):
+def folder_already_exists(skin_folder):
     skins_folder = get_cached_skin_path()
     inis = find_inis_in_folder(skin_folder)
     skin_name = os.path.basename(common_path(inis))

@@ -134,7 +134,7 @@ class TestFolderInstaller(TestCase):
 
             self.assertTrue(skin_path_exists)
 
-    def test_check_skin_folder_already_exists_existing(self):
+    def test_folder_already_exists_existing(self):
         """
         Given
             installing a skin with name BeatTime from a folder
@@ -159,7 +159,7 @@ class TestFolderInstaller(TestCase):
 
             skins_path = SKIN_PATH_PROVIDER.get_cached_skin_path()
             skin_path = os.path.join(skins_path, "BeatTime")
-            skin_path_exists = FOLDER_INSTALLER.check_skin_folder_already_exists(dst_path)
+            skin_path_exists = FOLDER_INSTALLER.folder_already_exists(dst_path)
             self.assertEquals(actual_skin_path, skin_path)
 
             # cleanup the installed skin to make it reproduceable
@@ -167,7 +167,7 @@ class TestFolderInstaller(TestCase):
 
             self.assertTrue(skin_path_exists)
 
-    def test_check_skin_folder_already_exists_not_existing(self):
+    def test_folder_already_exists_not_existing(self):
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
 
@@ -176,4 +176,4 @@ class TestFolderInstaller(TestCase):
             dst_path = os.path.join(temp_path, "skin_folder")
             shutil.copytree(folder_path, dst_path)
 
-            self.assertFalse(FOLDER_INSTALLER.check_skin_folder_already_exists(dst_path))
+            self.assertFalse(FOLDER_INSTALLER.folder_already_exists(dst_path))
