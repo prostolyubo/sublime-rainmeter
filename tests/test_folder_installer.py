@@ -84,7 +84,7 @@ class TestFolderInstaller(TestCase):
 
         self.assertTrue(os.path.exists(common_path))
 
-    def test_install_skin_folder_into_skins_folder(self):
+    def test_install_into_skins_folder(self):
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
 
@@ -93,7 +93,7 @@ class TestFolderInstaller(TestCase):
             dst_path = os.path.join(temp_path, "skin_folder")
             shutil.copytree(folder_path, dst_path)
 
-            actual_skin_path = FOLDER_INSTALLER.install_skin_folder_into_skins_folder(dst_path)
+            actual_skin_path = FOLDER_INSTALLER.install_into_skins_folder(dst_path)
             self.assertTrue(os.path.isdir(actual_skin_path))
 
             skins_path = SKIN_PATH_PROVIDER.get_cached_skin_path()
@@ -120,7 +120,7 @@ class TestFolderInstaller(TestCase):
             dst_path = os.path.join(temp_path, "multi_skin_folder")
             shutil.copytree(folder_path, dst_path)
 
-            actual_skin_path = FOLDER_INSTALLER.install_skin_folder_into_skins_folder(dst_path)
+            actual_skin_path = FOLDER_INSTALLER.install_into_skins_folder(dst_path)
             self.assertTrue(os.path.isdir(actual_skin_path))
 
             skins_path = SKIN_PATH_PROVIDER.get_cached_skin_path()
@@ -153,7 +153,7 @@ class TestFolderInstaller(TestCase):
             dst_path = os.path.join(temp_path, "skin_folder")
             shutil.copytree(folder_path, dst_path)
 
-            actual_skin_path = FOLDER_INSTALLER.install_skin_folder_into_skins_folder(dst_path)
+            actual_skin_path = FOLDER_INSTALLER.install_into_skins_folder(dst_path)
             self.assertTrue(len(actual_skin_path) > 0)
             self.assertTrue(os.path.isdir(actual_skin_path))
 

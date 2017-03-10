@@ -196,7 +196,7 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
         with open(install_cache_path, write_mode) as cache_handler:
             cache_handler.write(path)
 
-        dest_folder = from_folder.install_skin_folder_into_skins_folder(path)
+        dest_folder = from_folder.install_into_skins_folder(path)
         sublime.message_dialog("Skin was successfully installed into \n\n" + dest_folder)
 
 

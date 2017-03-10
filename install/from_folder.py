@@ -22,7 +22,7 @@ def folder_already_exists(skin_folder):
     return os.path.exists(target_skin_folder)
 
 
-def install_skin_folder_into_skins_folder(skin_folder):
+def install_into_skins_folder(skin_folder):
     """
     Install skin folder into Rainmeter skins folder.
 
