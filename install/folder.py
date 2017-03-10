@@ -52,19 +52,19 @@ def common_path(paths):
 
 def find_resources_folders_in_folder(folder):
     resources = []
-    for root, dirs, files in os.walk(folder):
-        for dir in dirs:
-            if dir.lower() == "@resources":
-                resources.append(os.path.join(os.path.abspath(root), dir))
+    for root, directories, files in os.walk(folder):
+        for directory in directories:
+            if directory.lower() == "@resources":
+                resources.append(os.path.join(os.path.abspath(root), directory))
 
     return resources
 
 
 def find_resources_folder_in_folder(folder):
-    for root, dirs, files in os.walk(folder):
-        for dir in dirs:
-            if dir.lower() == "@resources":
-                return os.path.join(os.path.abspath(root), dir)
+    for root, directories, files in os.walk(folder):
+        for directory in directories:
+            if directory.lower() == "@resources":
+                return os.path.join(os.path.abspath(root), directory)
 
 
 NAME_PATTERN = re.compile(r"^\s*Name=(.+)$", re.IGNORECASE)
