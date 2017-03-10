@@ -36,7 +36,7 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
 
         return ret_value
 
-    def __get_yaml_content_in_package(self, package, dir_of_yaml, yaml_file):
+    def __yaml_content_in_package(self, package, dir_of_yaml, yaml_file):
         # try searching in Installed Packages e.g. if packaged in .sublime-package
         packages_path = sublime.installed_packages_path()
         sublime_package = package + ".sublime-package"
@@ -49,7 +49,7 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
 
         return None
 
-    def __get_yaml_content_by_sublime_api(self, dir_of_yaml, yaml_file):
+    def __yaml_content_by_sublime_api(self, dir_of_yaml, yaml_file):
         # try over sublimes find resources first
         # should handle loose and packaged version
         for resource in sublime.find_resources(yaml_file):
@@ -59,7 +59,7 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
                 )
                 return sublime.load_resource(resource)
 
-    def __get_yaml_content_by_git_path(self, dir_of_yaml, yaml_file):
+    def __yaml_content_by_git_path(self, dir_of_yaml, yaml_file):
         # try over absolute paths determined from root e.g. by cloning with git
         rm_root_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
         # the dir_of_yaml comes in as foo/bar but internally python uses foo\\bar
@@ -72,7 +72,8 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
             with open(yaml_path, 'r') as yaml_content_stream:
                 return yaml_content_stream.read()
 
-    def __fail(self, dir_of_yaml, yaml_file):
+    @staticmethod
+    def __fail(dir_of_yaml, yaml_file):
         logger.error(
             "found not yaml neither via sublime resources, nor absolute pathing, " +
             "nor .sublime-package for '" + dir_of_yaml + yaml_file + "'."
@@ -89,7 +90,7 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
         Parameters
         ----------
         """
-        return self.__get_yaml_content_by_sublime_api(dir_of_yaml, yaml_file) or \
-            self.__get_yaml_content_by_git_path(dir_of_yaml, yaml_file) or \
-            self.__get_yaml_content_in_package("Rainmeter", dir_of_yaml, yaml_file) or \
-            self.__fail(dir_of_yaml, yaml_file)
+        return self.__yaml_content_by_sublime_api(dir_of_yaml, yaml_file) or \
+            self.__yaml_content_by_git_path(dir_of_yaml, yaml_file) or \
+            self.__yaml_content_in_package("Rainmeter", dir_of_yaml, yaml_file) or \
+            YamlContentReader.__fail(dir_of_yaml, yaml_file)
