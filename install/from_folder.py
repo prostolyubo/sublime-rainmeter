@@ -1,6 +1,4 @@
-"""
-This module handles the business logic to install skins from a local directory.
-"""
+"""This module handles the business logic to install skins from a local directory."""
 
 import os
 import re

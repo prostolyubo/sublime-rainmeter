@@ -1,6 +1,4 @@
-"""
-This module handles the business logic to install skins from zip files.
-"""
+"""This module handles the business logic to install skins from zip files."""
 
 
 def install_skin_zip_into_skins_folder(skin_zip):
