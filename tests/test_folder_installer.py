@@ -1,4 +1,4 @@
-"""This module is for testing installing skins via given folders"""
+"""This module is for testing installing skins via given folders."""
 
 
 import os.path
@@ -13,9 +13,12 @@ SKIN_PATH_PROVIDER = sys.modules["Rainmeter.path.skin_path_provider"]
 
 
 class TestFolderInstaller(TestCase):
-    """Test for the levenshtein module using unittest."""
+    """
+    Test for the levenshtein module using unittest.
+    """
 
     def test_find_inis_correct_count(self):
+        """Find 8 ini files in skin_folder."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
 
@@ -24,6 +27,7 @@ class TestFolderInstaller(TestCase):
         self.assertEqual(len(inis), 8)
 
     def test_find_inis_exists(self):
+        """All found ini files exist."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
 
@@ -33,6 +37,7 @@ class TestFolderInstaller(TestCase):
             self.assertTrue(os.path.exists(ini))
 
     def test_find_skin_name_in_inis(self):
+        """Skin name BeatTime found via ini files."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
 
@@ -66,11 +71,11 @@ class TestFolderInstaller(TestCase):
 
         inis = FOLDER_INSTALLER.find_inis_in_folder(folder_path)
         common_path = FOLDER_INSTALLER.common_path(inis)
-        print(common_path)
 
         self.assertTrue(os.path.exists(common_path))
 
     def test_common_path_of_skin_exists(self):
+        """Common path testing with ini and @Resources folder mixed."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
 
@@ -85,6 +90,7 @@ class TestFolderInstaller(TestCase):
         self.assertTrue(os.path.exists(common_path))
 
     def test_install_into_skins_folder(self):
+        """Install simple skin into Rainmeter skins folder."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
 
@@ -112,6 +118,7 @@ class TestFolderInstaller(TestCase):
             self.assertTrue(resources_path_exists)
 
     def test_install_multi_skin_folder_into_skins_folder(self):
+        """Install multi skin configuration into Rainmeter skins folder."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "multi_skin_folder")
 
@@ -168,6 +175,7 @@ class TestFolderInstaller(TestCase):
             self.assertTrue(skin_path_exists)
 
     def test_folder_already_exists_not_existing(self):
+        """A skin skin_folder should not be already installed at destination."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
 
