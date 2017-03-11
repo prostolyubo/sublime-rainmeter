@@ -107,7 +107,9 @@ GITHUB_ACCESS_TOKEN = "3e2e92777aab20a3352c058f9a8eb10e5ff5fd61"
 #             info("Downloaded zip to temp file '" + temp_file + "'.")
 
 #             if not zipfile.is_zipfile(temp_file):
-#                 message = "The file from '" + url + "' is not a valid ZIP file. Invalid files can not be extracted. Aborting Operation."
+#                 message = "The file from '" +
+#                           url +
+#                           "' is not a valid ZIP file. Invalid files can not be extracted. Aborting Operation."
 
 #                 error(message)
 #                 sublime.error_message(message)
