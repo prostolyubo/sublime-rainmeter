@@ -274,7 +274,7 @@ class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
         with open(install_cache_path, write_mode) as cache_handler:
             cache_handler.write(path)
 
-        from_zip.install_skin_zip_into_skins_folder(path)
+        from_zip.install_skin_zip(path)
         sublime.status_message("Skin was successfully installed!")
 
 
