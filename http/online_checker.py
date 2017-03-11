@@ -12,7 +12,7 @@ This does not mean, that do not need to handle a failure on their part
 import http.client
 
 
-def __is_online(domain, sub_path, response_status, response_reason):
+def _is_online(domain, sub_path, response_status, response_reason):
     conn = http.client.HTTPSConnection(domain, timeout=1)
     conn.request("HEAD", sub_path)
     response = conn.getresponse()
@@ -29,7 +29,7 @@ def is_rm_doc_online():
     with the latest online version. These information are stored and parsed
     to display them as a tooltip on special constructs.
     """
-    return __is_online("docs.rainmeter.net", "/manual-beta/", 200, "OK")
+    return _is_online("docs.rainmeter.net", "/manual-beta/", 200, "OK")
 
 
 def is_gh_online():
@@ -40,7 +40,7 @@ def is_gh_online():
     and thus just being GitHub online does not mean,
     that required parts are online.
     """
-    return __is_online("github.com", "/", 200, "OK")
+    return _is_online("github.com", "/", 200, "OK")
 
 
 def is_gh_raw_online():
@@ -53,4 +53,4 @@ def is_gh_raw_online():
     We do not follow reroutes else it would be 200 OK on github.com but we already have another method to check for that
     and Github.com is on a different service than the content delivery.
     """
-    return __is_online("raw.githubusercontent.com", "/", 301, "Moved Permanently")
+    return _is_online("raw.githubusercontent.com", "/", 301, "Moved Permanently")

@@ -45,7 +45,7 @@ def compile_values(options):
             option_values = option['values']
 
             for option_value in option_values:
-                compiled_value = __compile_value(option_value)
+                compiled_value = _compile_value(option_value)
                 compiled_values.append(compiled_value)
 
         key_to_values[option_key] = compiled_values
@@ -53,7 +53,7 @@ def compile_values(options):
     return key_to_values
 
 
-def __compile_value(value_elements):
+def _compile_value(value_elements):
     """
     Transpile a list of elements into a sublime text completion scheme.
 
