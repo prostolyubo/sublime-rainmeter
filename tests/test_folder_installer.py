@@ -75,7 +75,7 @@ class TestFolderInstaller(TestCase):
         folder_path = os.path.join(tests_folder, "skin_folder")
 
         inis = FOLDER_INSTALLER.find_inis_in_folder(folder_path)
-        resources = FOLDER_INSTALLER.find_resources_folders_in_folder(folder_path)
+        resources = FOLDER_INSTALLER.find_resources_folders(folder_path)
 
         paths = list(inis)
         paths.extend(resources)

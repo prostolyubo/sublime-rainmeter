@@ -32,7 +32,7 @@ def install_into_skins_folder(skin_folder):
 
     inis = find_inis_in_folder(skin_folder)
     skin_name = os.path.basename(common_path(inis))
-    resources_folders = find_resources_folders_in_folder(skin_folder)
+    resources_folders = find_resources_folders(skin_folder)
 
     paths = []
     paths.extend(inis)
@@ -67,7 +67,7 @@ def common_path(paths):
     return os.path.dirname(os.path.commonprefix([p + os.path.sep for p in paths]))
 
 
-def find_resources_folders_in_folder(folder):
+def find_resources_folders(folder):
     """
     Find @Resources folders in the given folder.
 
