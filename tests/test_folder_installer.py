@@ -41,7 +41,7 @@ class TestFolderInstaller(TestCase):
 
         self.assertEqual(skin_name, "BeatTime")
 
-    def test_find_resources_folder_in_skin(self):
+    def test_find_resources_folder(self):
         """Should find a resources folder."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
@@ -50,7 +50,7 @@ class TestFolderInstaller(TestCase):
 
         self.assertNotEqual(maybe_resources_folder, None)
 
-    def test_existence_resource_folder_in_skin(self):
+    def test_existence_resource_folder(self):
         """Found folder should exist."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
