@@ -203,7 +203,8 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
             return
 
         if not from_folder.find_inis_in_folder(path):
-            sublime.error_message("The entered path '" + path + "' is not a valid Rainmeter skin. Please check your input.")
+            message = "The entered path '" + path + "' is not a valid Rainmeter skin. Please check your input."
+            sublime.error_message(message)
             return
 
         # we expect the user to enter a new path which we need to persist
