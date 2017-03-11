@@ -191,7 +191,6 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
 
         Checks the given user input to verify some basic requirements like that it is a directory.
         """
-
         if not os.path.exists(path):
             sublime.error_message("The entered path '" + path + "' is not valid. Please check your input.")
             return
@@ -220,7 +219,11 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
 
 
 class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
-    """Class extending the ApplicationCommand from ST3."""
+    """
+    Class extending the ApplicationCommand from ST3.
+
+    Command string is rainmeter_install_skin_from_zip_command.
+    """
 
     def run(self):
         # check cache first to determine the default path shown to the user
@@ -248,7 +251,6 @@ class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
 
     def on_zip_path_entered(self, path):
         """Executed after a zip path is entered."""
-
         if not os.path.exists(path):
             sublime.error_message("The entered path '" + path + "' is not valid. Please check your input.")
             return
@@ -277,7 +279,11 @@ class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
 
 
 class RainmeterInstallSkinFromGitCommand(sublime_plugin.ApplicationCommand):
-    """Class extending the ApplicationCommand from ST3."""
+    """
+    Class extending the ApplicationCommand from ST3.
+
+    Command String is rainmeter_install_skin_from_git_command.
+    """
 
     def run(self):
         """Executed after this command is triggered from the ST3 API."""
@@ -289,7 +295,11 @@ class RainmeterInstallSkinFromGitCommand(sublime_plugin.ApplicationCommand):
 
 
 class RainmeterInstallSkinFromGithubCommand(sublime_plugin.ApplicationCommand):
-    """Class extending the ApplicationCommand from ST3."""
+    """
+    Class extending the ApplicationCommand from ST3.
+
+    Command string is rainmeter_install_skin_from_github.
+    """
 
     def run(self):
         """Executed after this command is triggered from the ST3 API."""
