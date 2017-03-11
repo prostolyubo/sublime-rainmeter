@@ -43,7 +43,7 @@ def get_rm_path_from_registry():
     return rainmeter_path
 
 
-def __executable_exists(rm_path):
+def _executable_exists(rm_path):
     """Check if Rainmeter executable exists."""
     # normalize path
     rainmeter_exe = os.path.join(rm_path, "Rainmeter.exe")
@@ -94,7 +94,7 @@ def get_cached_program_path():
         logger.info(message)
         return
 
-    if not __executable_exists(rm_path):
+    if not _executable_exists(rm_path):
         return
 
     logger.info("Rainmeter found in " + rm_path)
