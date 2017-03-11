@@ -1,3 +1,11 @@
+"""
+Install skin is the plugin to handle the installation of skins.
+
+This can be done various providers; from basic local folders,
+up to server-side providers like DeviantArt or GitHub.
+"""
+
+
 import os.path
 # import shutil
 # import tempfile
@@ -148,6 +156,11 @@ GITHUB_ACCESS_TOKEN = "3e2e92777aab20a3352c058f9a8eb10e5ff5fd61"
 
 
 class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
+    """
+    Command to install skin from a folder.
+
+    Command String is rainmeter_install_skin_from_folder_command.
+    """
 
     def run(self):
         # check cache first to determine the default path shown to the user
@@ -173,6 +186,12 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
         )
 
     def on_folder_path_entered(self, path):
+        """
+        Executed after a path is entered.
+
+        Checks the given user input to verify some basic requirements like that it is a directory.
+        """
+
         if not os.path.exists(path):
             sublime.error_message("The entered path '" + path + "' is not valid. Please check your input.")
             return
@@ -201,6 +220,7 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
 
 
 class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
+    """Class extending the ApplicationCommand from ST3."""
 
     def run(self):
         # check cache first to determine the default path shown to the user
@@ -227,6 +247,8 @@ class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
         )
 
     def on_zip_path_entered(self, path):
+        """Executed after a zip path is entered."""
+
         if not os.path.exists(path):
             sublime.error_message("The entered path '" + path + "' is not valid. Please check your input.")
             return
@@ -255,17 +277,22 @@ class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
 
 
 class RainmeterInstallSkinFromGitCommand(sublime_plugin.ApplicationCommand):
+    """Class extending the ApplicationCommand from ST3."""
 
     def run(self):
+        """Executed after this command is triggered from the ST3 API."""
         pass
 
     def on_git_path_entered(self, path):
-        pass
+        """Executed after a Git path is entered."""
+        print(path)
 
 
 class RainmeterInstallSkinFromGithubCommand(sublime_plugin.ApplicationCommand):
+    """Class extending the ApplicationCommand from ST3."""
 
     def run(self):
+        """Executed after this command is triggered from the ST3 API."""
         default_path = "https://github.com/<user>/<repository>"
         sublime.active_window().show_input_panel(
             "Enter skin zip location:",
@@ -274,5 +301,7 @@ class RainmeterInstallSkinFromGithubCommand(sublime_plugin.ApplicationCommand):
         )
 
     def on_github_path_entered(self, path):
+        """Executed after a GitHub path is entered."""
+
         if is_gh_online():
-            print("Github is online")
+            print("Github is online:", path)
