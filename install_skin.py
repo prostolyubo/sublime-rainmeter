@@ -145,7 +145,8 @@ GITHUB_ACCESS_TOKEN = "3e2e92777aab20a3352c058f9a8eb10e5ff5fd61"
 
 #     def run(self):
 #         if not is_gh_online():
-#             message = "Could not access github.com. Please check your connection and try again or look if github.com is down."
+#             message = "Could not access github.com. "+
+#                       "Please check your connection and try again or look if github.com is down."
 
 #             error(message)
 #             sublime.error_message(message)
