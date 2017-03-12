@@ -14,6 +14,7 @@ from .path.program_path_provider import get_cached_program_path
 
 
 def calculate_refresh_commands(rm_exe, config, fil, activate, is_inc):
+    """Detect if an activate config flag is required or not."""
     if activate:
         cmds = [rm_exe, "!ActivateConfig", config]
         if not is_inc:
