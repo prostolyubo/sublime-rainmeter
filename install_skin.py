@@ -319,6 +319,7 @@ class RainmeterInstallSkinFromGithubCommand(sublime_plugin.ApplicationCommand):
             self.__on_github_path_entered, None, None
         )
 
+    @classmethod
     def __on_github_path_entered(cls, path):
         """Executed after a GitHub path is entered."""
 
