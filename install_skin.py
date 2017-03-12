@@ -166,6 +166,7 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
     """
 
     def run(self):
+        """Automatically executed upon calling this command."""
         # check cache first to determine the default path shown to the user
         install_cache_path = os.path.join(sublime.cache_path(), "Rainmeter", "install", "last_entered_folder.cache")
         if os.path.exists(install_cache_path) and os.path.isfile(install_cache_path):
@@ -230,6 +231,7 @@ class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
     """
 
     def run(self):
+        """Automatically executed upon calling this command."""
         # check cache first to determine the default path shown to the user
         install_cache_path = os.path.join(sublime.cache_path(), "Rainmeter", "install", "last_entered_zip.cache")
         if os.path.exists(install_cache_path) and os.path.isfile(install_cache_path):
