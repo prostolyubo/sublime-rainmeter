@@ -186,10 +186,11 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
         sublime.active_window().show_input_panel(
             "Enter skin folder location:",
             default_path,
-            self.on_folder_path_entered, None, None
+            self.__on_folder_path_entered, None, None
         )
 
-    def on_folder_path_entered(self, path):
+    @classmethod
+    def __on_folder_path_entered(cls, path):
         """
         Executed after a path is entered.
 
@@ -252,10 +253,11 @@ class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
         sublime.active_window().show_input_panel(
             "Enter skin zip location:",
             default_path,
-            self.on_zip_path_entered, None, None
+            self.__on_zip_path_entered, None, None
         )
 
-    def on_zip_path_entered(self, path):
+    @classmethod
+    def __on_zip_path_entered(cls, path):
         """Executed after a zip path is entered."""
         if not os.path.exists(path):
             sublime.error_message("The entered path '" + path + "' is not valid. Please check your input.")
@@ -295,7 +297,8 @@ class RainmeterInstallSkinFromGitCommand(sublime_plugin.ApplicationCommand):
         """Executed after this command is triggered from the ST3 API."""
         pass
 
-    def on_git_path_entered(self, path):
+    @classmethod
+    def __on_git_path_entered(cls, path):
         """Executed after a Git path is entered."""
         print(path)
 
@@ -313,10 +316,10 @@ class RainmeterInstallSkinFromGithubCommand(sublime_plugin.ApplicationCommand):
         sublime.active_window().show_input_panel(
             "Enter skin zip location:",
             default_path,
-            self.on_github_path_entered, None, None
+            self.__on_github_path_entered, None, None
         )
 
-    def on_github_path_entered(self, path):
+    def __on_github_path_entered(cls, path):
         """Executed after a GitHub path is entered."""
 
         if is_gh_online():
