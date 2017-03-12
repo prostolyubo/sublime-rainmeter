@@ -158,7 +158,7 @@ GITHUB_ACCESS_TOKEN = "3e2e92777aab20a3352c058f9a8eb10e5ff5fd61"
 #         )
 
 
-class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
+class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):  # pylint: disable=R0903; commands
     """
     Command to install skin from a folder.
 
@@ -224,7 +224,7 @@ class RainmeterInstallSkinFromFolderCommand(sublime_plugin.ApplicationCommand):
         sublime.message_dialog("Skin was successfully installed into \n\n" + dest_folder)
 
 
-class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
+class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):  # pylint: disable=R0903; commands
     """
     Class extending the ApplicationCommand from ST3.
 
@@ -286,7 +286,7 @@ class RainmeterInstallSkinFromZipCommand(sublime_plugin.ApplicationCommand):
         sublime.status_message("Skin was successfully installed!")
 
 
-class RainmeterInstallSkinFromGitCommand(sublime_plugin.ApplicationCommand):
+class RainmeterInstallSkinFromGitCommand(sublime_plugin.ApplicationCommand):  # pylint: disable=R0903; commands
     """
     Class extending the ApplicationCommand from ST3.
 
@@ -303,7 +303,7 @@ class RainmeterInstallSkinFromGitCommand(sublime_plugin.ApplicationCommand):
         print(path)
 
 
-class RainmeterInstallSkinFromGithubCommand(sublime_plugin.ApplicationCommand):
+class RainmeterInstallSkinFromGithubCommand(sublime_plugin.ApplicationCommand):  # pylint: disable=R0903; commands
     """
     Class extending the ApplicationCommand from ST3.
 
