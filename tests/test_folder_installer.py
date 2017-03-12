@@ -117,7 +117,7 @@ class TestFolderInstaller(TestCase):
             self.assertTrue(skin_path_exists)
             self.assertTrue(resources_path_exists)
 
-    def test_install_multi_skin_folder_into_skins_folder(self):
+    def test_install_multi_skin(self):
         """Install multi skin configuration into Rainmeter skins folder."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "multi_skin_folder")
@@ -141,7 +141,11 @@ class TestFolderInstaller(TestCase):
 
             self.assertTrue(skin_path_exists)
 
-    def test_folder_already_exists_existing(self):
+
+class TestFolderInstallerFolderAlreadyExists(TestCase):
+    """Standalone class for method testing folder_already_exists."""
+
+    def test_existing(self):
         """
         Given
             installing a skin with name BeatTime from a folder
@@ -174,7 +178,7 @@ class TestFolderInstaller(TestCase):
 
             self.assertTrue(skin_path_exists)
 
-    def test_folder_already_exists_not_existing(self):
+    def test_not_existing(self):
         """A skin skin_folder should not be already installed at destination."""
         tests_folder = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(tests_folder, "skin_folder")
