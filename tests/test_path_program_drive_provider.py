@@ -1,6 +1,5 @@
 """This module contains the tests for the program drive provider."""
 
-
 import sys
 
 from unittest import TestCase

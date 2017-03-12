@@ -40,6 +40,7 @@ def sections_contain_section_id(sections, section_id):
 
 
 class SkinSectionAutoCompleter(YamlContentReader):  # pylint: disable=R0903; only provide one method
+
     """
     Ths class is the logical state holder for the auto completion suggestions.
 

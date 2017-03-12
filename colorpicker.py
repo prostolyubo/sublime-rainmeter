@@ -27,6 +27,7 @@ from .color import converter
 
 
 class RainmeterReplaceColorCommand(sublime_plugin.TextCommand):  # pylint: disable=R0903; we only need one method
+
     """
     Replace a region with a text.
 

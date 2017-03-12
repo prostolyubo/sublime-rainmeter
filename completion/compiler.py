@@ -54,7 +54,7 @@ def compile_values(options):
 
 
 def _compile_value(value_elements):
-    """
+    r"""
     Transpile a list of elements into a sublime text completion scheme.
 
     A completion scheme is a tuple constructed as:
