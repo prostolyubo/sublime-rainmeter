@@ -1,3 +1,5 @@
+"""This module is to test the new skin tools module."""
+
 import sys
 
 import sublime
