@@ -5,12 +5,12 @@ import sublime
 from unittest import TestCase
 
 
-class TestThemeSwitcher(TestCase):
+class TestThemeSwitcherEditThemeCommand(TestCase):
     """Test class wrapper using unittest."""
 
     # pylint: disable=W0703; This is acceptable since we are testing it not failing
 
-    def test_edit_theme_command_single_theme(self):
+    def test_single_theme(self):
         """Changing the theme should effect the settings."""
         win = sublime.active_window()
 
@@ -27,7 +27,7 @@ class TestThemeSwitcher(TestCase):
 
         self.assertTrue(future_skin in post_theme)
 
-    def test_edit_theme_command_multi_theme(self):
+    def test_multi_theme(self):
         """Changing to a non existing theme does not effect the settings."""
         win = sublime.active_window()
 
