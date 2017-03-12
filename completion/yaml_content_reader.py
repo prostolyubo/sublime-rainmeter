@@ -49,7 +49,8 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
 
         return None
 
-    def __yaml_content_by_sublime_api(self, dir_of_yaml, yaml_file):
+    @classmethod
+    def __yaml_content_by_sublime_api(cls, dir_of_yaml, yaml_file):
         # try over sublimes find resources first
         # should handle loose and packaged version
         for resource in sublime.find_resources(yaml_file):
@@ -59,7 +60,8 @@ class YamlContentReader(object):  # pylint: disable=R0903; this is an abstract c
                 )
                 return sublime.load_resource(resource)
 
-    def __yaml_content_by_git_path(self, dir_of_yaml, yaml_file):
+    @classmethod
+    def __yaml_content_by_git_path(cls, dir_of_yaml, yaml_file):
         # try over absolute paths determined from root e.g. by cloning with git
         rm_root_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
         # the dir_of_yaml comes in as foo/bar but internally python uses foo\\bar
