@@ -1,3 +1,5 @@
+"""This module is to test the refresh commands plugin."""
+
 import sys
 
 from unittest import TestCase
