@@ -9,11 +9,11 @@ This does not mean, that do not need to handle a failure on their part
 """
 
 
-import http.client
+from http.client import HTTPSConnection
 
 
 def _is_online(domain, sub_path, response_status, response_reason):
-    conn = http.client.HTTPSConnection(domain, timeout=1)
+    conn = HTTPSConnection(domain, timeout=1)
     conn.request("HEAD", sub_path)
     response = conn.getresponse()
     conn.close()
