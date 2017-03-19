@@ -5,7 +5,7 @@ import sys
 
 from unittest import TestCase
 
-ONLINE_CHECKER = sys.modules["Rainmeter.http.online_checker"]
+ONLINE_CHECKER = sys.modules["Rainmeter.web.online_checker"]
 
 
 class TestRmDocOnlineChecker(TestCase):
