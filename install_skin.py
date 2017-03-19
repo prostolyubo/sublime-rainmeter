@@ -16,8 +16,8 @@ import sublime_plugin
 
 # from .logger import info, error
 
-from .http.online_checker import is_gh_online
-# from .http.content_downloader import download_from_to
+from .web.online_checker import is_gh_online
+# from .web.content_downloader import download_from_to
 from .install import from_folder
 from .install import from_zip
 # from .path.skin_path_provider import get_cached_skin_path

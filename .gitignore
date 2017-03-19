@@ -37,6 +37,7 @@
 
 # include http
 !http/
+!web/
 
 # include install package which handles installing skins
 !install
