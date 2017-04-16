@@ -128,8 +128,37 @@ class ContextSensAutoCompletion(object):
 
         return key_values
 
+    def __autocomplete_value(self, line_content, section):
+        key_match, value_match = self.get_key_value(line_content)
+
+        if value_match == "":
+            logger.info("after equal trigger in '" + line_content + "'")
+            # value trigger
+            return self.skin_rainmeter_section.get_value_context_completion(
+                section,
+                key_match
+            )
+
+    def __autocomplete_key(self, line_content, prefix, section, key_values):
+        # only do key completion if we are in the key are
+        # that means in front of the equal or no equal at all
+        logger.info("before equal trigger in '" + line_content + "'")
+        key_result = self.skin_rainmeter_section.get_key_context_completion(
+            prefix,
+            line_content,
+            section,
+            key_values
+        )
+
+        return key_result
+
+    @classmethod
+    def __autocomplete_default(cls):
+        return None
+
     def on_query_completions(self, view, prefix, locations):
-        """Execute if a auto completion is requested.
+        """
+        Execute if a auto completion is requested.
 
         can be either via typing or manual invoked with ctrl+space.
 
@@ -185,52 +214,9 @@ class ContextSensAutoCompletion(object):
             first_line = section_lines[0]
             match = self.section_expression.search(first_line)
 
-            # no section defined
-            # TODO section suggestion
-            # if not match:
-            #     logger.info("no section found")
-            #     size = view.size()
-            #     content = view.substr(sublime.Region(0, size))
-            #     sections = self.bracket_expression.findall(content)
-
-            #     return self.section.get_key_context_completion(prefix, line_content, sections)
             section = match.group(1)
-
-            key_match, value_match = self.get_key_value(line_content)
             key_values = self.get_key_values(section_lines)
 
-            if value_match == "":
-                logger.info("after equal trigger in '" + line_content + "'")
-                # value trigger
-                value_result = self.skin_rainmeter_section.get_value_context_completion(
-                    section,
-                    key_match
-                )
-
-                if value_result:
-                    return value_result
-
-            # only do key completion if we are in the key are
-            # that means in front of the equal or no equal at all
-            else:
-                logger.info("before equal trigger in '" + line_content + "'")
-                key_result = self.skin_rainmeter_section.get_key_context_completion(
-                    prefix,
-                    line_content,
-                    section,
-                    key_values
-                )
-
-                if key_result:
-                    return key_result
-
-                key_result = self.skin_metadata_section.get_key_context_completion(
-                    prefix,
-                    line_content,
-                    section,
-                    key_values
-                )
-                if key_result:
-                    return key_result
-
-            return None
+            return self.__autocomplete_value(line_content, section) or \
+                self.__autocomplete_key(line_content, prefix, section, key_values) or \
+                self.__autocomplete_default()
