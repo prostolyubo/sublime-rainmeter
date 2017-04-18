@@ -183,6 +183,14 @@ contexts:
           captures:
             1: support.constant.option_values.rainmeter
         - include: meter-shape-modifier
+        # capture measures
+        - match: "(\\[.+\\])"
+          captures:
+            1: variable.other.dynamic.rainmeter
+        # capture variables
+        - match: "(\\#.+\\#)"
+          captures:
+            1: support.variable.rainmeter
         - match: $
           pop: true
 
