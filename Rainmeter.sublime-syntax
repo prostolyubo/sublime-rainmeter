@@ -393,13 +393,38 @@ contexts:
         2: keyword.operator.option.equal.rainmeter
         4: invalid.rainmeter
 
-    # 
+    # Rainmeter plugins
     - match: "(?i)^\\s*(plugin)\\s*(=)\\s*(((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|FileView|InputText|iTunesPlugin|MediaKey|NowPlaying|PerfMon|PingPlugin|PowerPlugin|Process|QuotePlugin|RecycleManager|ResMon|RunCommand|SpeedFanPlugin|SysInfo|VirtualDesktops|WebParser|WiFiStatus|AudioLevel|Win7AudioPlugin|WindowMessagePlugin)(\\.dll)?)|\"((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|InputText|iTunes|MediaKey|NowPlaying|PerfMon|Ping|Power|Process|Quote|RecycleManager|ResMon|RunCommand|SpeedFan|SysInfo|VirtualDesktops|WebParser|WiFiStatus|Win7Audio|WindowMessage)(\\.dll)?)\")\\s*$"
       scope: meta.option.plugin.rainmeter
       captures: 
         1: storage.type.option.predefined.rainmeter
         2: keyword.operator.option.equal.rainmeter
         3: support.constant.names.rainmeter
+
+    # custom plugins
+    - match: "(?i)^\\s*(plugin)\\s*(=)\\s*(MSIAfterburner.dll)\\s*$"
+      scope: meta.option.plugin.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.names.rainmeter
+    
+    # MSI After Burner DataSource matching
+    # the values are case sensitive so no ignore case
+    # with ?-i the case sensivity is disabled
+    - match:  "^\\s*(?i)(DataSource)(?-i)\\s*(=)\\s*(Core clock|Fan speed|Fan tachometer|Framerate|GPU usage|GPU temperature|GPU voltage|Memory clock|PCB temperature|Shader clock)\\s*$"
+      scope: meta.option.plugin.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+    # basically everything else is invalid
+    - match: "^\\s*(?i)(DataSource)(?-i)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.meter.invalid.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
 
     # 
     - match: "(?i)^\\s*(TooltipIcon)\\s*(=)\\s*((INFO|WARNING|ERROR|QUESTION|SHIELD)|\"(INFO|WARNING|ERROR|QUESTION|SHIELD)\")\\s*$"
