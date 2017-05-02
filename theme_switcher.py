@@ -38,13 +38,11 @@ class EditThemeCommand(sublime_plugin.ApplicationCommand):
         rm_exp = re.compile(r"Packages/Rainmeter/", re.IGNORECASE)
 
         theme_exp = re.compile(re.escape(theme))
-        filtered_themes = list(
-            filter(lambda t: rm_exp.search(t) and theme_exp.search(t), all_themes)
-        )
+        filtered_themes = [theme for theme in all_themes if rm_exp.search(theme) and theme_exp.search(theme)]
 
         if len(filtered_themes) != 1:
-            stringified_all_themes = '\n'.join(map(str, all_themes))
-            stringified_filtered_themes = '\n'.join(map(str, filtered_themes))
+            str_all_themes = '\n'.join(str(t) for t in all_themes)
+            str_filtered_themes = '\n'.join(str(t) for t in filtered_themes)
             message = """searched for '{theme}' in
 
                          {stringified_all_themes}
@@ -54,8 +52,8 @@ class EditThemeCommand(sublime_plugin.ApplicationCommand):
                          {stringified_filtered_themes}"""
             formatted_message = message.format(
                 theme=theme,
-                stringified_all_themes=stringified_all_themes,
-                stringified_filtered_themes=stringified_filtered_themes
+                stringified_all_themes=str_all_themes,
+                stringified_filtered_themes=str_filtered_themes
             )
             logger.error(formatted_message)
             sublime.error_message(formatted_message)
