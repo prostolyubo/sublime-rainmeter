@@ -175,7 +175,7 @@ contexts:
         1: storage.type.option.predefined.rainmeter
         3: keyword.operator.option.equal.rainmeter
       push:
-        - match: (Path)\s+([a-zA-Z0-9]+)
+        - match: (Path[1]?)\s+([a-zA-Z0-9]+)
           captures:
             1: support.constant.option_values.rainmeter
             2: storage.type.variable.rainmeter
