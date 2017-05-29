@@ -536,6 +536,7 @@
         {"trigger": "ln\tNatural logarithm of x", "contents": "ln(${1:x})"},
         {"trigger": "log\tBase 10 logarithm of x", "contents": "log(${1:x})"},
         {"trigger": "rad\tConverts x degrees to radians", "contents": "rad(${1:x})"},
+        {"trigger": "deg\tConverts x radians to degrees", "contents": "deg(${1:x})"},
         {"trigger": "round\tRounds x to integer or with precision", "contents": "round(${1:x}${2:, ${3:(precision)}})"},
         {"trigger": "sgn\t1 if x is positive, -1 if x is negative, or 0 if x is zero", "contents": "sgn(${1:x})"},
         {"trigger": "sin\tSine of an angle of x radians", "contents": "sin(${1:x})" },            
