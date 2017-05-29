@@ -508,6 +508,22 @@ contexts:
         2: keyword.operator.option.equal.rainmeter
         4: invalid.rainmeter
 
+    # FontWeight attribute of String Meter
+    - match: "(?i)^\\s*(fontweight)\\s*(=)\\s*([1-9]\\d{0,2})\\s*$"
+      scope: meta.option.fontweight.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: constant.numeric.rainmeter
+
+    # invalid FontWeight options
+    - match: "(?i)^\\s*(fontweight)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.fontweight.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+
     # 
     - match: "(?i)^\\s*(stringalign)\\s*(=)\\s*(((Left|Right|Center)(Bottom|Top|Center)?)|\"((Left|Right|Center)(Bottom|Top|Center)?)\")\\s*$"
       scope: meta.option.align.rainmeter
@@ -524,7 +540,7 @@ contexts:
         2: keyword.operator.option.equal.rainmeter
         4: invalid.rainmeter
 
-    # 
+    # StringStyle attribute of String Meter
     - match: "(?i)^\\s*(stringstyle)\\s*(=)\\s*((Normal|Bold|Italic|Bolditalic)|\"(Normal|Bold|Italic|Bolditalic)\")\\s*$"
       scope: meta.option.stringstyle.rainmeter
       captures: 
@@ -532,7 +548,7 @@ contexts:
         2: keyword.operator.option.equal.rainmeter
         3: support.constant.option_values.rainmeter
 
-    # 
+    # invalid string styles
     - match: "(?i)^\\s*(stringstyle)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
       scope: meta.option.stringstyle.invalid.rainmeter
       captures: 

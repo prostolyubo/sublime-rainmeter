@@ -122,6 +122,7 @@
         "FontEffectColor",
         "FontFace",
         "FontSize",
+        "FontWeight",
         "ForceReload",
         "Format",
         "FormatLocale",
