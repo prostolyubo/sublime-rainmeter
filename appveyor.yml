@@ -84,7 +84,7 @@ after_test:
 
 
     # additional support for codeclimate
-    - pip install 'codeclimate-test-reporter>=4.0,<4.4'
+    - pip install codeclimate-test-reporter==0.2.1
     - codeclimate-test-reporter
 
 
