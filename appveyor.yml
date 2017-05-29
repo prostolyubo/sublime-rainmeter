@@ -91,8 +91,8 @@ after_test:
     # additional support for codecov
     # no token required for Travis-CI, CircleCI and AppVeyor for public repositories 
     # -X gcov disables gcov input if not needed
-    - pip install codecov
-    - codecov -X gcov
+    - pip install codecov==2.0.6
+    - codecov
 
     # this needs to be here in after_test and not in on_success because artifacts are collected directly after after_test
     # package application without ps
