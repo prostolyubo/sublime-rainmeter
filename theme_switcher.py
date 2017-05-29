@@ -1,5 +1,5 @@
 """
-The theme switcher is a construct to allow easy manipulations of the rainmeter themes.
+Allow easy manipulations of the rainmeter themes.
 
 The rainmeter themes are hidden to the default system
 so other systems can not use these color schemes.
@@ -14,7 +14,7 @@ from . import logger
 
 
 class EditThemeCommand(sublime_plugin.ApplicationCommand):
-    """Command class to bind to the sublime text API via the ApplicationCommand."""
+    """Bind to the sublime text API via the ApplicationCommand."""
 
     def run(self, theme):  # pylint: disable=R0201; sublime text API, no need for class reference
         """
