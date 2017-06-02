@@ -451,6 +451,10 @@
         {"trigger": "!DraggableGroup", "contents": "!DraggableGroup \"${1:NewSetting:(0|1|-1)}\" \"${2:ConfigGroup}\""},
         {"trigger": "!EnableMeasure", "contents": "!EnableMeasure \"${1:Measure}\" ${2:\"${3:(Config)}\"}"},
         {"trigger": "!EnableMeasureGroup", "contents": "!EnableMeasureGroup \"${1:Group}\" ${2:\"${3:(Config)}\"}"},
+        
+        {"trigger": "!FadeDuration", "contents": "!FadeDuration ${1:Duration} ${2:\"${3:(Config)}\"}"},
+        {"trigger": "!FadeDurationGroup", "contents": "!FadeDurationGroup ${1:Duration} \"${2:ConfigGroup}\""},
+
         {"trigger": "!Hide", "contents": "!Hide ${1:\"${2:(Config)}\"}"},
         {"trigger": "!HideBlur", "contents": "!HideBlur ${1:\"${2:(Config)}\"}"},
         {"trigger": "!HideFade", "contents": "!HideFade ${1:\"${2:(Config)}\"}"},
