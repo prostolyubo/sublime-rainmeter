@@ -84,7 +84,7 @@ contexts:
       scope: support.variable.userinput.rainmeter
 
     # Deprecated bangs
-    - match: "(?i)!((Rainmeter((SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Update)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Show|Hide)(Group)?)))|Execute|(Rainmeter)?PluginBang)\\b"
+    - match: "(?i)!((Rainmeter((SetClip)|(EditSkin)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Update)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Show|Hide)(Group)?)))|Execute|(Rainmeter)?PluginBang)\\b"
       scope: invalid.deprecated.bang.rainmeter
 
     - include: bangs
@@ -662,7 +662,7 @@ contexts:
 
   built-in-variables:
       # Rainmeter builtin variables
-    - match: "(?i)(#@#|#PROGRAMDRIVE#)|(#PROGRAMPATH#)|(#SETTINGSPATH#)|(#SKINSPATH#)|(#PLUGINSPATH#)|(#ADDONSPATH#)|(#CURRENTPATH#)|(#ROOTCONFIGPATH#)|(#CURRENTFILE#)|(#CURRENTCONFIG#)|(#CURRENTSECTION#)|(#CURRENTCONFIGWIDTH#)|(#CURRENTCONFIGHEIGHT#)|(#CURRENTCONFIGX#)|(#CURRENTCONFIGY#)|(#[Pp]?WORKAREAX#)|(#[Pp]?WORKAREAY#)|(#[Pp]?WORKAREAWIDTH#)|(#[Pp]?WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAWIDTH#)|(#[PpVv]?SCREENAREAHEIGHT#)|(#CRLF#)|(#WORKAREAWIDTH#)|(#WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAX#)|(#[PpVv]?SCREENAREAY#)|(#WORKAREAX@\\d+#)|(#WORKAREAY@\\d+#)|(#WORKAREAWIDTH@\\d+#)|(#WORKAREAHEIGHT@\\d+#)|(#SCREENAREAX@\\d+#)|(#SCREENAREAY@\\d+#)|(#SCREENAREAWIDTH@\\d+#)|(#SCREENAREAHEIGHT@\\d+#)"
+    - match: "(?i)(#@#|#PROGRAMDRIVE#)|(#CONFIGEDITOR#)|(#PROGRAMPATH#)|(#SETTINGSPATH#)|(#SKINSPATH#)|(#PLUGINSPATH#)|(#ADDONSPATH#)|(#CURRENTPATH#)|(#ROOTCONFIGPATH#)|(#CURRENTFILE#)|(#CURRENTCONFIG#)|(#CURRENTSECTION#)|(#CURRENTCONFIGWIDTH#)|(#CURRENTCONFIGHEIGHT#)|(#CURRENTCONFIGX#)|(#CURRENTCONFIGY#)|(#[Pp]?WORKAREAX#)|(#[Pp]?WORKAREAY#)|(#[Pp]?WORKAREAWIDTH#)|(#[Pp]?WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAWIDTH#)|(#[PpVv]?SCREENAREAHEIGHT#)|(#CRLF#)|(#WORKAREAWIDTH#)|(#WORKAREAHEIGHT#)|(#[PpVv]?SCREENAREAX#)|(#[PpVv]?SCREENAREAY#)|(#WORKAREAX@\\d+#)|(#WORKAREAY@\\d+#)|(#WORKAREAWIDTH@\\d+#)|(#WORKAREAHEIGHT@\\d+#)|(#SCREENAREAX@\\d+#)|(#SCREENAREAY@\\d+#)|(#SCREENAREAWIDTH@\\d+#)|(#SCREENAREAHEIGHT@\\d+#)"
       scope: support.variable.rainmeter
 
   escaped-variables:
@@ -688,7 +688,7 @@ contexts:
 
   bangs:
     # Bangs
-    - match: "(?i)!((FadeDuration(Group)?)|(SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Un|Toggle)?PauseMeasure)|((Show|Hide)(Group)?|(Update)|(LoadLayout)))\\b"
+    - match: "(?i)!((FadeDuration(Group)?)|(EditSkin)|(SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Un|Toggle)?PauseMeasure)|((Show|Hide)(Group)?|(Update)|(LoadLayout)))\\b"
       scope: support.function.bang.rainmeter
 
 
