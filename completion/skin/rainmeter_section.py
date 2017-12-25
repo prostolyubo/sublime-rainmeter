@@ -101,6 +101,7 @@ class SkinRainmeterSectionAutoComplete(YamlContentReader):  # pylint: disable=R0
         value_completions = self.all_value_completions[key_match]
 
         if not value_completions:
+            logger.info("found no Rainmeter value completions for key '" + key_match + "' thus returning None")
             return None
         else:
             return value_completions, self.flags

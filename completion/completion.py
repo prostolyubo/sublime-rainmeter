@@ -132,7 +132,7 @@ class ContextSensAutoCompletion(object):
         key_match, value_match = self.get_key_value(line_content)
 
         if value_match == "":
-            logger.info("after equal trigger in '" + line_content + "'")
+            logger.info("auto-completing value: cursor after equal trigger in '" + line_content + "'")
             # value trigger
             return self.skin_rainmeter_section.get_value_context_completion(
                 section,
