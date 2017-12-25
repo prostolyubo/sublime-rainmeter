@@ -49,6 +49,7 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
                 {"cmd": [rainmeter_exe, "!RefreshApp"]}
             )
         else:
+            sublime.error_message(cmd[0])
             config = rainmeter.get_current_config(cmd[0])
             fil = rainmeter.get_current_file(cmd[0])
             if not fil:
@@ -111,6 +112,10 @@ class RainmeterRefreshCurrentSkinCommand(sublime_plugin.TextCommand):
         """
         # Get current file's path
         filepath = self.view.file_name()
+
+        # Convert to real path to avoid symlinks
+        filepath = os.path.realpath(filepath)
+
         if not filepath:
             return
 
