@@ -14,8 +14,8 @@ class TestRefreshCommandArgs(TestCase):
 
     def test_for_more_flags(self):
         """Calling from an inc file should result in less call flags."""
-        shorter = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.inc", True, True)
-        longer = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.ini", True, False)
+        shorter = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.inc", True, False)
+        longer = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.ini", True, True)
 
         self.assertGreater(longer, shorter)
 
