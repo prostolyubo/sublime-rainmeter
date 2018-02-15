@@ -13,11 +13,11 @@ from . import rainmeter
 from .path.program_path_provider import get_cached_program_path
 
 
-def calculate_refresh_commands(rm_exe, config, fil, activate, is_inc):
+def calculate_refresh_commands(rm_exe, config, fil, activate, is_ini):
     """Detect if an activate config flag is required or not."""
     if activate:
         cmds = [rm_exe, "!ActivateConfig", config]
-        if is_inc:
+        if is_ini:
             cmds.append(fil)
         return cmds
     else:
@@ -68,9 +68,9 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
             # Load activate setting
             settings = sublime.load_settings("Rainmeter.sublime-settings")
             activate = settings.get("rainmeter_refresh_and_activate", True)
-            is_inc = fil.endswith(".inc")
+            is_ini = fil.endswith(".ini")
 
-            refresh_commands = calculate_refresh_commands(rainmeter_exe, config, fil, activate, is_inc)
+            refresh_commands = calculate_refresh_commands(rainmeter_exe, config, fil, activate, is_ini)
             if refresh_commands:
                 sublime.active_window().run_command("exec", {"cmd": refresh_commands})
             refresh_config = [
