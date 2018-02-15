@@ -24,14 +24,16 @@ class TestRefreshCommandArgs(TestCase):
 
         It is missing the file name since we cannot directly refresh the inc file."""
 
-        inc = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.inc", True, True)
-        ini = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.ini", True, False)
+        inc = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.inc", True, False)
+        ini = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.ini", True, True)
 
         self.assertEqual(len(inc) + 1, len(ini))
 
     def test_config_overwrite(self):
-        """If the config option is not activated we force it to do nothing thus resulting in the same result."""
+        """If the config option is not activated we force it 
+
+        We set True for the ini file to append the file thus resulting in the same result."""
         inc = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.inc", False, True)
-        ini = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.ini", False, False)
+        ini = REFRESH_COMMANDS.calculate_refresh_commands("Rainmeter.exe", "test-config", "file.ini", False, True)
 
         self.assertEquals(inc, ini)
