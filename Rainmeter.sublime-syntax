@@ -330,7 +330,7 @@ contexts:
         4: invalid.rainmeter
 
     # 
-    - match: "(?i)^\\s*(measure)\\s*(=)\\s*((Script|Cpu|Memory|PhysicalMemory|SwapMemory|Uptime|Net(In|Out|Total)|FreeDiskSpace|Loop|Plugin|Registry|Time|Calc|String)|\"(Script|Cpu|Memory|PhysicalMemory|SwapMemory|Uptime|Net(In|Out|Total)|FreeDiskSpace|Loop|Plugin|Registry|Time|Calc|String)\")\\s*$"
+    - match: "(?i)^\\s*(measure)\\s*(=)\\s*((Calc|CPU|FreeDiskSpace|Loop|MediaKey|Memory|PhysicalMemory|SwapMemory|Net(In|Out|Total)|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)|\"(Calc|CPU|FreeDiskSpace|Loop|MediaKey|Memory|PhysicalMemory|SwapMemory|Net(In|Out|Total)|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)\")\\s*$"
       scope: meta.option.measure.rainmeter
       captures: 
         1: storage.type.option.predefined.rainmeter
@@ -394,12 +394,25 @@ contexts:
         4: invalid.rainmeter
 
     # Rainmeter plugins
-    - match: "(?i)^\\s*(plugin)\\s*(=)\\s*(((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|FileView|InputText|iTunesPlugin|MediaKey|NowPlaying|PerfMon|PingPlugin|PowerPlugin|Process|QuotePlugin|RecycleManager|ResMon|RunCommand|SpeedFanPlugin|SysInfo|VirtualDesktops|WebParser|WiFiStatus|AudioLevel|Win7AudioPlugin|WindowMessagePlugin)(\\.dll)?)|\"((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|InputText|iTunes|MediaKey|NowPlaying|PerfMon|Ping|Power|Process|Quote|RecycleManager|ResMon|RunCommand|SpeedFan|SysInfo|VirtualDesktops|WebParser|WiFiStatus|Win7Audio|WindowMessage)(\\.dll)?)\")\\s*$"
+    # they might be declared as:
+    # - Plugin=ActionTimer
+    # - Plugin=ActionTimer.dll
+    # - Plugin=Plugins\ActionTimer.dll
+    - match: "(?i)^\\s*(plugin)\\s*(=)\\s*(((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|FileView|InputText|iTunesPlugin|PerfMon|PingPlugin|PowerPlugin|Process|QuotePlugin|ResMon|RunCommand|SpeedFanPlugin|SysInfo|VirtualDesktops|WiFiStatus|AudioLevel|Win7AudioPlugin|WindowMessagePlugin)(\\.dll)?)|\"((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|InputText|iTunes|MediaKey|NowPlaying|PerfMon|Ping|Power|Process|Quote|RecycleManager|ResMon|RunCommand|SpeedFan|SysInfo|VirtualDesktops|WebParser|WiFiStatus|Win7Audio|WindowMessage)(\\.dll)?)\")\\s*$"
       scope: meta.option.plugin.rainmeter
       captures: 
         1: storage.type.option.predefined.rainmeter
         2: keyword.operator.option.equal.rainmeter
         3: support.constant.names.rainmeter
+
+    # Deprecated plugins
+    # Were moved to measures; see announcement https://forum.rainmeter.net/viewtopic.php?f=13&t=27744
+    - match: "(?i)^\\s*(plugin)\\s*(=)\\s*(((Plugins\\\\)?(MediaKey|NowPlaying|RecycleManager|WebParser)(\\.dll)?)|\"((Plugins\\\\)?(MediaKey|NowPlaying|RecycleManager|WebParser)(\\.dll)?)\")\\s*$"
+      scope: meta.option.plugin.rainmeter
+      captures: 
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: invalid.deprecated.bang.rainmeter
 
     # custom plugins
     - match: "(?i)^\\s*(plugin)\\s*(=)\\s*(MSIAfterburner.dll)\\s*$"

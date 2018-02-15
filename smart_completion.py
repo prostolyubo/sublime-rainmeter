@@ -43,6 +43,7 @@ class MeterAutoComplete(sublime_plugin.EventListener):
             ["CPU", "CPU"],
             ["FreeDiskSpace", "FreeDiskSpace"],
             ["Loop", "Loop"],
+            ["MediaKey", "MediaKey"],
 
             # memory measure
             ["Memory", "Memory"],
@@ -54,12 +55,15 @@ class MeterAutoComplete(sublime_plugin.EventListener):
             ["NetOut", "NetOut"],
             ["NetTotal", "NetTotal"],
 
+            ["NowPlaying", "NowPlaying"],
             ["Plugin", "Plugin"],
+            ["RecycleManager", "RecycleManager"],
             ["Registry", "Registry"],
             ["Script", "Script"],
             ["String", "String"],
             ["Time", "Time"],
-            ["Uptime", "Uptime"]
+            ["Uptime", "Uptime"],
+            ["WebParser", "WebParser"]
         ]),
 
         # meters
@@ -115,19 +119,15 @@ class MeterAutoComplete(sublime_plugin.EventListener):
             ["FolderInfo", "FolderInfo"],
             ["InputText", "InputText"],
             ["iTunes", "iTunesPlugin"],
-            ["MediaKey", "MediaKey"],
-            ["NowPlaying", "NowPlaying"],
             ["PerfMon", "PerfMon"],
             ["Ping", "PingPlugin"],
             ["Power", "PowerPlugin"],
             ["Process", "Process"],
             ["Quote", "QuotePlugin"],
-            ["RecycleManager", "RecycleManager"],
             ["ResMon", "ResMon"],
             ["RunCommand", "RunCommand"],
             ["SpeedFan", "SpeedFanPlugin"],
             ["SysInfo", "SysInfo"],
-            ["WebParser", "WebParser"],
             ["WiFiStatus", "WiFiStatus"],
             ["Win7Audio", "Win7AudioPlugin"],
             ["WindowMessage", "WindowMessagePlugin"]
