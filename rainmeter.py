@@ -2,6 +2,8 @@
 
 import os
 import re
+import filecmp
+import ctypes
 
 # own dependencies
 from . import logger
@@ -83,15 +85,69 @@ def get_current_config(filepath):
     filepath = os.path.normpath(filepath)
 
     skinspath = get_cached_skin_path()
-    if not skinspath or not filepath.startswith(skinspath):
+    if not skinspath:
         logger.info("current config could not be found" +
-                    " because either the skins path could not be found or the" +
-                    " current file is not located in the skins path.")
+                    " because the skins path could not be found.")
+        return
+    if not filepath.startswith(skinspath):
+        logger.info("current config could not be found" +
+                    " because the current file is not located in the skins path.")
+
+        """workaround for symlinks:
+        It could exists a symlink in the rainmeter skins folder.
+        Rainmeter detects it correctly but uses the name of the symlink
+        for the config name."""
+
+        logger.info("trying symlink detection to find the skin config.")
+        skins = os.listdir(skinspath)
+
+        for skin in skins:
+            check = os.path.join(skinspath, skin)
+            # 0x0400 is the attribute for reparse point https://msdn.microsoft.com/en-us/library/ee332330(VS.85).aspx
+            symbolic = os.path.isdir(check) and (ctypes.windll.kernel32.GetFileAttributesW(str(check)) & 0x0400) > 0
+            if symbolic:
+                logger.info("detected a symbolic link '" + check + "' through reparse pointer in file attributes.")
+                walked = os.walk(check)
+                # we walk deeper here because there can also be sub configs hidden in folders like <config/subconfig/config.ini>
+                # which results the config being <config/subconfig>
+                # at this point <skin> is probably the <config/
+                for root, dirs, files in walked:
+                    for file in files:
+                        probe = os.path.join(root, file)
+                        if filecmp.cmp(probe, filepath):
+                            config = os.path.relpath(root, skinspath)
+                            logger.info("found same file '" + file + "'. Recreate interpreted config '" + config + "'.")
+
+                            return config
+
+                            # when we found the file, we need to reverse the path to detect the sub configs
+                            # _, probe_path_and_file = os.path.splitdrive(probe)
+                            # _, actual_path_and_file = os.path.splitdrive(filepath)
+                            
+                            # prime the algorithm to remove the files
+                            # probe_path, _ = os.path.split(probe_path_and_file)
+                            # actual_path, _ = os.path.split(actual_path_and_file)
+
+                            # while 1:
+                            #     probe_path, probe_folder = os.path.split(probe_path)
+                            #     actual_path, actual_folder = os.path.split(actual_path)
+                            #     if probe_folder != actual_folder:
+                            #         logger.info("Found last not matching folder '" + probe_folder + "' with '" + actual_folder + "'")
+
+                            #         directory = os.path.dirname(probe)
+
+                                    
+               
         return
 
+    # before you get the whole path called from the skin D:\Documents\Rainmeter\Skins\test\test.ini
     if os.path.isfile(filepath):
         filepath = os.path.dirname(filepath)
+    # after the file name is trimmed D:\Documents\Rainmeter\Skins\test
 
+    # the result is the directory path minus the skin path
+    # D:\Documents\Rainmeter\Skins\test minus D:\Documents\Rainmeter\Skins\test equals test
+    # thus the config is called <test>
     return os.path.relpath(filepath, skinspath)
 
 

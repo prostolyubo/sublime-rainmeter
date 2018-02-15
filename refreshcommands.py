@@ -17,7 +17,7 @@ def calculate_refresh_commands(rm_exe, config, fil, activate, is_inc):
     """Detect if an activate config flag is required or not."""
     if activate:
         cmds = [rm_exe, "!ActivateConfig", config]
-        if not is_inc:
+        if is_inc:
             cmds.append(fil)
         return cmds
     else:
@@ -49,17 +49,19 @@ class RainmeterRefreshConfigCommand(sublime_plugin.ApplicationCommand):
                 {"cmd": [rainmeter_exe, "!RefreshApp"]}
             )
         else:
-            sublime.error_message(cmd[0])
             config = rainmeter.get_current_config(cmd[0])
-            fil = rainmeter.get_current_file(cmd[0])
-            if not fil:
-                fil = ""
             if not config:
                 sublime.error_message(
                     "Error while trying to refresh Rainmeter skin:" +
                     " The config could not be found. Please check the" +
                     " path of the config and your" +
                     " \"rainmeter_skins_path\" setting.")
+
+            # by rainmeter documentation
+            # If not specified, the next .ini file variant in the config folder is activated.
+            fil = rainmeter.get_current_file(cmd[0])
+            if not fil:
+                fil = ""
 
             sublime.status_message("Refreshing config: " + config)
 
@@ -112,9 +114,6 @@ class RainmeterRefreshCurrentSkinCommand(sublime_plugin.TextCommand):
         """
         # Get current file's path
         filepath = self.view.file_name()
-
-        # Convert to real path to avoid symlinks
-        filepath = os.path.realpath(filepath)
 
         if not filepath:
             return
