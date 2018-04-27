@@ -59,10 +59,12 @@ test_script:
     # - ps: .\appveyor.ps1 "run_syntax_tests" -verbose
 
 after_test:
-    - ps: pip install coveralls
+    # upgrade to latest pip first
+    - python -m pip install --upgrade pip
+    - pip install coveralls
 
     # check if actually copied
-    - ps: coverage report
+    - coverage report
     
     # set via AppVeyor environment token for privacy
     # or use encrypted versions and decrypt it here
@@ -74,10 +76,10 @@ after_test:
 
 
     # additional support for codacy
-    - ps: pip install codacy-coverage
+    - pip install codacy-coverage
 
     # To generate the required coverage XML file, calculate coverage for your project as normal, by running:
-    - ps: coverage xml
+    - coverage xml
 
     # Next, simply run the Codacy reporter. It will find the current commit and send all details to your project dashboard:
     - python-codacy-coverage -r coverage.xml
