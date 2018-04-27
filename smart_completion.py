@@ -127,6 +127,7 @@ class MeterAutoComplete(sublime_plugin.EventListener):
             ["ResMon", "ResMon"],
             ["RunCommand", "RunCommand"],
             ["SpeedFan", "SpeedFanPlugin"],
+            ["UsageMonitor", "UsageMonitor"],
             ["SysInfo", "SysInfo"],
             ["WiFiStatus", "WiFiStatus"],
             ["Win7Audio", "Win7AudioPlugin"],

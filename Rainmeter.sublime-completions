@@ -621,6 +621,28 @@
         "HKEY_LOCAL_MACHINE",
         "HKEY_CLASSES_ROOT",
         "HKEY_PERFORMANCE_DATA",
-        "HKEY_DYN_DATA"    
+        "HKEY_DYN_DATA"
+
+        "Alias",
+        "CategoryDefault",
+        "Counter",
+        "Index",
+        "Name",
+        "Blacklist",
+        "Whitelist",
+        "Rollup",
+        "Percent",
+        "RawValue",
+        "PIDToName",
+
+        "CPU",
+        "RAM",
+        "RAMSHARED",
+        "IO",
+        "IOREAD",
+        "IOWRITE",
+        "GPU",
+        "VRAM",
+        "VRAMSHARED"
     ]
 }

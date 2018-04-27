@@ -24,6 +24,7 @@
     - ["ResMon", "Monitors resources", "ResMon"]
     - ["RunCommand", "Execute external program", "RunCommand"]
     - ["SpeedFan", "SpeedFan adapter", "SpeedFanPlugin"]
+    - ["UsageMonitor", "Windows Performance Monitor", "UsageMonitor"]
     - ["SysInfo", "Information about system", "SysInfo"]
     - ["WebParser", "Read/parse from webpages", "WebParser"]
     - ["WiFiStatus", "Information about WiFi networks", "WiFiStatus"]

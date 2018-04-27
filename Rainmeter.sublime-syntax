@@ -398,7 +398,7 @@ contexts:
     # - Plugin=ActionTimer
     # - Plugin=ActionTimer.dll
     # - Plugin=Plugins\ActionTimer.dll
-    - match: "(?i)^\\s*(plugin)\\s*(=)\\s*(((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|FileView|InputText|iTunesPlugin|PerfMon|PingPlugin|PowerPlugin|Process|QuotePlugin|ResMon|RunCommand|SpeedFanPlugin|SysInfo|VirtualDesktops|WiFiStatus|AudioLevel|Win7AudioPlugin|WindowMessagePlugin)(\\.dll)?)|\"((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|InputText|iTunes|MediaKey|NowPlaying|PerfMon|Ping|Power|Process|Quote|RecycleManager|ResMon|RunCommand|SpeedFan|SysInfo|VirtualDesktops|WebParser|WiFiStatus|Win7Audio|WindowMessage)(\\.dll)?)\")\\s*$"
+    - match: "(?i)^\\s*(plugin)\\s*(=)\\s*(((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|FileView|InputText|iTunesPlugin|PerfMon|PingPlugin|PowerPlugin|Process|QuotePlugin|ResMon|RunCommand|SpeedFanPlugin|SysInfo|VirtualDesktops|UsageMonitor|WiFiStatus|AudioLevel|Win7AudioPlugin|WindowMessagePlugin)(\\.dll)?)|\"((Plugins\\\\)?(ActionTimer|AdvancedCPU|CoreTemp|FolderInfo|InputText|iTunes|MediaKey|NowPlaying|PerfMon|Ping|Power|Process|Quote|RecycleManager|ResMon|RunCommand|SpeedFan|SysInfo|VirtualDesktops|WebParser|UsageMonitor|WiFiStatus|Win7Audio|WindowMessage)(\\.dll)?)\")\\s*$"
       scope: meta.option.plugin.rainmeter
       captures: 
         1: storage.type.option.predefined.rainmeter
@@ -614,6 +614,57 @@ contexts:
       captures: 
         1: storage.type.option.predefined.rainmeter
         78: keyword.operator.option.equal.rainmeter
+
+    # UsageMonitor plugin
+    # Specific Alias Options
+    - match: "(?i)^\\s*(Alias)\\s*(=)\\s*(CPU|RAM|RAMSHARED|IO|IOREAD|IOWRITE|GPU|VRAM|VRAMSHARED)"
+      scope: meta.option.predefined.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+    # Specific Index Options
+    - match: "(?i)^\\s*(Index)\\s*(=)\\s*(\\d+)"
+      scope: meta.option.predefined.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: constant.numeric.rainmeter
+    # Specific Rollup, Percent, RawValue, PIDToName Options
+    - match: "(?i)^\\s*(Rollup|Percent|RawValue|PIDToName)\\s*(=)\\s*(1|0)"
+      scope: meta.option.predefined.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: support.constant.option_values.rainmeter
+    # Invalid Rollup, Percent, RawValue, PIDToName Options
+    - match: "(?i)^\\s*(Rollup|Percent|RawValue|PIDToName)\\s*(=)\\s*(\\d+)\\s*$"
+      scope: meta.option.predefined.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        3: invalid.rainmeter
+    # All UsageMonitor Options
+    - match: "(?i)^\\s*(Alias|CategoryDefault|Counter|Index|Name|Blacklist|Whitelist|Rollup|Percent|RawValue|PIDToName)\\s*(=)\\s*"
+      scope: meta.option.predefined.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+    - match: "(?i)^\\s*(Alias|CategoryDefault|Counter|Index|Name|Blacklist|Whitelist|Rollup|Percent|RawValue|PIDToName)\\s*"
+      scope: meta.option.predefined.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+    # Invalid Alias options
+    - match: "(?i)^\\s*(Alias|CategoryDefault|Counter|Index|Name|Blacklist|Whitelist|Rollup|Percent|RawValue|PIDToName)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+      scope: meta.option.predefined.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+        4: invalid.rainmeter
+    
+    
+    # Option Index
+    #
 
     # Constants used in Calc measures
     - match: "(?i)\\b(PI|E|RANDOM)\\b"
