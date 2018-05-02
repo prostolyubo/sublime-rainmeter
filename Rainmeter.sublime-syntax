@@ -630,6 +630,14 @@ contexts:
         1: storage.type.option.predefined.rainmeter
         2: keyword.operator.option.equal.rainmeter
         3: constant.numeric.rainmeter
+    # Specific Blacklist, Whitelist Options
+    - match: "(?i)^\\s*(Blacklist|Whitelist)\\s*(=)\\s*"
+      scope: meta.option.predefined.rainmeter
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        2: keyword.operator.option.equal.rainmeter
+      push: pipe-seperated-list
+
     # Specific Rollup, Percent, RawValue, PIDToName Options
     - match: "(?i)^\\s*(Rollup|Percent|RawValue|PIDToName)\\s*(=)\\s*(1|0)"
       scope: meta.option.predefined.rainmeter
@@ -808,3 +816,20 @@ contexts:
       captures:
         1: support.constant.option_values.rainmeter
         2: support.constant.option_values.rainmeter
+
+  pipe-seperated-list:
+    # match first entry in the pipe seperated list
+    - match: "(?i)\\s*([a-zA-Z0-9._-]+)\\s*"
+      captures:
+        1: support.constant.option_values.rainmeter
+    # match all entries being pipe seperated
+    - match: "(?i)\\s*(\\|)\\s*([a-zA-Z0-9._-]+)\\s*"
+      captures:
+        1: keyword.operator.option.equal.rainmeter
+        2: support.constant.option_values.rainmeter
+    # invalid all other seperators 
+    - match: "(?i)\\s*([^a-zA-Z0-9._-|\\s]+)\\s*"
+      captures:
+        1: invalid.rainmeter
+    - match: "$"
+      pop: true
