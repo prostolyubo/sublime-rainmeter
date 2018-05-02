@@ -636,7 +636,7 @@ contexts:
       captures:
         1: storage.type.option.predefined.rainmeter
         2: keyword.operator.option.equal.rainmeter
-      push: pipe-seperated-list
+      push: pipe-seperated-file-list
 
     # Specific Rollup, Percent, RawValue, PIDToName Options
     - match: "(?i)^\\s*(Rollup|Percent|RawValue|PIDToName)\\s*(=)\\s*(1|0)"
@@ -817,7 +817,7 @@ contexts:
         1: support.constant.option_values.rainmeter
         2: support.constant.option_values.rainmeter
 
-  pipe-seperated-list:
+  pipe-seperated-file-list:
     # match first entry in the pipe seperated list
     - match: "(?i)\\s*([a-zA-Z0-9._-]+)\\s*"
       captures:
