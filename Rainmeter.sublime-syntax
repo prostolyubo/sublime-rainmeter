@@ -22,7 +22,7 @@ contexts:
   main:
     # comment lines
     - match: "^\\s*(;.*)$"
-      scope: meta.comment
+      scope: meta.comment.rainmeter
       captures:
         1: comment.line.character.rainmeter
 
