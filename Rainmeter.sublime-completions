@@ -452,7 +452,23 @@
         {"trigger": "!EnableMeasure", "contents": "!EnableMeasure \"${1:Measure}\" ${2:\"${3:(Config)}\"}"},
         {"trigger": "!EnableMeasureGroup", "contents": "!EnableMeasureGroup \"${1:Group}\" ${2:\"${3:(Config)}\"}"},
         {"trigger": "!EditSkin", "contents": "!EditSkin ${1:\"${2:(Config)}\"} ${3:\"${4:(File)}\"}"},
-        
+
+
+        {"trigger": "!DisableMouseAction", "contents": "!DisableMouseAction \"${1:Meter}\" \"${2:MouseAction(s)}\" ${3:\"${4:(Config)}\"}"},
+        {"trigger": "!ClearMouseAction", "contents": "!ClearMouseAction \"${1:Meter}\" \"${2:MouseAction(s)}\" ${3:\"${4:(Config)}\"}"},
+        {"trigger": "!EnableMouseAction", "contents": "!EnableMouseAction \"${1:Meter}\" \"${2:MouseAction(s)}\" ${3:\"${4:(Config)}\"}"},
+        {"trigger": "!ToggleMouseAction", "contents": "!ToggleMouseAction \"${1:Meter}\" \"${2:MouseAction(s)}\" ${3:\"${4:(Config)}\"}"},
+
+        {"trigger": "!DisableMouseActionGroup", "contents": "!DisableMouseActionGroup \"${1:MouseAction(s)}\" \"${2:Group}\" ${3:\"${4:(Config)}\"}"},
+        {"trigger": "!ClearMouseActionGroup", "contents": "!ClearMouseActionGroup \"${1:MouseAction(s)}\" \"${2:Group}\" ${3:\"${4:(Config)}\"}"},
+        {"trigger": "!EnableMouseActionGroup", "contents": "!EnableMouseActionGroup \"${1:MouseAction(s)}\" \"${2:Group}\" ${3:\"${4:(Config)}\"}"},
+        {"trigger": "!ToggleMouseActionGroup", "contents": "!ToggleMouseActionGroup \"${1:MouseAction(s)}\" \"${2:Group}\" ${3:\"${4:(Config)}\"}"},
+
+        {"trigger": "!DisableMouseActionSkinGroup", "contents": "!DisableMouseActionSkinGroup \"${1:MouseAction(s)}\" \"${2:Group}\""},
+        {"trigger": "!ClearMouseActionSkinGroup", "contents": "!ClearMouseActionSkinGroup \"${1:MouseAction(s)}\" \"${2:Group}\""},
+        {"trigger": "!EnableMouseActionSkinGroup", "contents": "!EnableMouseActionSkinGroup \"${1:MouseAction(s)}\" \"${2:Group}\""},
+        {"trigger": "!ToggleMouseActionSkinGroup", "contents": "!ToggleMouseActionSkinGroup \"${1:MouseAction(s)}\" \"${2:Group}\""},
+
         {"trigger": "!FadeDuration", "contents": "!FadeDuration ${1:Duration} ${2:\"${3:(Config)}\"}"},
         {"trigger": "!FadeDurationGroup", "contents": "!FadeDurationGroup ${1:Duration} \"${2:ConfigGroup}\""},
 

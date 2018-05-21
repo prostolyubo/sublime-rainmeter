@@ -8,6 +8,10 @@ uuid: 6a53050b-d898-4e20-8fa0-c1726f4ce466
 foldingStartMarker: "^\\s*\\[\\s*[^\\[\\]\\s]*\\s*\\]\\s*$"
 foldingStopMarker: "^(?=\\s*\\[)"
 
+variables:
+  mouse_action_name: "(?i)((LeftMouseUp|LeftMouseDown|LeftMouseDoubleClick|RightMouseUp|RightMouseDown|RIghtMouseDoubleClick|MiddleMouseUp|MiddleMouseDown|MiddleMouseDoubleClick|X1MouseUp|X1MouseDown|X1MouseDoubleClick|X2MouseUp|X2MouseDown|X2MouseDoubleClick|MouseScrollUp|MouseScrollDown|MouseScrollLeft|MouseScrollRight|MouseOver|MouseLeave)Action|\\*)"
+  meter-name: ".+|\".+\""
+
 # template
 
     # # 
@@ -330,7 +334,7 @@ contexts:
         4: invalid.rainmeter
 
     # 
-    - match: "(?i)^\\s*(measure)\\s*(=)\\s*((Calc|CPU|FreeDiskSpace|Loop|MediaKey|Memory|PhysicalMemory|SwapMemory|Net(In|Out|Total)|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)|\"(Calc|CPU|FreeDiskSpace|Loop|MediaKey|Memory|PhysicalMemory|SwapMemory|Net(In|Out|Total)|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)\")\\s*$"
+    - match: "(?i)^\\s*(Measure)\\s*(=)\\s*((Calc|CPU|FreeDiskSpace|Loop|MediaKey|Memory|PhysicalMemory|SwapMemory|Net(In|Out|Total)|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)|\"(Calc|CPU|FreeDiskSpace|Loop|MediaKey|Memory|PhysicalMemory|SwapMemory|Net(In|Out|Total)|NowPlaying|Plugin|RecycleManager|Registry|Script|String|Time|Uptime|WebParser)\")\\s*$"
       scope: meta.option.measure.rainmeter
       captures: 
         1: storage.type.option.predefined.rainmeter
@@ -338,7 +342,7 @@ contexts:
         3: support.constant.names.rainmeter
 
     # 
-    - match: "(?i)^\\s*(measure)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
+    - match: "(?i)^\\s*(Measure)\\s*(=)\\s*(?!(.*#.*#.*$|.*\\[.*\\].*$))(.*)\\s*$"
       scope: meta.option.measure.invalid.rainmeter
       captures: 
         1: storage.type.option.predefined.rainmeter
@@ -763,6 +767,36 @@ contexts:
     - match: "(?i)!((FadeDuration(Group)?)|(EditSkin)|(SetClip)|(SetWallpaper)|(About)|(Manage)|(Log)|(LsBoxHook)|(ResetStats)|(TrayMenu)|(RefreshApp)|(Quit)|(SetOption(Group)?)|(WriteKeyValue)|(SetVariable(Group)?)|(Toggle(Group|Config)?)|(Move(Meter)?)|(DeactivateConfig(Group)?)|(ActivateConfig)|(Refresh(Group)?)|(Redraw(Group)?)|(SetTransparency(Group)?)|((Show|Hide|Toggle)Fade(Group)?)|((Show|Hide|Toggle|Add|Remove)Blur)|(Draggable(Group)?)|(ZPos(Group)?)|(KeepOnScreen(Group)?)|(ClickThrough(Group)?)|AutoSelectScreen(Group)?|(SnapEdges(Group)?)|(SkinMenu)|(SkinCustomMenu)|((Show|Hide|Toggle|Update)Meter(Group)?)|(((Dis|En)able|Toggle|Update)Measure(Group)?)|(CommandMeasure)|((Un|Toggle)?PauseMeasure)|((Show|Hide)(Group)?|(Update)|(LoadLayout)))\\b"
       scope: support.function.bang.rainmeter
 
+    - include: mouse-action-bangs
+  # https://docs.rainmeter.net/manual-beta/bangs/#MouseAction
+  mouse-action-bangs:
+    # reversed order because of priority of same common action names
+    - include: skin-group-bangs
+    - include: meter-group-bangs
+    - include: meter-bangs
+    
+  meter-bangs:
+    # Parameters: Meter, MouseAction(s), Config (optional)
+    - match: "(?i)!((Disable|Clear|Enable|Toggle)MouseAction)"
+      scope: support.function.bang.rainmeter
+    - include: mouse-action-name
+  meter-group-bangs:
+    # Parameters: MouseAction(s), Group, Config (optional)
+    - match: "(?i)!((Disable|Clear|Enable|Toggle)MouseActionGroup)"
+      scope: support.function.bang.rainmeter
+  skin-group-bangs:
+    # Parameters: MouseAction(s), Group
+    - match: "(?i)!((Disable|Clear|Enable|Toggle)MouseActionSkinGroup)"
+      scope: support.function.bang.rainmeter
+  mouse-action-name:
+    # need other scopes if the action name is in front and thus a key
+    - match: "({{mouse_action_name}})\\s*(=)"
+      captures:
+        1: storage.type.option.predefined.rainmeter
+        4: keyword.operator.option.equal.rainmeter
+    # this is a mouse action name in a parameter
+    - match: "{{mouse_action_name}}"
+      scope: support.constant.option_values.rainmeter
 
   # Include statements
   includes:
